@@ -1,0 +1,342 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Aurora + Liquid Glass Design System — Dark/Light */
+
+@layer base {
+
+  /* ===== LIGHT MODE (default root) ===== */
+  :root {
+    /* Warm off-white background */
+    --background: 40 20% 97%;
+    --foreground: 222 47% 11%;
+
+    /* Card/Glass surfaces */
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* Primary */
+    --primary: 222 47% 11%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary */
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 222 47% 11%;
+
+    /* Muted */
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 43%;
+
+    /* Accent - Aurora teal */
+    --accent: 168 84% 39%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Aurora palette */
+    --aurora-teal: 168 84% 42%;
+    --aurora-purple: 258 90% 58%;
+    --aurora-pink: 330 86% 62%;
+    --aurora-green: 160 84% 32%;
+
+    /* Destructive */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders */
+    --border: 220 13% 87%;
+    --input: 220 13% 87%;
+    --ring: 168 84% 42%;
+
+    --radius: 0.75rem;
+
+    /* Glass properties — dark glass on light bg */
+    --glass-bg: 222 47% 11%;
+    --glass-border: 222 47% 11%;
+    --glass-blur: 24px;
+
+    /* Aurora blob opacities — higher on light bg for visibility */
+    --aurora-opacity: 0.15;
+    --aurora-opacity-2: 0.12;
+    --aurora-opacity-3: 0.10;
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 168 84% 42%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 96%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border: 220 13% 87%;
+    --sidebar-ring: 168 84% 42%;
+  }
+
+  /* ===== DARK MODE ===== */
+  .dark {
+    /* OLED Black */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+
+    /* Card/Glass surfaces */
+    --card: 0 0% 4%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 100%;
+
+    /* Primary */
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
+
+    /* Secondary */
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 0 0% 100%;
+
+    /* Muted */
+    --muted: 240 4% 16%;
+    --muted-foreground: 240 5% 55%;
+
+    /* Accent - Aurora teal */
+    --accent: 168 84% 49%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Aurora palette */
+    --aurora-teal: 168 84% 49%;
+    --aurora-purple: 258 90% 66%;
+    --aurora-pink: 330 86% 70%;
+    --aurora-green: 160 84% 39%;
+
+    /* Destructive */
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders */
+    --border: 0 0% 100%;
+    --input: 0 0% 100%;
+    --ring: 168 84% 49%;
+
+    /* Glass properties — white glass on dark bg */
+    --glass-bg: 0 0% 100%;
+    --glass-border: 0 0% 100%;
+    --glass-blur: 24px;
+
+    /* Aurora blob opacities — subtle on dark bg */
+    --aurora-opacity: 0.08;
+    --aurora-opacity-2: 0.06;
+    --aurora-opacity-3: 0.05;
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 2%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 168 84% 49%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 15%;
+    --sidebar-ring: 168 84% 49%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border/10;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  ::selection {
+    background: hsl(var(--aurora-teal) / 0.3);
+    color: white;
+  }
+}
+
+@layer components {
+
+  /* Liquid Glass Panel */
+  .glass-panel {
+    @apply relative;
+    background: hsl(var(--glass-bg) / 0.04);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid hsl(var(--glass-border) / 0.08);
+    border-radius: var(--radius);
+  }
+
+  .glass-panel-hover {
+    @apply glass-panel transition-all duration-300;
+  }
+
+  .glass-panel-hover:hover {
+    background: hsl(var(--glass-bg) / 0.06);
+    border-color: hsl(var(--aurora-teal) / 0.2);
+    box-shadow:
+      0 0 30px hsl(var(--aurora-teal) / 0.1),
+      0 0 60px hsl(var(--aurora-purple) / 0.05);
+  }
+
+  /* Liquid Glass Text — light mode uses dark gradient, dark mode uses white */
+  .glass-text {
+    @apply relative;
+    background: linear-gradient(135deg,
+        hsl(var(--foreground) / 0.9) 0%,
+        hsl(var(--foreground) / 0.6) 50%,
+        hsl(var(--foreground) / 0.9) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 40px hsl(var(--foreground) / 0.1);
+  }
+
+  .glass-text-shimmer {
+    @apply glass-text;
+    background-size: 200% 100%;
+    animation: glass-shimmer 8s ease-in-out infinite;
+  }
+
+  @keyframes glass-shimmer {
+
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  /* Aurora Gradient Text */
+  .aurora-text {
+    background: linear-gradient(90deg,
+        hsl(var(--aurora-teal)) 0%,
+        hsl(var(--aurora-purple)) 50%,
+        hsl(var(--aurora-pink)) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% 100%;
+    animation: aurora-flow 4s ease-in-out infinite;
+  }
+
+  @keyframes aurora-flow {
+
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  /* Aurora Glow on Hover */
+  .aurora-glow {
+    @apply transition-all duration-300;
+  }
+
+  .aurora-glow:hover {
+    box-shadow:
+      0 0 20px hsl(var(--aurora-teal) / 0.3),
+      0 0 40px hsl(var(--aurora-purple) / 0.15),
+      0 0 60px hsl(var(--aurora-pink) / 0.1);
+  }
+
+  .aurora-glow-purple {
+    @apply transition-all duration-300;
+  }
+
+  .aurora-glow-purple:hover {
+    box-shadow:
+      0 0 20px hsl(var(--aurora-purple) / 0.4),
+      0 0 40px hsl(var(--aurora-pink) / 0.2);
+  }
+
+  /* Glass Button */
+  .glass-button {
+    @apply glass-panel px-6 py-3 font-medium transition-all duration-300;
+    background: hsl(var(--glass-bg) / 0.06);
+  }
+
+  .glass-button:hover {
+    background: hsl(var(--glass-bg) / 0.1);
+    border-color: hsl(var(--aurora-teal) / 0.3);
+    box-shadow:
+      0 0 20px hsl(var(--aurora-teal) / 0.2),
+      inset 0 0 20px hsl(var(--aurora-teal) / 0.05);
+    transform: translateY(-2px);
+  }
+
+  /* Glass Input */
+  .glass-input {
+    @apply glass-panel px-4 py-3 w-full outline-none transition-all duration-300;
+    background: hsl(var(--glass-bg) / 0.03);
+  }
+
+  .glass-input:focus {
+    border-color: hsl(var(--aurora-teal) / 0.4);
+    box-shadow:
+      0 0 20px hsl(var(--aurora-teal) / 0.15),
+      inset 0 0 20px hsl(var(--aurora-teal) / 0.03);
+  }
+
+  .glass-input::placeholder {
+    color: hsl(var(--muted-foreground));
+  }
+
+  /* Aurora Underline */
+  .aurora-underline {
+    @apply relative;
+  }
+
+  .aurora-underline::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300;
+    background: linear-gradient(90deg,
+        hsl(var(--aurora-teal)),
+        hsl(var(--aurora-purple)));
+  }
+
+  .aurora-underline:hover::after {
+    @apply w-full;
+  }
+
+  /* Skill Pill */
+  .skill-pill {
+    @apply glass-panel px-3 py-1.5 text-sm transition-all duration-300;
+    background: hsl(var(--glass-bg) / 0.04);
+  }
+
+  .skill-pill:hover {
+    background: hsl(var(--glass-bg) / 0.08);
+    border-color: hsl(var(--aurora-teal) / 0.3);
+    box-shadow: 0 0 15px hsl(var(--aurora-teal) / 0.15);
+  }
+}
+
+@layer utilities {
+
+  /* Hide scrollbar */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Text balance */
+  .text-balance {
+    text-wrap: balance;
+  }
+}
