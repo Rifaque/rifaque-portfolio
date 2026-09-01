@@ -1,5 +1,5 @@
-import { useRef, useCallback, useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useRef, useCallback, useState } from "react";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useWindowManager, type WindowState } from "./WindowManagerContext";
 

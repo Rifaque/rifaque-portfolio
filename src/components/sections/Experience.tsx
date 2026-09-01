@@ -1,129 +1,82 @@
-import { useState, useRef } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
-import GlassCard from "@/components/GlassCard";
-import GlassText from "@/components/GlassText";
-import { experiences, type Experience as ExperienceType } from "@/data/portfolio";
+import { FiExternalLink } from "react-icons/fi";
+import Section, { Reveal } from "@/components/Section";
+import { experiences } from "@/data/portfolio";
 
-const ExperienceCard = ({ experience, index }: { experience: ExperienceType; index: number }) => {
-  const [isHovering, setIsHovering] = useState(false);
-  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+const Experience = () => (
+  <Section
+    id="experience"
+    eyebrow="Experience"
+    heading="Where the work happened"
+    lede="Two entries that overlap, which is deliberate rather than a date error — the studio ran alongside the internship."
+  >
+    <ol className="relative space-y-10 border-l border-foreground/[0.1] pl-5 sm:space-y-14 sm:pl-8 lg:space-y-16 lg:pl-10">
+      {experiences.map((job, i) => (
+        <li key={job.id} className="relative">
+          <span
+            aria-hidden
+            className="absolute -left-[calc(1.25rem+4.5px)] top-2 h-2 w-2 rounded-full bg-aurora-teal sm:-left-[calc(2rem+4.5px)] lg:-left-[calc(2.5rem+4.5px)]"
+          />
+          <Reveal delay={i * 0.05}>
+            <p className="font-mono text-xs text-foreground/45">
+              {job.dates} · {job.location}
+            </p>
 
-  const handleMouseEnter = () => {
-    hoverTimeoutRef.current = setTimeout(() => {
-      setIsHovering(true);
-    }, 350);
-  };
+            <h3 className="mt-2 text-lg font-semibold tracking-tight text-foreground sm:text-xl lg:text-2xl">
+              {job.role}
+            </h3>
 
-  const handleMouseLeave = () => {
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current);
-    }
-    setIsHovering(false);
-  };
+            <p className="mt-1 text-base text-foreground/70">
+              {job.url ? (
+                <a
+                  href={job.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="tap-target inline-flex items-center gap-1.5 transition-colors hover:text-aurora-teal focus-ring"
+                >
+                  {job.company}
+                  <FiExternalLink className="h-3.5 w-3.5" aria-hidden />
+                </a>
+              ) : (
+                job.company
+              )}
+            </p>
 
-  const isLeft = index % 2 === 0;
+            <p className="mt-4 max-w-2xl text-[0.9rem] leading-relaxed text-foreground/60 sm:text-[0.95rem]">
+              {job.summary}
+            </p>
 
-  return (
-    <div className={`relative flex items-center gap-8 ${isLeft ? "md:flex-row" : "md:flex-row-reverse"}`}>
-      {/* Timeline Line & Dot */}
-      <div className="hidden md:flex flex-col items-center absolute left-1/2 -translate-x-1/2 top-0 bottom-0">
-        <div className="w-4 h-4 rounded-full bg-gradient-to-br from-aurora-teal to-aurora-purple shadow-[0_0_15px_hsl(168_84%_49%/0.5)]" />
-        <div className="flex-1 w-px bg-gradient-to-b from-aurora-teal/50 to-transparent" />
-      </div>
+            {/* Always visible. Nothing here was ever worth hiding behind a
+                hover, and on a phone hover does not exist at all. */}
+            <ul className="mt-5 max-w-2xl space-y-3">
+              {job.highlights.map((item, idx) => (
+                <li
+                  key={idx}
+                  className="flex gap-3 text-[0.9rem] leading-relaxed text-foreground/70 sm:text-[0.95rem]"
+                >
+                  <span
+                    aria-hidden
+                    className="mt-[0.55rem] h-1 w-1 shrink-0 rounded-full bg-aurora-teal/70"
+                  />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
 
-      {/* Card */}
-      <div className={`w-full md:w-[calc(50%-2rem)] ${isLeft ? "md:pr-0" : "md:pl-0"}`}>
-        <div className="relative">
-          <GlassCard
-            className="p-6"
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-          >
-            <span className="text-aurora-teal text-sm font-medium">{experience.dates}</span>
-            <h3 className="text-xl font-semibold text-foreground mt-1">{experience.role}</h3>
-            <p className="text-foreground/60 mt-1">{experience.company} • {experience.location}</p>
-            <p className="text-foreground/50 text-sm mt-3">{experience.shortDescription}</p>
-          </GlassCard>
-
-          {/* Hover Detail */}
-          <AnimatePresence>
-            {isHovering && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95, y: 10 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                transition={{ duration: 0.2 }}
-                className="absolute z-50 top-full left-0 right-0 mt-2"
-              >
-                <GlassCard className="p-4 border-aurora-teal/20 shadow-[0_0_40px_hsl(168_84%_49%/0.15)]">
-                  <ul className="space-y-2 mb-4">
-                    {experience.fullDescription.map((item, i) => (
-                      <li key={i} className="text-foreground/70 text-sm flex items-start gap-2">
-                        <span className="text-aurora-teal mt-1">▹</span>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="flex flex-wrap gap-2">
-                    {experience.technologies.map((tech) => (
-                      <span key={tech} className="skill-pill text-xs text-foreground/70">
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </GlassCard>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const Experience = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
-  return (
-    <section id="experience" className="py-24 px-6" ref={ref}>
-      <div className="max-w-5xl mx-auto">
-        {/* Section Title */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="mb-16"
-        >
-          <GlassText as="h2" shimmer className="text-4xl md:text-5xl font-bold">
-            Experience
-          </GlassText>
-          <div className="mt-4 w-20 h-1 bg-gradient-to-r from-aurora-teal to-aurora-purple rounded-full" />
-        </motion.div>
-
-        {/* Timeline */}
-        <div className="relative space-y-12">
-          {/* Mobile Timeline Line */}
-          <div className="absolute left-4 top-0 bottom-0 w-px bg-gradient-to-b from-aurora-teal/50 via-aurora-purple/30 to-transparent md:hidden" />
-
-          {experiences.map((experience, index) => (
-            <motion.div
-              key={experience.id}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.1 + index * 0.1 }}
-              className="relative pl-10 md:pl-0"
-            >
-              {/* Mobile Dot */}
-              <div className="absolute left-2 top-6 w-4 h-4 rounded-full bg-gradient-to-br from-aurora-teal to-aurora-purple shadow-[0_0_15px_hsl(168_84%_49%/0.5)] md:hidden" />
-
-              <ExperienceCard experience={experience} index={index} />
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
+            <ul className="mt-5 flex flex-wrap gap-2">
+              {job.technologies.map((tech) => (
+                <li
+                  key={tech}
+                  className="max-w-full break-words rounded-md border border-foreground/10 px-2.5 py-1 text-xs text-foreground/55"
+                >
+                  {tech}
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+        </li>
+      ))}
+    </ol>
+  </Section>
+);
 
 export default Experience;

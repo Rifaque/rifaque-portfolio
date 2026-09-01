@@ -1,32 +1,39 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
-import PortfolioV2 from "./pages/PortfolioV2";
+import Archive from "./pages/Archive";
 import NotFound from "./pages/NotFound";
 
-const queryClient = new QueryClient();
+// The desktop environment is a large, self-contained bundle. It is a
+// discovery, not the front door, so it should not be in the initial payload.
+const PortfolioV2 = lazy(() => import("./pages/PortfolioV2"));
+
+const DesktopFallback = () => (
+  <div
+    role="status"
+    aria-live="polite"
+    className="flex min-h-screen items-center justify-center bg-black font-mono text-sm text-white/50"
+  >
+    Loading desktop…
+  </div>
+);
 
 const App = () => (
-  <ThemeProvider attribute="class" defaultTheme="dark" forcedTheme="dark">
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/desktop" element={<PortfolioV2 />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
-  </ThemeProvider>
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Index />} />
+      <Route path="/archive" element={<Archive />} />
+      <Route
+        path="/desktop"
+        element={
+          <Suspense fallback={<DesktopFallback />}>
+            <PortfolioV2 />
+          </Suspense>
+        }
+      />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  </BrowserRouter>
 );
 
 export default App;

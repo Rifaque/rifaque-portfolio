@@ -146,6 +146,45 @@
 
   html {
     scroll-behavior: smooth;
+    /* Reserve the scrollbar track always, so the fixed header and the page
+       content share one width and stop disagreeing by ~15px. Overlay
+       scrollbars on touch devices make this a no-op there. */
+    scrollbar-gutter: stable;
+
+    /* Device safe areas, resolved once. Zero on everything without a notch. */
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+
+    /* Measured height of the fixed header; the mobile nav panel sits below it
+       instead of guessing a pixel value. */
+    --header-h: 3.25rem;
+  }
+
+  @media (min-width: 640px) {
+    html {
+      --header-h: 3.75rem;
+    }
+  }
+
+  /*
+   * Long project and technology names must wrap, not overflow. The overflow
+   * would be clipped by an ancestor rather than scrolled, so the text would
+   * silently vanish instead of merely looking wrong.
+   */
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  li,
+  dd,
+  dt,
+  a,
+  button,
+  span {
+    overflow-wrap: anywhere;
   }
 
   body {
@@ -156,6 +195,14 @@
   ::selection {
     background: hsl(var(--aurora-teal) / 0.3);
     color: white;
+  }
+
+  /* A visible focus indicator is required everywhere, not just where it was
+     remembered. Pointer clicks stay clean via :focus-visible. */
+  :focus-visible {
+    outline: 2px solid hsl(var(--aurora-teal));
+    outline-offset: 2px;
+    border-radius: 4px;
   }
 }
 
@@ -338,5 +385,270 @@
   /* Text balance */
   .text-balance {
     text-wrap: balance;
+  }
+}
+@layer components {
+
+  /*
+   * One content rail for the whole site.
+   *
+   * The horizontal padding lives on the outer element and the max-width on the
+   * inner one, so the fixed header and every section resolve to the same left
+   * edge. Growing the cap on large screens keeps a 3440px monitor from being
+   * mostly margin, while text columns inside stay capped for line length.
+   */
+  .rail {
+    padding-left: max(1rem, var(--safe-left));
+    padding-right: max(1rem, var(--safe-right));
+  }
+
+  @media (min-width: 640px) {
+    .rail {
+      padding-left: max(1.5rem, var(--safe-left));
+      padding-right: max(1.5rem, var(--safe-right));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .rail {
+      padding-left: max(2rem, var(--safe-left));
+      padding-right: max(2rem, var(--safe-right));
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .rail {
+      padding-left: max(3rem, var(--safe-left));
+      padding-right: max(3rem, var(--safe-right));
+    }
+  }
+
+  .rail-inner {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    max-width: 72rem;
+  }
+
+  @media (min-width: 1280px) {
+    .rail-inner {
+      max-width: 76rem;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .rail-inner {
+      max-width: 82rem;
+    }
+  }
+
+  @media (min-width: 1920px) {
+    .rail-inner {
+      max-width: 90rem;
+    }
+  }
+
+  @media (min-width: 2560px) {
+    .rail-inner {
+      max-width: 100rem;
+    }
+  }
+
+  /* On very large displays the whole scale steps up once, so a 4K screen does
+     not render the site as a postage stamp. */
+  @media (min-width: 2560px) {
+    html {
+      font-size: 18px;
+    }
+  }
+
+  /* Decorative aurora field. Parallax offset comes from two custom properties
+     the background component sets; the drift itself is pure CSS. */
+  .aurora-field {
+    --aurora-x: 0px;
+    --aurora-y: 0px;
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    translate: var(--aurora-x) var(--aurora-y);
+    transition: translate 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* CRT power-off: wide line collapses to a dot, then fades. */
+  .crt-collapse {
+    display: block;
+    width: 80vw;
+    height: 3px;
+    border-radius: 1px;
+    background: rgba(255, 255, 255, 0.9);
+    animation: crt-line 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.35s forwards,
+      crt-dot 0.35s ease-out 0.8s forwards;
+  }
+
+  @keyframes crt-line {
+    to {
+      width: 6px;
+      height: 6px;
+      border-radius: 9999px;
+    }
+  }
+
+  @keyframes crt-dot {
+    to {
+      opacity: 0;
+      transform: scale(0.2);
+    }
+  }
+
+  .js .dialog-overlay {
+    animation: dialog-fade 0.2s ease-out both;
+  }
+
+  .js .dialog-panel {
+    animation: dialog-rise 0.24s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @keyframes dialog-fade {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes dialog-rise {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .aurora-blob {
+    position: absolute;
+    will-change: transform;
+  }
+
+  /*
+   * Touch devices have no hover state, but they do fire it on tap and then
+   * leave it stuck. Card lift and glow are disabled there; the tap itself is
+   * the feedback.
+   */
+  @media (hover: none) {
+
+    .card-hover:hover {
+      border-color: hsl(var(--foreground) / 0.08);
+      background-color: hsl(var(--foreground) / 0.015);
+    }
+  }
+
+  /* Comfortable touch targets without changing the visual size of small
+     controls: the hit area is expanded with a pseudo-element instead. */
+  @media (pointer: coarse) {
+
+    .tap-target {
+      position: relative;
+    }
+
+    .tap-target::before {
+      content: "";
+      position: absolute;
+      inset: -0.5rem;
+      /* Sits above neighbouring text but below any real overlay. */
+      z-index: 1;
+    }
+  }
+}
+
+@layer components {
+
+  /*
+   * Entrance animations run in CSS, not JS.
+   *
+   * requestAnimationFrame is paused while a tab is hidden, so a JS-driven
+   * opacity transition never resolves for anyone who opens the site in a
+   * background tab — they get a blank page until they focus it. CSS
+   * animations are not subject to that, and the hidden state is applied only
+   * when JS is present (the `js` class), so a failed bundle still shows
+   * everything.
+   */
+  .js .reveal {
+    opacity: 0;
+  }
+
+  .js .reveal.is-visible {
+    animation: reveal-rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  /* Hero content is above the fold; it animates on load rather than on view. */
+  .js .rise {
+    opacity: 0;
+    animation: reveal-rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  @keyframes reveal-rise {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@layer utilities {
+
+  /* Explicit focus ring for elements that need it scoped rather than global. */
+  .focus-ring {
+    @apply outline-none;
+  }
+
+  .focus-ring:focus-visible {
+    outline: 2px solid hsl(var(--aurora-teal));
+    outline-offset: 2px;
+  }
+
+  /* Editorial body copy inside project narratives. */
+  .prose-narrative p {
+    @apply text-[0.95rem] leading-[1.75] text-foreground/70 sm:text-base;
+  }
+
+  .prose-narrative p + p {
+    @apply mt-4;
+  }
+}
+
+/* Respect the OS setting. Decoration stops; content stays. */
+@media (prefers-reduced-motion: reduce) {
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  .js .reveal,
+  .js .rise,
+  .js .dialog-overlay,
+  .js .dialog-panel {
+    opacity: 1 !important;
+    animation: none !important;
+    transform: none !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }

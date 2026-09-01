@@ -1,102 +1,60 @@
-import { useState, useEffect } from "react";
 import { FiGithub, FiLinkedin, FiMail, FiMapPin } from "react-icons/fi";
-import { motion, AnimatePresence } from "framer-motion";
-import { personalInfo } from "@/data/portfolio";
+import { personalInfo, education } from "@/data/portfolio";
 
-const AboutApp = () => {
-    const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
+const links = [
+    { icon: FiGithub, href: personalInfo.socials.github, label: "GitHub" },
+    { icon: FiLinkedin, href: personalInfo.socials.linkedin, label: "LinkedIn" },
+    { icon: FiMail, href: personalInfo.socials.email, label: "Email" },
+];
 
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setCurrentRoleIndex((prev) => (prev + 1) % personalInfo.roles.length);
-        }, 3000);
-        return () => clearInterval(timer);
-    }, []);
-
-    return (
-        <div className="p-6 space-y-6">
-            {/* Header */}
-            <div className="text-center space-y-3">
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-aurora-teal/30 to-aurora-purple/30 flex items-center justify-center mx-auto text-4xl">
-                    👨‍💻
-                </div>
-                <h2 className="text-2xl font-bold text-foreground">{personalInfo.name}</h2>
-                <div className="h-6 relative overflow-hidden flex justify-center">
-                    <AnimatePresence mode="wait">
-                        <motion.p
-                            key={currentRoleIndex}
-                            initial={{ y: 20, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            exit={{ y: -20, opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="text-aurora-teal text-sm font-medium absolute"
-                        >
-                            {personalInfo.roles[currentRoleIndex]}
-                        </motion.p>
-                    </AnimatePresence>
-                </div>
-            </div>
-
-            {/* Bio */}
-            <div className="space-y-3">
-                {personalInfo.bio.split("\n\n").map((p, i) => (
-                    <p key={i} className="text-foreground/60 text-sm leading-relaxed">
-                        {p}
-                    </p>
-                ))}
-            </div>
-
-            {/* Quick Facts */}
-            <div className="grid grid-cols-2 gap-3">
-                {[
-                    { label: "Experience", value: "1+ Year" },
-                    { label: "Projects", value: "10+" },
-                    { label: "Technologies", value: "15+" },
-                    { label: "Curiosity", value: "∞" },
-                ].map((fact) => (
-                    <div
-                        key={fact.label}
-                        className="p-3 rounded-lg bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.05] dark:border-white/[0.05] text-center"
-                    >
-                        <p className="text-foreground font-bold text-lg">{fact.value}</p>
-                        <p className="text-foreground/40 text-xs">{fact.label}</p>
-                    </div>
-                ))}
-            </div>
-
-            {/* Location */}
-            <div className="flex items-center gap-2 text-foreground/50 text-sm">
-                <FiMapPin className="w-4 h-4" />
-                <span>{personalInfo.location}</span>
-            </div>
-
-            {/* Social Links */}
-            <div className="flex gap-3">
-                <a
-                    href={personalInfo.socials.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 p-2.5 rounded-lg bg-black/[0.02] dark:bg-white/[0.04] border border-black/[0.06] dark:border-white/[0.06] text-foreground/60 hover:text-foreground hover:border-aurora-teal/30 transition-all text-sm"
-                >
-                    <FiGithub className="w-4 h-4" /> GitHub
-                </a>
-                <a
-                    href={personalInfo.socials.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 p-2.5 rounded-lg bg-black/[0.02] dark:bg-white/[0.04] border border-black/[0.06] dark:border-white/[0.06] text-foreground/60 hover:text-foreground hover:border-aurora-teal/30 transition-all text-sm"
-                >
-                    <FiLinkedin className="w-4 h-4" /> LinkedIn
-                </a>
-                <a
-                    href={`mailto:${personalInfo.email}`}
-                    className="flex-1 flex items-center justify-center gap-2 p-2.5 rounded-lg bg-black/[0.02] dark:bg-white/[0.04] border border-black/[0.06] dark:border-white/[0.06] text-foreground/60 hover:text-foreground hover:border-aurora-teal/30 transition-all text-sm"
-                >
-                    <FiMail className="w-4 h-4" /> Email
-                </a>
-            </div>
+const AboutApp = () => (
+    <div className="space-y-6 p-6">
+        <div>
+            <h2 className="text-xl font-semibold text-foreground">{personalInfo.name}</h2>
+            <p className="mt-1 text-sm text-aurora-teal">{personalInfo.headline}</p>
+            <p className="mt-0.5 text-xs text-foreground/45">{personalInfo.tagline}</p>
         </div>
-    );
-};
+
+        <div className="space-y-3">
+            {personalInfo.bio.map((paragraph, i) => (
+                <p key={i} className="text-sm leading-relaxed text-foreground/60">
+                    {paragraph}
+                </p>
+            ))}
+        </div>
+
+        <dl className="space-y-1.5 border-t border-foreground/[0.08] pt-4 text-xs text-foreground/50">
+            <div className="flex gap-2">
+                <dt className="text-foreground/35">Degree</dt>
+                <dd>
+                    B.E. {education.field}, {education.dates} · CGPA {education.cgpa}
+                </dd>
+            </div>
+            <div className="flex gap-2">
+                <dt className="text-foreground/35">University</dt>
+                <dd>{education.university}</dd>
+            </div>
+        </dl>
+
+        <div className="flex items-center gap-2 text-sm text-foreground/50">
+            <FiMapPin className="h-4 w-4" aria-hidden />
+            <span>{personalInfo.location}</span>
+        </div>
+
+        <div className="flex gap-2">
+            {links.map(({ icon: Icon, href, label }) => (
+                <a
+                    key={label}
+                    href={href}
+                    target={href.startsWith("mailto:") ? undefined : "_blank"}
+                    rel={href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
+                    className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-foreground/[0.08] p-2.5 text-sm text-foreground/60 transition-colors hover:border-aurora-teal/30 hover:text-foreground focus-ring"
+                >
+                    <Icon className="h-4 w-4" aria-hidden /> {label}
+                </a>
+            ))}
+        </div>
+    </div>
+);
 
 export default AboutApp;

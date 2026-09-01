@@ -15,10 +15,10 @@ const FILE_TREE: FileNode[] = [
         name: "projects",
         type: "folder",
         children: [
-            { name: "rifaque-s-aurora", type: "file", link: "https://github.com/Rifaque", description: "Portfolio website (this site)" },
-            { name: "atlas", type: "file", link: "https://github.com/Rifaque/atlas", description: "AI workspace assistant" },
-            { name: "querycraft", type: "file", link: "https://github.com/Rifaque/querycraft", description: "Querycraft project" },
-            { name: "bhatkal-time-luxe", type: "file", link: "https://github.com/Rifaque/Bhatkal-Time-Luxe", description: "Bhatkal Time Luxe" },
+            { name: "rifaque-portfolio", type: "file", link: "https://github.com/Rifaque/rifaque-portfolio", description: "This site" },
+            { name: "atlas", type: "file", link: "https://github.com/Rifaque/atlas", description: "Local-first RAG workspace" },
+            { name: "querycraft", type: "file", link: "https://github.com/HubZeroHQ/querycraft", description: "NL2SQL, retired" },
+            { name: "bhatkal-time-luxe", type: "file", link: "https://github.com/HubZeroHQ/bhatkal-time-luxe", description: "Client work, HubZero" },
         ],
     },
     {
@@ -54,7 +54,11 @@ const FileManagerApp = () => {
     const toggle = (path: string) => {
         setExpanded((prev) => {
             const next = new Set(prev);
-            next.has(path) ? next.delete(path) : next.add(path);
+            if (next.has(path)) {
+                next.delete(path);
+            } else {
+                next.add(path);
+            }
             return next;
         });
     };

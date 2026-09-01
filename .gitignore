@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# TypeScript incremental build cache
+*.tsbuildinfo
+
+# Private career notes — never publish to this public repository.
+# Contains compensation and positioning strategy (see its section 56).
+Rifaque_Profile_Knowledge_Base.md

@@ -12,17 +12,15 @@ import AboutApp from "@/components/v2/apps/AboutApp";
 import ProjectsApp from "@/components/v2/apps/ProjectsApp";
 import ExperienceApp from "@/components/v2/apps/ExperienceApp";
 import SkillsApp from "@/components/v2/apps/SkillsApp";
-import GitHubApp from "@/components/v2/apps/GitHubApp";
 import ContactApp from "@/components/v2/apps/ContactApp";
 import TerminalApp from "@/components/v2/apps/TerminalApp";
 import ResumeApp from "@/components/v2/apps/ResumeApp";
 import NotepadApp from "@/components/v2/apps/NotepadApp";
 import SettingsApp from "@/components/v2/apps/SettingsApp";
-import CalculatorApp from "@/components/v2/apps/CalculatorApp";
 import FileManagerApp from "@/components/v2/apps/FileManagerApp";
-import MusicPlayerApp from "@/components/v2/apps/MusicPlayerApp";
-import BrowserApp from "@/components/v2/apps/BrowserApp";
 import SpotlightSearch from "@/components/v2/SpotlightSearch";
+import MobileFallback from "@/components/v2/MobileFallback";
+import { useIsMobile } from "@/hooks/use-mobile";
 import AltTabSwitcher from "@/components/v2/AltTabSwitcher";
 
 // Map app IDs to their content components
@@ -31,16 +29,12 @@ const APP_COMPONENTS: Record<string, React.FC> = {
     projects: ProjectsApp,
     experience: ExperienceApp,
     skills: SkillsApp,
-    github: GitHubApp,
     contact: ContactApp,
     terminal: TerminalApp,
     resume: ResumeApp,
     notepad: NotepadApp,
     settings: SettingsApp,
-    calculator: CalculatorApp,
     filemanager: FileManagerApp,
-    music: MusicPlayerApp,
-    browser: BrowserApp,
 };
 
 // Inner component that uses the window manager context
@@ -79,6 +73,8 @@ const DesktopEnvironment = () => {
 };
 
 const PortfolioV2 = () => {
+    const isMobile = useIsMobile();
+    const [override, setOverride] = useState(false);
     const alreadyBooted = sessionStorage.getItem("v2-booted") === "true";
     const [booted, setBooted] = useState(alreadyBooted);
 
@@ -86,6 +82,10 @@ const PortfolioV2 = () => {
         sessionStorage.setItem("v2-booted", "true");
         setBooted(true);
     };
+
+    if (isMobile && !override) {
+        return <MobileFallback onContinue={() => setOverride(true)} />;
+    }
 
     return (
         <SettingsProvider>

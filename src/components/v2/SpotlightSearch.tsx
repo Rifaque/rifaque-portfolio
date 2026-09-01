@@ -5,7 +5,7 @@ import { Search } from "lucide-react";
 import { useWindowManager, APP_DEFINITIONS } from "./WindowManagerContext";
 
 const QUICK_LINKS = [
-    { label: "GitHub", url: "https://github.com/RifaqueSr" },
+    { label: "GitHub", url: "https://github.com/Rifaque" },
     { label: "LinkedIn", url: "https://www.linkedin.com/in/rifaque" },
 ];
 

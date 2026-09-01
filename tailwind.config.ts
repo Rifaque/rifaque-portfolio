@@ -2,17 +2,26 @@ import type { Config } from "tailwindcss";
 
 export default {
   darkMode: ["class"],
-  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
+  content: ["./index.html", "./src/**/*.{ts,tsx}"],
   prefix: "",
   theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
-    },
     extend: {
+      screens: {
+        // Tailwind's defaults stop at 1536. Large monitors and ultrawides are
+        // a real design environment here, not an edge case.
+        "3xl": "1920px",
+        "4xl": "2560px",
+        // Short viewports get tighter vertical rhythm: 1280x720, 1366x768,
+        // and small phones in portrait.
+        short: { raw: "(max-height: 800px)" },
+        // Landscape phones are a different problem entirely - wide but only
+        // ~400px tall - and need the type scale capped, not just less padding.
+        squat: { raw: "(max-height: 520px)" },
+        tall: { raw: "(min-height: 900px)" },
+        // Devices that cannot hover. Used to drop hover-only affordances.
+        touch: { raw: "(hover: none)" },
+        stylus: { raw: "(hover: hover) and (pointer: fine)" },
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -75,14 +84,6 @@ export default {
         mono: ["JetBrains Mono", "Fira Code", "monospace"],
       },
       keyframes: {
-        "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
-        },
         "aurora-drift": {
           "0%, 100%": {
             transform: "translate(0%, 0%) scale(1)",
@@ -163,8 +164,6 @@ export default {
         },
       },
       animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
         "aurora-1": "aurora-drift 45s ease-in-out infinite",
         "aurora-2": "aurora-drift-2 55s ease-in-out infinite",
         "aurora-3": "aurora-drift-3 50s ease-in-out infinite",
@@ -175,5 +174,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [],
 } satisfies Config;

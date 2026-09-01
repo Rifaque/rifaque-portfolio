@@ -1,96 +1,117 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { FiExternalLink, FiGithub, FiArrowLeft } from "react-icons/fi";
 import { projects, type Project } from "@/data/portfolio";
 
 const ProjectsApp = () => {
-    const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+    const [selected, setSelected] = useState<Project | null>(null);
 
-    if (selectedProject) {
+    if (selected) {
         return (
-            <div className="p-5 space-y-4">
-                {/* Back Button */}
+            <div className="space-y-4 p-5">
                 <button
-                    onClick={() => setSelectedProject(null)}
-                    className="flex items-center gap-2 text-foreground/60 hover:text-foreground text-sm transition-colors"
+                    type="button"
+                    onClick={() => setSelected(null)}
+                    className="inline-flex items-center gap-2 text-sm text-foreground/60 transition-colors hover:text-foreground focus-ring"
                 >
-                    <FiArrowLeft className="w-4 h-4" />
-                    Back to Projects
+                    <FiArrowLeft className="h-4 w-4" aria-hidden />
+                    All projects
                 </button>
 
-                {/* Project Image */}
-                {selectedProject.image && (
-                    <div className="rounded-lg overflow-hidden aspect-video">
-                        <img
-                            src={selectedProject.image}
-                            alt={selectedProject.name}
-                            className="w-full h-full object-cover"
-                        />
-                    </div>
-                )}
+                <div>
+                    <h2 className="text-lg font-semibold text-foreground">{selected.name}</h2>
+                    <p className="mt-1 font-mono text-[10px] text-foreground/45">
+                        {selected.status.label} · {selected.dates}
+                    </p>
+                    <p className="mt-2 text-xs text-foreground/50">{selected.role}</p>
+                </div>
 
-                <h2 className="text-xl font-bold text-foreground">{selectedProject.name}</h2>
-                <p className="text-foreground/60 text-sm leading-relaxed">{selectedProject.fullDescription}</p>
-
-                {/* Tech Stack */}
-                <div className="flex flex-wrap gap-1.5">
-                    {selectedProject.technologies.map((tech) => (
-                        <span key={tech} className="px-2 py-1 text-xs rounded-md bg-black/[0.03] dark:bg-white/[0.05] border border-black/[0.06] dark:border-white/[0.06] text-foreground/70">
-                            {tech}
-                        </span>
+                <div className="space-y-4">
+                    {selected.narrative.map((block) => (
+                        <div key={block.heading}>
+                            <h3 className="font-mono text-[10px] uppercase tracking-[0.16em] text-aurora-teal/80">
+                                {block.heading}
+                            </h3>
+                            {block.body?.map((p, i) => (
+                                <p key={i} className="mt-2 text-xs leading-relaxed text-foreground/60">
+                                    {p}
+                                </p>
+                            ))}
+                            {block.list && (
+                                <ul className="mt-2 space-y-1.5">
+                                    {block.list.map((item, i) => (
+                                        <li key={i} className="flex gap-2 text-xs leading-relaxed text-foreground/60">
+                                            <span aria-hidden className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-aurora-teal/70" />
+                                            <span>{item}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
                     ))}
                 </div>
 
-                {/* Links */}
-                <div className="flex gap-3 pt-2">
-                    {selectedProject.liveUrl && (
-                        <a href={selectedProject.liveUrl} target="_blank" rel="noopener noreferrer"
-                            className="flex items-center gap-1.5 text-aurora-teal text-sm hover:underline">
-                            <FiExternalLink className="w-4 h-4" /> Live Demo
-                        </a>
-                    )}
-                    {selectedProject.githubUrl && (
-                        <a href={selectedProject.githubUrl} target="_blank" rel="noopener noreferrer"
-                            className="flex items-center gap-1.5 text-foreground/60 text-sm hover:text-foreground">
-                            <FiGithub className="w-4 h-4" /> Source Code
-                        </a>
-                    )}
-                </div>
+                <ul className="flex flex-wrap gap-1.5 border-t border-foreground/[0.08] pt-3">
+                    {selected.technologies.map((tech) => (
+                        <li
+                            key={tech}
+                            className="rounded border border-foreground/10 px-1.5 py-0.5 text-[10px] text-foreground/50"
+                        >
+                            {tech}
+                        </li>
+                    ))}
+                </ul>
+
+                {selected.links.length > 0 && (
+                    <div className="flex flex-wrap gap-3">
+                        {selected.links.map((link) => (
+                            <a
+                                key={link.href}
+                                href={link.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1.5 text-xs text-foreground/60 transition-colors hover:text-foreground focus-ring"
+                            >
+                                {link.kind === "live" ? (
+                                    <FiExternalLink className="h-3.5 w-3.5" aria-hidden />
+                                ) : (
+                                    <FiGithub className="h-3.5 w-3.5" aria-hidden />
+                                )}
+                                {link.label}
+                            </a>
+                        ))}
+                    </div>
+                )}
             </div>
         );
     }
 
     return (
-        <div className="p-5">
-            <div className="grid grid-cols-2 gap-3">
-                {projects.map((project, index) => (
-                    <motion.button
-                        key={project.id}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.05 }}
-                        onClick={() => setSelectedProject(project)}
-                        className="text-left p-3 rounded-lg bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.05] dark:border-white/[0.05] hover:border-aurora-teal/20 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-all group"
+        <ul className="space-y-2 p-5">
+            {projects.map((project) => (
+                <li key={project.id}>
+                    <button
+                        type="button"
+                        onClick={() => setSelected(project)}
+                        className="w-full rounded-lg border border-foreground/[0.07] p-3 text-left transition-colors hover:border-aurora-teal/25 focus-ring"
                     >
-                        {/* Thumbnail */}
-                        {project.image && (
-                            <div className="rounded-md overflow-hidden aspect-video mb-2">
-                                <img src={project.image} alt={project.name} className="w-full h-full object-cover" loading="lazy" />
-                            </div>
-                        )}
-                        <h3 className="text-sm font-semibold text-foreground group-hover:text-aurora-teal transition-colors">
-                            {project.name}
-                        </h3>
-                        <p className="text-foreground/50 text-xs mt-1 line-clamp-2">{project.shortDescription}</p>
-                        <div className="flex flex-wrap gap-1 mt-2">
-                            {project.technologies.slice(0, 2).map((t) => (
-                                <span key={t} className="text-[10px] px-1.5 py-0.5 rounded bg-black/[0.03] dark:bg-white/[0.05] text-foreground/50">{t}</span>
-                            ))}
+                        <div className="flex items-baseline justify-between gap-3">
+                            <span className="text-sm font-medium text-foreground">
+                                {project.name}
+                            </span>
+                            <span className="shrink-0 font-mono text-[10px] text-foreground/40">
+                                {project.dates}
+                            </span>
                         </div>
-                    </motion.button>
-                ))}
-            </div>
-        </div>
+                        <p className="mt-1 text-[10px] uppercase tracking-wider text-aurora-teal/70">
+                            {project.status.label}
+                        </p>
+                        <p className="mt-2 text-xs leading-relaxed text-foreground/55">
+                            {project.tagline}
+                        </p>
+                    </button>
+                </li>
+            ))}
+        </ul>
     );
 };
 

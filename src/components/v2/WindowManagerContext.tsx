@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer, useCallback, ReactNode } from "react";
-import { User, Folder, Briefcase, Zap, Github, Mail, TerminalSquare, FileText, StickyNote, Settings, Calculator, FolderOpen, Music, Globe } from "lucide-react";
+import { User, Folder, Briefcase, Zap, Mail, TerminalSquare, FileText, StickyNote, Settings, FolderOpen } from "lucide-react";
 
 // ═══════════════════════════════════════
 // Types
@@ -71,24 +71,12 @@ export const APP_DEFINITIONS: Record<string, AppDefinition> = {
     projects: { id: "projects", title: "Projects", icon: <Folder size={20} className="text-yellow-400" />, defaultWidth: 800, defaultHeight: 600, minWidth: 500, minHeight: 400 },
     experience: { id: "experience", title: "Experience", icon: <Briefcase size={20} className="text-orange-400" />, defaultWidth: 650, defaultHeight: 520, minWidth: 400, minHeight: 350 },
     skills: { id: "skills", title: "Skills", icon: <Zap size={20} className="text-green-400" />, defaultWidth: 700, defaultHeight: 500, minWidth: 450, minHeight: 350 },
-    github: { id: "github", title: "GitHub", icon: <Github size={20} className="text-purple-400" />, defaultWidth: 750, defaultHeight: 550, minWidth: 500, minHeight: 400 },
     contact: { id: "contact", title: "Contact", icon: <Mail size={20} className="text-red-400" />, defaultWidth: 550, defaultHeight: 480, minWidth: 380, minHeight: 350 },
     terminal: { id: "terminal", title: "Terminal", icon: <TerminalSquare size={20} className="text-gray-400" />, defaultWidth: 700, defaultHeight: 450, minWidth: 400, minHeight: 300 },
     resume: { id: "resume", title: "Resume", icon: <FileText size={20} className="text-indigo-400" />, defaultWidth: 500, defaultHeight: 400, minWidth: 350, minHeight: 300 },
     notepad: { id: "notepad", title: "Notepad", icon: <StickyNote size={20} className="text-lime-400" />, defaultWidth: 550, defaultHeight: 450, minWidth: 350, minHeight: 300 },
     settings: { id: "settings", title: "Settings", icon: <Settings size={20} className="text-neutral-400" />, defaultWidth: 500, defaultHeight: 520, minWidth: 400, minHeight: 400 },
-    calculator: { id: "calculator", title: "Calculator", icon: <Calculator size={20} className="text-amber-400" />, defaultWidth: 320, defaultHeight: 460, minWidth: 280, minHeight: 400 },
     filemanager: { id: "filemanager", title: "Files", icon: <FolderOpen size={20} className="text-sky-400" />, defaultWidth: 650, defaultHeight: 450, minWidth: 450, minHeight: 350 },
-    music: { id: "music", title: "Music", icon: <Music size={20} className="text-pink-400" />, defaultWidth: 340, defaultHeight: 540, minWidth: 280, minHeight: 450 },
-    browser: {
-        id: "browser",
-        title: "Browser",
-        icon: <Globe size={24} className="text-blue-400" />,
-        defaultWidth: 900,
-        defaultHeight: 650,
-        minWidth: 400,
-        minHeight: 300,
-    },
 };
 
 // ═══════════════════════════════════════

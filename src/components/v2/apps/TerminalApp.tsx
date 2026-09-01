@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import { personalInfo, projects, skillCategories, experiences } from "@/data/portfolio";
+import { personalInfo, projects, skillEvidence, alsoWorkedWith, terminalCommands } from "@/data/portfolio";
 
 // ═══════════════════════════════════════
 // All available commands
@@ -10,7 +10,8 @@ const ALL_COMMANDS = [
     "help", "skills", "projects", "contact", "clear", "whoami", "theme", "exit",
     "ls", "about", "open", "cd", "resume", "version", "uptime", "logs", "env",
     "fortune", "neofetch", "date", "ascii", "coffee", "sudo", "hack", "echo",
-    "man", "install", "matrix", "vim", "rm",
+    "man", "install", "matrix", "vim", "rm", "nexus", "atlas", "hubzero",
+    "invariants",
 ];
 
 const COMMAND_ALIASES: Record<string, string> = {
@@ -21,6 +22,10 @@ const MANUALS: Record<string, string> = {
     help: "Displays all available commands",
     skills: "Lists developer's skills by category",
     projects: "Shows featured projects",
+    nexus: "The flagship experiment, and what it cost",
+    atlas: "The one that shipped",
+    hubzero: "The studio",
+    invariants: "One of the 27 rules Nexus cannot talk its way past",
     contact: "Shows contact information",
     cd: "Usage: cd [section] — navigates within the portfolio",
     open: "Usage: open [github | linkedin | resume] — opens respective link",
@@ -64,7 +69,7 @@ const TerminalApp = () => {
         { type: "output", content: `Type "help" to get started.\n` },
     ]);
     const [commandHistory, setCommandHistory] = useState<string[]>([]);
-    const [commandIndex, setCommandIndex] = useState(-1);
+    const [, setCommandIndex] = useState(-1);
     const [suggestions, setSuggestions] = useState<string[]>([]);
     const inputRef = useRef<HTMLInputElement>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -106,17 +111,23 @@ const TerminalApp = () => {
                 return `Available commands:\n\n${ALL_COMMANDS.join(", ")}\n\nType "man [command]" for details on any command.`;
 
             case "skills":
-                return skillCategories
-                    .map((g) => `${g.name}:\n  ${g.skills.join(", ")}`)
-                    .join("\n\n");
+                return (
+                    skillEvidence
+                        .map((s) => `${s.name.padEnd(24)}${s.evidence.join(", ")}`)
+                        .join("\n") +
+                    `\n\nAlso worked with: ${alsoWorkedWith.join(", ")}`
+                );
 
             case "projects":
                 return projects
-                    .map((p, i) => `${i + 1}. ${p.name} — ${p.shortDescription}`)
+                    .map(
+                        (p, i) =>
+                            `${i + 1}. ${p.name} — ${p.status.label}\n   ${p.tagline}`
+                    )
                     .join("\n\n");
 
             case "contact":
-                return `Email: ${personalInfo.email}\nPhone: ${personalInfo.phone}\nLocation: ${personalInfo.location}`;
+                return terminalCommands.contact;
 
             case "clear":
                 setHistory([]);
@@ -124,13 +135,25 @@ const TerminalApp = () => {
                 return "";
 
             case "whoami":
-                return `You are visiting ${personalInfo.name}'s portfolio.\nRole: ${personalInfo.roles[0]}`;
+                return `You are visiting ${personalInfo.name}'s portfolio.\n${personalInfo.headline}.`;
 
             case "theme":
                 return "Dark mode — always. Terminal stays dark. ☕️";
 
             case "about":
-                return personalInfo.bio;
+                return personalInfo.bio.join("\n\n");
+
+            case "nexus":
+                return terminalCommands.nexus;
+
+            case "atlas":
+                return terminalCommands.atlas;
+
+            case "hubzero":
+                return terminalCommands.hubzero;
+
+            case "invariants":
+                return terminalCommands.invariants;
 
             case "resume":
                 window.open(personalInfo.resume, "_blank");
@@ -154,7 +177,7 @@ const TerminalApp = () => {
                 return "Nice try. There's no escape from this terminal. 😈";
 
             case "version":
-                return "Rifaque's Portfolio Terminal v2.0.0 (build 2025.07.14)";
+                return "Portfolio terminal v2.1.0";
 
             case "uptime": {
                 const seconds = Math.floor((Date.now() - startTime) / 1000);
@@ -164,10 +187,10 @@ const TerminalApp = () => {
             }
 
             case "logs":
-                return `[INFO]  Loaded config\n[INFO]  Fetched profile data\n[INFO]  Rendered ${projects.length} projects\n[INFO]  ${skillCategories.length} skill categories loaded\n[WARN]  Portfolio too awesome to handle 😎`;
+                return `[INFO]  Loaded config\n[INFO]  Composition root initialised\n[INFO]  Rendered ${projects.length} projects\n[INFO]  ${skillEvidence.length} skills resolved against evidence\n[WARN]  0 unverified claims. This took a while.`;
 
             case "env":
-                return `NODE_ENV=production\nFRAMEWORK=React + Vite\nSTYLING=Tailwind CSS\nLANGUAGE=TypeScript\nANIMATIONS=Framer Motion\nDEPLOY=Cloudflare`;
+                return `NODE_ENV=production\nFRAMEWORK=React 18 + Vite\nSTYLING=Tailwind CSS\nLANGUAGE=TypeScript\nANIMATIONS=Framer Motion\nDEPLOY=Vercel`;
 
             case "fortune":
                 return getRandomFortune();
@@ -179,11 +202,11 @@ const TerminalApp = () => {
                     `    ╚══════════════════╝`,
                     ``,
                     `  Name:      ${personalInfo.name}`,
-                    `  Role:      ${personalInfo.roles[0]}`,
+                    `  Role:      ${personalInfo.headline}`,
                     `  Location:  ${personalInfo.location}`,
                     `  Projects:  ${projects.length}`,
-                    `  Skills:    ${skillCategories.reduce((a, c) => a + c.skills.length, 0)} across ${skillCategories.length} categories`,
-                    `  Status:    Building cool stuff 🚀`,
+                    `  Skills:    ${skillEvidence.length}, each attached to shipped work`,
+                    `  Status:    Open to product / AI engineering roles`,
                 ].join("\n");
 
             case "date":

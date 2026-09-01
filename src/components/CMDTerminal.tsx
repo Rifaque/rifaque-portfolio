@@ -1,162 +1,208 @@
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { FiX, FiTerminal } from "react-icons/fi";
-import { terminalCommands } from "@/data/portfolio";
+import { terminalCommands, personalInfo } from "@/data/portfolio";
 
 interface TerminalLine {
   type: "input" | "output";
   content: string;
 }
 
+const GREETING: TerminalLine[] = [
+  {
+    type: "output",
+    content: `rifaque.ahmed — portfolio shell
+
+Type "help" for commands. Esc or "exit" to close.`,
+  },
+];
+
 const CMDTerminal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
-  const [history, setHistory] = useState<TerminalLine[]>([
-    { type: "output", content: 'Welcome to the terminal! Type "help" for available commands.' },
-  ]);
+  const [history, setHistory] = useState<TerminalLine[]>(GREETING);
+  const [recall, setRecall] = useState<string[]>([]);
+  const [recallIndex, setRecallIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
-  const terminalRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const restoreRef = useRef<HTMLElement | null>(null);
 
+  const close = useCallback(() => {
+    setIsOpen(false);
+    restoreRef.current?.focus?.();
+  }, []);
+
+  // Backtick toggles. Ignored while typing in a real field, so the shortcut
+  // never eats a character someone meant to write.
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "`" || (e.ctrlKey && e.key === "k")) {
+      const target = e.target as HTMLElement | null;
+      const typing =
+        target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.isContentEditable);
+
+      if (e.key === "`" && !typing) {
         e.preventDefault();
-        setIsOpen((prev) => !prev);
-      }
-      if (e.key === "Escape" && isOpen) {
-        setIsOpen(false);
+        restoreRef.current = document.activeElement as HTMLElement;
+        setIsOpen(true);
       }
     };
-
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen]);
+  }, []);
 
   useEffect(() => {
-    if (isOpen && inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [isOpen]);
+    if (!isOpen) return;
+    inputRef.current?.focus();
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        close();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [isOpen, close]);
 
   useEffect(() => {
-    if (terminalRef.current) {
-      terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
-    }
+    if (bodyRef.current) bodyRef.current.scrollTop = bodyRef.current.scrollHeight;
   }, [history]);
 
-  const executeCommand = (cmd: string) => {
-    const trimmedCmd = cmd.trim().toLowerCase();
+  const run = (raw: string) => {
+    const cmd = raw.trim().toLowerCase();
+    setRecall((prev) => [raw, ...prev].slice(0, 40));
+    setRecallIndex(-1);
+    setHistory((prev) => [...prev, { type: "input", content: raw }]);
 
-    setHistory((prev) => [...prev, { type: "input", content: cmd }]);
-
-    if (trimmedCmd === "clear") {
+    if (cmd === "clear") {
       setHistory([]);
       return;
     }
-
-    if (trimmedCmd === "exit") {
-      setIsOpen(false);
+    if (cmd === "exit") {
+      close();
+      return;
+    }
+    if (cmd === "resume") {
+      window.open(personalInfo.resume, "_blank", "noopener");
+      setHistory((prev) => [
+        ...prev,
+        { type: "output", content: terminalCommands.resume },
+      ]);
       return;
     }
 
-    const output = terminalCommands[trimmedCmd] || `Command not found: ${cmd}. Type "help" for available commands.`;
-
+    const output =
+      terminalCommands[cmd] ??
+      `${raw}: command not found. Type "help" to see what exists.`;
     setHistory((prev) => [...prev, { type: "output", content: output }]);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (input.trim()) {
-      executeCommand(input);
-      setInput("");
+  const handleInputKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      const next = Math.min(recallIndex + 1, recall.length - 1);
+      if (next >= 0) {
+        setRecallIndex(next);
+        setInput(recall[next]);
+      }
+    } else if (e.key === "ArrowDown") {
+      e.preventDefault();
+      const next = recallIndex - 1;
+      setRecallIndex(next);
+      setInput(next >= 0 ? recall[next] : "");
     }
   };
 
   return (
-    <AnimatePresence>
+    <>
       {isOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md"
-          onClick={() => setIsOpen(false)}
+        <div
+          className="dialog-overlay fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-3 backdrop-blur-md sm:p-4"
+          onClick={close}
         >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            transition={{ duration: 0.2 }}
-            className="w-full max-w-3xl max-h-[80vh] bg-[#0a0a0a] border border-white/[0.1] rounded-xl overflow-hidden shadow-[0_0_60px_rgba(0,0,0,0.8)]"
+          <div
+            className="dialog-panel relative flex max-h-[85dvh] w-full max-w-3xl flex-col overflow-hidden rounded-xl border border-white/[0.1] bg-[#0a0a0a]"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Portfolio terminal"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Terminal Header */}
-            <div className="flex items-center justify-between px-4 py-3 bg-white/[0.02] border-b border-white/[0.05]">
+            <div className="flex items-center justify-between border-b border-white/[0.06] px-4 py-3">
               <div className="flex items-center gap-2">
-                <FiTerminal className="w-4 h-4 text-aurora-teal" />
-                <span className="text-white/70 text-sm font-mono">rifaque@portfolio ~ </span>
+                <FiTerminal className="h-4 w-4 text-aurora-teal" aria-hidden />
+                <span className="font-mono text-sm text-white/60">
+                  rifaque@portfolio ~
+                </span>
               </div>
               <button
-                onClick={() => setIsOpen(false)}
-                className="p-1 text-white/50 hover:text-white transition-colors"
+                type="button"
+                onClick={close}
+                className="rounded p-1 text-white/50 transition-colors hover:text-white focus-ring"
               >
-                <FiX className="w-4 h-4" />
+                <span className="sr-only">Close terminal</span>
+                <FiX className="h-4 w-4" aria-hidden />
               </button>
             </div>
 
-            {/* Terminal Body */}
             <div
-              ref={terminalRef}
-              className="p-4 h-[400px] overflow-y-auto font-mono text-sm scrollbar-hide"
+              ref={bodyRef}
+              className="scrollbar-hide h-[400px] max-h-[62dvh] overflow-y-auto overscroll-contain p-4 pb-[calc(1rem+var(--safe-bottom))] font-mono text-xs sm:text-sm"
+              aria-live="polite"
             >
               {history.map((line, index) => (
-                <div key={index} className="mb-2">
+                <div key={index} className="mb-3">
                   {line.type === "input" ? (
                     <div className="flex items-start gap-2">
-                      <span className="text-aurora-teal">❯</span>
+                      <span className="text-aurora-teal" aria-hidden>
+                        ❯
+                      </span>
                       <span className="text-white">{line.content}</span>
                     </div>
                   ) : (
-                    <pre className="aurora-text whitespace-pre-wrap leading-relaxed pl-4">
+                    <pre className="whitespace-pre-wrap pl-4 leading-relaxed text-white/70">
                       {line.content}
                     </pre>
                   )}
                 </div>
               ))}
 
-              {/* Input Line */}
-              <form onSubmit={handleSubmit} className="flex items-center gap-2">
-                <span className="text-aurora-teal">❯</span>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (input.trim()) {
+                    run(input);
+                    setInput("");
+                  }
+                }}
+                className="flex items-center gap-2"
+              >
+                <label htmlFor="terminal-input" className="text-aurora-teal">
+                  <span className="sr-only">Terminal command</span>
+                  <span aria-hidden>❯</span>
+                </label>
                 <input
+                  id="terminal-input"
                   ref={inputRef}
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  className="flex-1 bg-transparent text-white outline-none caret-aurora-teal"
+                  onKeyDown={handleInputKey}
+                  className="flex-1 bg-transparent text-white caret-aurora-teal outline-none"
                   spellCheck={false}
                   autoComplete="off"
-                />
-                <motion.span
-                  animate={{ opacity: [1, 0] }}
-                  transition={{ duration: 0.8, repeat: Infinity }}
-                  className="w-2 h-5 bg-aurora-teal"
+                  autoCapitalize="off"
                 />
               </form>
             </div>
-
-            {/* Scanline Effect */}
-            <div className="absolute inset-0 pointer-events-none opacity-[0.02]">
-              <div
-                className="absolute inset-0"
-                style={{
-                  backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px)",
-                }}
-              />
-            </div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       )}
-    </AnimatePresence>
+    </>
   );
 };
 

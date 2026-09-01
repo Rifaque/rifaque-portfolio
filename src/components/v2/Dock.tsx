@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { useWindowManager, APP_DEFINITIONS } from "./WindowManagerContext";
 import { useSettings } from "./SettingsContext";
 
-const DOCK_APPS = ["about", "projects", "experience", "skills", "github", "contact", "terminal", "resume", "notepad", "calculator", "filemanager", "music", "settings", "browser"] as const;
+const DOCK_APPS = ["about", "projects", "experience", "skills", "contact", "terminal", "resume", "notepad", "filemanager", "settings"] as const;
 
 interface DockProps {
     appComponents?: Record<string, React.FC>;

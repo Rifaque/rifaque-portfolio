@@ -1,28 +1,28 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
-import { componentTagger } from "lovable-tagger";
 
-// https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
+export default defineConfig({
   base: "/",
   server: {
     host: "::",
     port: 8080,
-    hmr: {
-      overlay: false,
+  },
+  plugins: [react()],
+  build: {
+    rollupOptions: {
+      output: {
+        // Split the slow-moving vendor code so a content edit does not
+        // invalidate the whole cached payload.
+        manualChunks: {
+          react: ["react", "react-dom", "react-router-dom"],
+        },
+      },
     },
   },
-  plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      // Deduplicate React to prevent multiple instances
-      "react": path.resolve(__dirname, "./node_modules/react"),
-      "react-dom": path.resolve(__dirname, "./node_modules/react-dom"),
     },
   },
-  optimizeDeps: {
-    include: ["react", "react-dom", "framer-motion", "@tanstack/react-query"],
-  },
-}));
+});

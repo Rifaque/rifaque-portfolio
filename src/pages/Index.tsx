@@ -1,28 +1,29 @@
 import AuroraBackground from "@/components/AuroraBackground";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/sections/Hero";
-import About from "@/components/sections/About";
-import Projects from "@/components/sections/Projects";
+import Work from "@/components/sections/Work";
 import Experience from "@/components/sections/Experience";
-import Education from "@/components/sections/Education";
 import Skills from "@/components/sections/Skills";
-import GitHub from "@/components/sections/GitHub";
+import About from "@/components/sections/About";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/sections/Footer";
 import CMDTerminal from "@/components/CMDTerminal";
+import SkipLink from "@/components/SkipLink";
+import { useHashScroll } from "@/hooks/useHashScroll";
 
 const Index = () => {
+  useHashScroll();
+
   return (
     <AuroraBackground>
+      <SkipLink />
       <Navbar />
-      <main>
+      <main id="main">
         <Hero />
-        <About />
-        <Projects />
+        <Work />
         <Experience />
-        <Education />
         <Skills />
-        <GitHub />
+        <About />
         <Contact />
       </main>
       <Footer />

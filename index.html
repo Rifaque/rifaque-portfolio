@@ -1,100 +1,127 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- Primary Meta Tags -->
-    <title>Rifaque Ahmed — Full Stack Developer</title>
-    <meta name="title" content="Rifaque Ahmed — Full Stack Developer" />
-    <meta name="description" content="Full Stack Developer specializing in React, TypeScript, Node.js, and AI-powered applications. Building scalable web platforms with MERN stack. Explore projects, skills, and get in touch." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <!-- Primary meta -->
+    <title>Rifaque Ahmed — Product-minded full-stack engineer</title>
+    <meta name="title" content="Rifaque Ahmed — Product-minded full-stack engineer" />
+    <meta
+      name="description"
+      content="Product-minded full-stack engineer. I build AI-assisted tools, RAG systems and web products — Nexus, a governed AI development assistant; Atlas, a local-first RAG desktop app; and client software delivered through HubZero."
+    />
     <meta name="author" content="Rifaque Ahmed" />
-    <meta name="keywords" content="Rifaque Ahmed, Full Stack Developer, React Developer, TypeScript, JavaScript, Node.js, Express.js, MongoDB, Next.js, Python, Flask, MERN Stack, Web Developer, Software Engineer, Portfolio, Bhatkal, Karnataka, India, REST APIs, Socket.io, Firebase, Tailwind CSS, GSAP, Framer Motion, SQL, MySQL, SQLite, NGINX, Linux, Cloudflare, Git, Android Developer" />
-    <meta name="robots" content="index, follow" />
-    <meta name="language" content="English" />
-    <meta name="revisit-after" content="7 days" />
-    
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://rifaque.lovable.app/" />
-    
-    <!-- Favicons & Icons -->
-    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+
+    <link rel="canonical" href="https://rifaque.hubzero.in/" />
+
+    <!-- Icons -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta name="theme-color" content="#14b8a6" />
-    <meta name="msapplication-TileColor" content="#000000" />
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://rifaque.lovable.app/" />
-    <meta property="og:site_name" content="Rifaque Ahmed Portfolio" />
-    <meta property="og:title" content="Rifaque Ahmed — Full Stack Developer" />
-    <meta property="og:description" content="Full Stack Developer specializing in React, TypeScript, and AI-powered applications. Explore projects, skills, and experience." />
-    <meta property="og:image" content="https://rifaque.lovable.app/og-image.png" />
+    <meta name="theme-color" content="#000000" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="profile" />
+    <meta property="og:url" content="https://rifaque.hubzero.in/" />
+    <meta property="og:site_name" content="Rifaque Ahmed" />
+    <meta property="og:title" content="Rifaque Ahmed — Product-minded full-stack engineer" />
+    <meta
+      property="og:description"
+      content="AI-assisted tools, RAG systems and web products. Nexus, Atlas, HubZero, and the work in between."
+    />
+    <meta property="og:image" content="https://rifaque.hubzero.in/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Rifaque Ahmed - Full Stack Developer Portfolio" />
+    <meta property="og:image:alt" content="Rifaque Ahmed — product-minded full-stack engineer" />
     <meta property="og:locale" content="en_US" />
-    
-    <!-- Twitter -->
+    <meta property="profile:first_name" content="Rifaque" />
+    <meta property="profile:last_name" content="Ahmed" />
+
+    <!-- Twitter card. No creator handle — none is verified. -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://rifaque.lovable.app/" />
-    <meta name="twitter:title" content="Rifaque Ahmed — Full Stack Developer" />
-    <meta name="twitter:description" content="Full Stack Developer specializing in React, TypeScript, and AI-powered applications. Building exceptional digital experiences." />
-    <meta name="twitter:image" content="https://rifaque.lovable.app/og-image.png" />
-    <meta name="twitter:image:alt" content="Rifaque Ahmed - Full Stack Developer Portfolio" />
-    <meta name="twitter:creator" content="@rifaque" />
-    
-    <!-- Article Metadata -->
-    <meta property="article:author" content="Rifaque Ahmed" />
-    <meta property="article:published_time" content="2025-01-01T00:00:00Z" />
-    <meta property="article:modified_time" content="2025-01-30T00:00:00Z" />
-    <meta property="article:section" content="Portfolio" />
-    
-    <!-- Structured Data (JSON-LD) -->
+    <meta name="twitter:title" content="Rifaque Ahmed — Product-minded full-stack engineer" />
+    <meta
+      name="twitter:description"
+      content="AI-assisted tools, RAG systems and web products. Nexus, Atlas, HubZero, and the work in between."
+    />
+    <meta name="twitter:image" content="https://rifaque.hubzero.in/og-image.png" />
+    <meta name="twitter:image:alt" content="Rifaque Ahmed — product-minded full-stack engineer" />
+
+    <!-- Structured data -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Rifaque Ahmed",
-      "url": "https://rifaque.lovable.app/",
-      "image": "https://rifaque.lovable.app/og-image.png",
-      "jobTitle": "Full Stack Developer",
-      "description": "Full Stack Developer specializing in React, TypeScript, and AI-powered applications",
-      "email": "rifaque.rs@gmail.com",
-      "telephone": "+91-6364282251",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Bhatkal",
-        "addressRegion": "Karnataka",
-        "addressCountry": "India"
-      },
-      "sameAs": [
-        "https://github.com/Rifaque",
-        "https://linkedin.com/in/rifaque-akrami"
-      ],
-      "knowsAbout": [
-        "React", "TypeScript", "JavaScript", "Node.js", "Express.js", 
-        "MongoDB", "Next.js", "Python", "Flask", "REST APIs", 
-        "Socket.io", "Firebase", "Tailwind CSS", "NGINX", "Linux"
-      ],
-      "alumniOf": {
-        "@type": "CollegeOrUniversity",
-        "name": "Anjuman Institute of Technology and Management"
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Rifaque Ahmed",
+        "url": "https://rifaque.hubzero.in/",
+        "image": "https://rifaque.hubzero.in/og-image.png",
+        "jobTitle": "Software Engineer",
+        "description": "Product-minded full-stack engineer building AI-assisted tools, RAG-based developer systems and web products.",
+        "email": "mailto:rifaque.rs@gmail.com",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Bhatkal",
+          "addressRegion": "Karnataka",
+          "addressCountry": "IN"
+        },
+        "sameAs": [
+          "https://github.com/Rifaque",
+          "https://linkedin.com/in/rifaque-akrami"
+        ],
+        "knowsAbout": [
+          "Full-stack engineering",
+          "Retrieval-Augmented Generation",
+          "Information retrieval",
+          "Backend API design",
+          "TypeScript",
+          "React",
+          "Next.js",
+          "Node.js",
+          "Python",
+          "Rust",
+          "PostgreSQL",
+          "MongoDB",
+          "Local language model inference"
+        ],
+        "alumniOf": {
+          "@type": "CollegeOrUniversity",
+          "name": "Visvesvaraya Technological University",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Belagavi",
+            "addressRegion": "Karnataka",
+            "addressCountry": "IN"
+          }
+        },
+        "worksFor": {
+          "@type": "Organization",
+          "name": "HubZero",
+          "url": "https://hubzero.in"
+        }
       }
-    }
     </script>
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
   </head>
 
   <body>
     <div id="root"></div>
+    <noscript>
+      <p style="padding: 2rem; font-family: system-ui, sans-serif">
+        This portfolio needs JavaScript. The same information is on my resume at
+        <a href="/resume/Rifaque_Resume.pdf">/resume/Rifaque_Resume.pdf</a>, and
+        my work is at
+        <a href="https://github.com/Rifaque">github.com/Rifaque</a>.
+      </p>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

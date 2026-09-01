@@ -1,174 +1,149 @@
-import { motion } from "framer-motion";
-import { useState } from "react";
-import { TypeAnimation } from "react-type-animation";
-import { FiGithub, FiLinkedin, FiMail, FiDownload, FiMonitor } from "react-icons/fi";
-import GlassText from "@/components/GlassText";
-import { personalInfo } from "@/data/portfolio";
-import ShutdownTransition from "@/components/ShutdownTransition";
+import { FiGithub, FiLinkedin, FiMail, FiArrowDown, FiFileText } from "react-icons/fi";
+import { personalInfo, signatureProjects, experiences } from "@/data/portfolio";
 
 const socialLinks = [
   { icon: FiGithub, href: personalInfo.socials.github, label: "GitHub" },
   { icon: FiLinkedin, href: personalInfo.socials.linkedin, label: "LinkedIn" },
+  { icon: FiMail, href: personalInfo.socials.email, label: "Email" },
 ];
 
-const Hero = () => {
-  const [showShutdown, setShowShutdown] = useState(false);
+/** Real current state, not a stat wall. Three rows, all verifiable. */
+const nowRows = [
+  ...signatureProjects.map((p) => ({ name: p.name, detail: p.status.label })),
+  {
+    name: experiences[0].company,
+    detail: `${experiences[0].role} · ${experiences[0].dates}`,
+  },
+];
 
-  const scrollToContact = () => {
-    document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-  };
+/** CSS-driven stagger. See `.rise` in index.css for why this is not JS. */
+const rise = (delay: number) => ({ style: { animationDelay: `${delay}s` } });
 
-  return (
-    <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20">
-      <div className="max-w-4xl mx-auto text-center">
-        {/* Greeting */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-foreground/60 text-base sm:text-lg mb-3 sm:mb-4"
+const Hero = () => (
+  <section
+    className={[
+      "rail relative",
+      // Top padding clears the fixed header and respects a notch. It drops
+      // hard on short viewports so a 1366x768 laptop and a landscape phone
+      // still get the headline, the intro and the CTAs above the fold.
+      "pt-[calc(var(--header-h)+3.5rem+var(--safe-top))]",
+      "sm:pt-[calc(var(--header-h)+5rem+var(--safe-top))]",
+      "lg:pt-[calc(var(--header-h)+7rem+var(--safe-top))]",
+      // Short and landscape viewports override the width-based padding above.
+      "short:pt-[calc(var(--header-h)+1.25rem+var(--safe-top))]",
+      "short:sm:pt-[calc(var(--header-h)+2.25rem+var(--safe-top))]",
+      "squat:pt-[calc(var(--header-h)+1rem+var(--safe-top))]",
+      "squat:sm:pt-[calc(var(--header-h)+1rem+var(--safe-top))]",
+      "pb-14 sm:pb-20 lg:pb-24 short:pb-10 squat:pb-8",
+    ].join(" ")}
+  >
+    <div
+      className={[
+        "rail-inner grid gap-10",
+        // Tablets get the two-column composition too, not a stretched phone
+        // layout — there is room for the status rail from 768 up.
+        "md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] md:gap-10",
+        "lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] lg:gap-16 2xl:gap-24",
+        // A landscape phone is wide enough for two columns even though it is
+        // far too short to stack them.
+        "squat:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] squat:gap-8",
+      ].join(" ")}
+    >
+      <div className="min-w-0 max-w-3xl">
+        <p
+          {...rise(0)}
+          className="rise font-mono text-xs uppercase tracking-[0.2em] text-aurora-teal/80"
         >
-          Hi, I'm
-        </motion.p>
+          {personalInfo.name}
+        </p>
 
-        {/* Name with Glass Effect */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+        <h1
+          {...rise(0.08)}
+          className="rise mt-4 text-[1.95rem] font-semibold leading-[1.08] tracking-tight text-foreground min-[400px]:text-[2.25rem] sm:mt-5 sm:text-5xl lg:text-6xl 2xl:text-7xl short:mt-3 short:lg:text-5xl squat:!mt-2 squat:!text-[1.75rem]"
         >
-          <GlassText
-            as="h1"
-            shimmer
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-4 sm:mb-6"
-          >
-            {personalInfo.name}
-          </GlassText>
-        </motion.div>
+          {personalInfo.headline}
+        </h1>
 
-        {/* Typewriter with Aurora Text */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="h-10 sm:h-12 md:h-14 mb-6 sm:mb-8"
+        <p
+          {...rise(0.14)}
+          className="rise mt-3 text-base text-foreground/50 sm:mt-4 sm:text-xl 2xl:text-2xl squat:!mt-1.5 squat:!text-sm"
         >
-          <span className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-medium aurora-text">
-            <TypeAnimation
-              sequence={personalInfo.roles.flatMap((role) => [role, 2000])}
-              wrapper="span"
-              speed={50}
-              repeat={Infinity}
-            />
-          </span>
-        </motion.div>
+          {personalInfo.tagline}
+        </p>
 
-        {/* Bio */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="text-foreground/60 text-base sm:text-lg max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed px-2"
+        <p
+          {...rise(0.2)}
+          className="rise mt-6 max-w-2xl text-[0.95rem] leading-relaxed text-foreground/70 sm:mt-8 sm:text-lg 2xl:text-xl short:mt-3 short:sm:mt-5 squat:!mt-3 squat:!text-sm"
         >
-          I build exceptional digital experiences with modern technologies.
-          Passionate about clean code, beautiful design, and innovative solutions.
-        </motion.p>
+          {personalInfo.intro}
+        </p>
 
-        {/* CTA Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-10 sm:mb-12"
+        <div
+          {...rise(0.26)}
+          className="rise mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center short:mt-4 squat:!mt-4 squat:flex-row squat:flex-wrap squat:items-center"
         >
-          <button
-            onClick={scrollToContact}
-            className="glass-button rounded-full text-foreground font-medium flex items-center gap-2 aurora-glow w-full sm:w-auto justify-center"
-          >
-            Let's Connect
-            <FiMail className="w-4 h-4" />
-          </button>
           <a
-            href="#projects"
-            className="glass-button rounded-full text-foreground/80 font-medium w-full sm:w-auto text-center"
+            href="#work"
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-aurora-teal/40 bg-aurora-teal/[0.08] px-5 py-3 text-sm font-medium text-foreground transition-colors hover:bg-aurora-teal/[0.14] focus-ring"
           >
-            View Projects
+            See the work
+            <FiArrowDown className="h-4 w-4" aria-hidden />
+          </a>
+          <a
+            href={personalInfo.socials.email}
+            className="inline-flex min-w-0 items-center justify-center gap-2 rounded-lg border border-foreground/15 px-5 py-3 text-sm font-medium text-foreground/85 transition-colors hover:border-foreground/30 hover:text-foreground focus-ring"
+          >
+            <FiMail className="h-4 w-4 shrink-0" aria-hidden />
+            <span className="truncate">{personalInfo.email}</span>
           </a>
           <a
             href={personalInfo.resume}
-            download
-            className="glass-button rounded-full text-foreground/80 font-medium flex items-center gap-2 w-full sm:w-auto justify-center"
+            className="inline-flex items-center justify-center gap-2 rounded-lg px-2 py-3 text-sm text-foreground/55 transition-colors hover:text-foreground focus-ring sm:px-3"
           >
-            <FiDownload className="w-4 h-4" />
+            <FiFileText className="h-4 w-4" aria-hidden />
             Resume
           </a>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setShowShutdown(true)}
-            className="glass-button rounded-full text-foreground font-medium flex items-center gap-2 w-full sm:w-auto justify-center aurora-glow-purple"
-          >
-            <FiMonitor className="w-4 h-4" />
-            Launch Desktop
-          </motion.button>
-        </motion.div>
+        </div>
 
-        {/* Social Links */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          className="flex items-center justify-center gap-3 relative z-10"
+        <div
+          {...rise(0.32)}
+          className="rise mt-8 flex items-center gap-1 sm:mt-10 short:mt-5 squat:!mt-3"
         >
-          {/* GitHub & LinkedIn */}
           {socialLinks.map(({ icon: Icon, href, label }) => (
             <a
               key={label}
               href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={label}
-              className="p-3 rounded-full bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.06] dark:border-white/[0.06] text-foreground/70 hover:text-foreground hover:border-aurora-teal/30 hover:shadow-[0_0_20px_hsl(168_84%_49%/0.15)] transition-all duration-300"
+              target={href.startsWith("mailto:") ? undefined : "_blank"}
+              rel={href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
+              className="rounded-md p-2.5 text-foreground/45 transition-colors hover:text-foreground focus-ring"
             >
-              <Icon className="w-5 h-5" />
+              <span className="sr-only">{label}</span>
+              <Icon className="h-5 w-5" aria-hidden />
             </a>
           ))}
-
-          {/* HARD-CODED EMAIL (no Framer weirdness) */}
-          <a
-            href="mailto:rifaque.rs@gmail.com"
-            aria-label="Email"
-            className="p-3 rounded-full bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.06] dark:border-white/[0.06] text-foreground/70 hover:text-foreground hover:border-aurora-teal/30 hover:shadow-[0_0_20px_hsl(168_84%_49%/0.15)] transition-all duration-300 relative z-20"
-          >
-            <FiMail className="w-5 h-5" />
-          </a>
-        </motion.div>
-
-        {/* Scroll Indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 0.5 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
-        >
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className="w-6 h-10 rounded-full border-2 border-foreground/20 flex items-start justify-center p-2"
-          >
-            <motion.div
-              animate={{ opacity: [0.5, 1, 0.5] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-              className="w-1 h-2 bg-foreground/50 rounded-full"
-            />
-          </motion.div>
-        </motion.div>
+        </div>
       </div>
 
-      {/* Shutdown Transition Overlay */}
-      {showShutdown && <ShutdownTransition />}
-    </section>
-  );
-};
+      {/* Current state, pulled from the same data the rest of the page uses. */}
+      <aside
+        {...rise(0.38)}
+        aria-label="Current status"
+        className="rise min-w-0 self-end border-t border-foreground/[0.1] pt-6 md:border-l md:border-t-0 md:pb-2 md:pl-8 md:pt-1 lg:pl-12 squat:self-start squat:border-l squat:border-t-0 squat:pl-6 squat:pt-0"
+      >
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-foreground/35">
+          Right now
+        </p>
+        <dl className="mt-4 space-y-4 sm:mt-5 squat:!mt-3 squat:space-y-2">
+          {nowRows.map((row) => (
+            <div key={row.name}>
+              <dt className="text-sm font-medium text-foreground/85">{row.name}</dt>
+              <dd className="mt-0.5 text-sm text-foreground/45">{row.detail}</dd>
+            </div>
+          ))}
+        </dl>
+      </aside>
+    </div>
+  </section>
+);
 
 export default Hero;
