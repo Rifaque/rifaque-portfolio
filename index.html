@@ -1,127 +1,28 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-
-    <!-- Primary meta -->
-    <title>Rifaque Ahmed — Product-minded full-stack engineer</title>
-    <meta name="title" content="Rifaque Ahmed — Product-minded full-stack engineer" />
-    <meta
-      name="description"
-      content="Product-minded full-stack engineer. I build AI-assisted tools, RAG systems and web products — Nexus, a governed AI development assistant; Atlas, a local-first RAG desktop app; and client software delivered through HubZero."
-    />
-    <meta name="author" content="Rifaque Ahmed" />
-    <meta name="robots" content="index, follow, max-image-preview:large" />
-
-    <link rel="canonical" href="https://rifaque.hubzero.in/" />
-
-    <!-- Icons -->
+    <!-- Before first paint: the pinned selected-work stage needs JavaScript
+         to follow the scroll, so without it the stacked layout is used. -->
+    <script>document.documentElement.classList.add("js")</script>
+    <!--
+      Title, description, robots, canonical, Open Graph and JSON-LD are
+      written per route by scripts/prerender.mjs from src/content/routes.ts.
+      In development they are applied at runtime by RouteHead.
+    -->
+    <!--app-head-->
+    <meta name="author" content="Rifaque Ahmed Akrami" />
+    <meta name="theme-color" content="#07090b" />
+    <meta name="color-scheme" content="dark" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta name="theme-color" content="#000000" />
-
-    <!-- Open Graph -->
-    <meta property="og:type" content="profile" />
-    <meta property="og:url" content="https://rifaque.hubzero.in/" />
-    <meta property="og:site_name" content="Rifaque Ahmed" />
-    <meta property="og:title" content="Rifaque Ahmed — Product-minded full-stack engineer" />
-    <meta
-      property="og:description"
-      content="AI-assisted tools, RAG systems and web products. Nexus, Atlas, HubZero, and the work in between."
-    />
-    <meta property="og:image" content="https://rifaque.hubzero.in/og-image.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Rifaque Ahmed — product-minded full-stack engineer" />
-    <meta property="og:locale" content="en_US" />
-    <meta property="profile:first_name" content="Rifaque" />
-    <meta property="profile:last_name" content="Ahmed" />
-
-    <!-- Twitter card. No creator handle — none is verified. -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Rifaque Ahmed — Product-minded full-stack engineer" />
-    <meta
-      name="twitter:description"
-      content="AI-assisted tools, RAG systems and web products. Nexus, Atlas, HubZero, and the work in between."
-    />
-    <meta name="twitter:image" content="https://rifaque.hubzero.in/og-image.png" />
-    <meta name="twitter:image:alt" content="Rifaque Ahmed — product-minded full-stack engineer" />
-
-    <!-- Structured data -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Rifaque Ahmed",
-        "url": "https://rifaque.hubzero.in/",
-        "image": "https://rifaque.hubzero.in/og-image.png",
-        "jobTitle": "Software Engineer",
-        "description": "Product-minded full-stack engineer building AI-assisted tools, RAG-based developer systems and web products.",
-        "email": "mailto:rifaque.rs@gmail.com",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Bhatkal",
-          "addressRegion": "Karnataka",
-          "addressCountry": "IN"
-        },
-        "sameAs": [
-          "https://github.com/Rifaque",
-          "https://linkedin.com/in/rifaque-akrami"
-        ],
-        "knowsAbout": [
-          "Full-stack engineering",
-          "Retrieval-Augmented Generation",
-          "Information retrieval",
-          "Backend API design",
-          "TypeScript",
-          "React",
-          "Next.js",
-          "Node.js",
-          "Python",
-          "Rust",
-          "PostgreSQL",
-          "MongoDB",
-          "Local language model inference"
-        ],
-        "alumniOf": {
-          "@type": "CollegeOrUniversity",
-          "name": "Visvesvaraya Technological University",
-          "address": {
-            "@type": "PostalAddress",
-            "addressLocality": "Belagavi",
-            "addressRegion": "Karnataka",
-            "addressCountry": "IN"
-          }
-        },
-        "worksFor": {
-          "@type": "Organization",
-          "name": "HubZero",
-          "url": "https://hubzero.in"
-        }
-      }
-    </script>
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
+    <!--app-preload-->
   </head>
 
   <body>
-    <div id="root"></div>
-    <noscript>
-      <p style="padding: 2rem; font-family: system-ui, sans-serif">
-        This portfolio needs JavaScript. The same information is on my resume at
-        <a href="/resume/Rifaque_Resume.pdf">/resume/Rifaque_Resume.pdf</a>, and
-        my work is at
-        <a href="https://github.com/Rifaque">github.com/Rifaque</a>.
-      </p>
-    </noscript>
+    <div id="root"><!--app-html--></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

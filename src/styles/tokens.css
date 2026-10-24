@@ -1,0 +1,62 @@
+/*
+ * Design tokens. Promoted from the Phase B /lab prototype.
+ * Contrast against --bg: fg 16.9:1, fg-muted 8.0:1, fg-faint 5.4:1, accent 9.5:1.
+ */
+
+/* Metric-matched fallback so the swap to Geist barely moves the layout. */
+@font-face {
+  font-family: "Geist Fallback";
+  src: local("Arial");
+  ascent-override: 95.94%;
+  descent-override: 28.16%;
+  line-gap-override: 0%;
+  size-adjust: 104.76%;
+}
+
+:root {
+  color-scheme: dark;
+
+  --bg: #07090b;
+  --bg-raised: #0d1114;
+  --bg-sunken: #050607;
+  --fg: #e9edf0;
+  --fg-muted: #9aa4ac;
+  --fg-faint: #7d878f;
+  --line: rgb(233 237 240 / 0.09);
+  --line-strong: rgb(233 237 240 / 0.24);
+  --accent: #3abeff;
+  --accent-ink: #001522;
+  --accent-soft: rgb(58 190 255 / 0.14);
+  --released: #6fdc9b;
+  --released-soft: rgb(111 220 155 / 0.14);
+  --retired: #9aa4ac;
+
+  --sans: "Geist Variable", "Geist Fallback", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Geist Mono Variable", ui-monospace, "SFMono-Regular", Consolas, monospace;
+
+  --step--1: 0.8125rem;
+  --step-0: 1rem;
+  --step-1: clamp(1.125rem, 1rem + 0.4vw, 1.3rem);
+  --step-2: clamp(1.25rem, 1rem + 0.9vw, 1.75rem);
+  --step-3: clamp(1.75rem, 1.2rem + 1.8vw, 3rem);
+  --step-4: clamp(2.75rem, 1.4rem + 4.4vw, 6rem);
+  --step-5: clamp(2.5rem, 1.1rem + 5.2vw, 6.5rem);
+
+  --gutter: clamp(16px, 4vw, 56px);
+  --max: 1520px;
+  --measure: 60ch;
+
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-full: 999px;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-1: 160ms;
+  --dur-2: 300ms;
+  --dur-3: 600ms;
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}

@@ -1,0 +1,9 @@
+# Never upload private or local-only material with a CLI or API deployment.
+Rifaque_Profile_Knowledge_Base.md
+.agents
+.claude
+.playwright-mcp
+skills-lock.json
+dist
+dist-ssr
+node_modules

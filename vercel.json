@@ -1,8 +1,27 @@
 {
-    "rewrites": [
-        {
-            "source": "/((?!api|assets|_next|.*\\..*).*)",
-            "destination": "/"
-        }
-    ]
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/desktop", "destination": "/", "permanent": true },
+    { "source": "/desktop/:path*", "destination": "/", "permanent": true },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.rsxdevelops.dev" }],
+      "destination": "https://rsxdevelops.dev/:path*",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/lab",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    }
+  ]
 }

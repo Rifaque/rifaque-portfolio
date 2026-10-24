@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://rifaque.hubzero.in/sitemap.xml

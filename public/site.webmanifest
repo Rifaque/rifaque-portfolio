@@ -1,11 +1,11 @@
 {
-  "name": "Rifaque Ahmed — Product-minded full-stack engineer",
-  "short_name": "Rifaque Ahmed",
-  "description": "AI-assisted tools, RAG systems and web products.",
+  "name": "RSX Develops · Rifaque Ahmed Akrami",
+  "short_name": "RSX Develops",
+  "description": "Product-minded engineer building full-stack software and practical AI systems.",
   "start_url": "/",
-  "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "display": "browser",
+  "background_color": "#07090b",
+  "theme_color": "#07090b",
   "icons": [
     {
       "src": "/favicon.ico",
