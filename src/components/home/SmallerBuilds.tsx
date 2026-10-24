@@ -1,6 +1,6 @@
 import { pick, smallerSlugs } from "../../content/projects";
 import { ExternalLink } from "../ExternalLink";
-import { StatusLine } from "../StatusLine";
+import { StatusBadge } from "../StatusBadge";
 
 /** Small labelled illustrations. Not screenshots: neither app has a public build. */
 const diagrams: Record<string, { label: string; svg: JSX.Element }> = {
@@ -71,7 +71,7 @@ export function SmallerBuilds() {
                 <h3 id={`smaller-${p.slug}-title`} className="smaller-title">
                   {p.title}
                 </h3>
-                <StatusLine project={p} />
+                <StatusBadge stage={p.stage} text={p.status} />
                 <p className="smaller-summary">{p.summary}</p>
                 <p className="smaller-limits">
                   <span className="tag">Not yet</span> {p.limits}

@@ -2,6 +2,8 @@ import { Link, useSearchParams } from "react-router-dom";
 import { Layout } from "../components/layout/Layout";
 import { SelectedWork } from "../components/work/SelectedWork";
 import { pick, selectedSlugs } from "../content/projects";
+import { MotionLab } from "./MotionLab";
+import { ProjectRibbon } from "./ribbon/ProjectRibbon";
 
 /**
  * Review route for the selected-work section. noindex (route manifest and
@@ -36,6 +38,8 @@ export default function LabPage() {
         <h2 className="sr-only">Selected work</h2>
         <SelectedWork projects={pick(selectedSlugs)} layout={layout} />
       </div>
+      <ProjectRibbon projects={pick(selectedSlugs)} />
+      <MotionLab />
     </Layout>
   );
 }

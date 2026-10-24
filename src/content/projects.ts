@@ -19,6 +19,13 @@
 
 export type Maturity = "released" | "active" | "delivered" | "retired";
 
+/**
+ * Where the project stands, as its status line states it. Chosen explicitly
+ * per project, never parsed from the status text, and drawn by StatusBadge
+ * (a glyph shape plus a status colour). Maturity stays as it was.
+ */
+export type Stage = "released" | "pre-release" | "in-development" | "private-alpha" | "delivered" | "retired";
+
 export type ProjectLink = { label: string; href: string };
 
 export type Section =
@@ -41,6 +48,7 @@ export type Project = {
   /** One line used in the status rail, lists and the command palette. */
   status: string;
   maturity: Maturity;
+  stage: Stage;
   period: string;
   role: string;
   /** Owner of the work when it is not a personal project. */
@@ -76,6 +84,7 @@ export const projects: Project[] = [
     kicker: "Personal AI operating layer",
     status: "Private alpha · active development",
     maturity: "active",
+    stage: "private-alpha",
     period: "Jun 2026 – present",
     role: "Personal project",
     question: "How can a personal AI stay useful without capability quietly becoming authority?",
@@ -149,6 +158,7 @@ export const projects: Project[] = [
     kicker: "Local-first workspace intelligence",
     status: "v1.0.3 released · not in active development",
     maturity: "released",
+    stage: "released",
     period: "Feb – Sep 2026",
     role: "Personal project · MIT licensed",
     question: "Can an assistant answer from your workspace, and say so when it can't?",
@@ -217,6 +227,7 @@ export const projects: Project[] = [
     kicker: "Local-first media client",
     status: "Pre-release · source-available, not open source",
     maturity: "active",
+    stage: "pre-release",
     period: "2026 – present",
     role: "Personal project · proprietary, all rights reserved",
     question: "What if a film were one thing, no matter how many files it lives in?",
@@ -279,6 +290,7 @@ export const projects: Project[] = [
     kicker: "Windows to Android second screen",
     status: "In development · Connect still disabled",
     maturity: "active",
+    stage: "in-development",
     period: "2026 – present",
     role: "Personal project · MIT licensed",
     question: "Can a tablet on a USB cable become a dependable second screen for Windows?",
@@ -340,6 +352,7 @@ export const projects: Project[] = [
     kicker: "Client project · HubZero",
     status: "Delivered · HubZero's first paid client project",
     maturity: "delivered",
+    stage: "delivered",
     period: "Apr – Sep 2025",
     role: "Architecture, full-stack development and infrastructure",
     attribution:
@@ -388,6 +401,7 @@ export const projects: Project[] = [
     kicker: "Final-year project · HubZero Build",
     status: "Final-year project · retired",
     maturity: "retired",
+    stage: "retired",
     period: "Aug 2025 – Jan 2026",
     role: "Primary technical contributor, three-person team",
     attribution:
@@ -443,6 +457,7 @@ export const projects: Project[] = [
     kicker: "Android Bluetooth widgets",
     status: "Pre-release · foundation complete",
     maturity: "active",
+    stage: "pre-release",
     period: "2026 – present",
     role: "Personal project · MIT licensed",
     summary:
@@ -463,6 +478,7 @@ export const projects: Project[] = [
     kicker: "Android widget platform",
     status: "Pre-release · no public release",
     maturity: "active",
+    stage: "pre-release",
     period: "2026 – present",
     role: "Personal project · private repository",
     summary:

@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot, hydrateRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import "@fontsource-variable/geist/wght.css";
+import "./styles/fonts.css";
 import "@fontsource-variable/geist-mono/wght.css";
 import "./index.css";
 import "./styles/tokens.css";
@@ -9,12 +9,17 @@ import "./styles/base.css";
 import "./styles/layout.css";
 import "./styles/work.css";
 import "./styles/pages.css";
+import "./styles/motion.css";
 import { AppRoutes } from "./AppRoutes";
+import { ScrollManager } from "./components/motion/ScrollManager";
+import { MotionRoot } from "./components/motion/MotionRoot";
 
 const root = document.getElementById("root")!;
 const app = (
   <StrictMode>
     <BrowserRouter>
+      <ScrollManager />
+      <MotionRoot />
       <AppRoutes />
     </BrowserRouter>
   </StrictMode>

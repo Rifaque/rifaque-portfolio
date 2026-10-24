@@ -4,6 +4,7 @@ import { FieldDiagram } from "./FieldDiagram";
 import { ProjectFigure } from "./ProjectFigure";
 import { ProjectMedia } from "./ProjectMedia";
 import { ProjectText } from "./ProjectText";
+import { StatusGlyph } from "../StatusBadge";
 
 type Props = {
   projects: Project[];
@@ -179,6 +180,7 @@ export function SelectedWork({ projects, layout = "auto" }: Props) {
                   >
                     <span className="sw-rail-index">{String(i + 1).padStart(2, "0")}</span>
                     <span>{p.title}</span>
+                    <StatusGlyph stage={p.stage} />
                     <span className="sr-only">, {p.status}</span>
                   </button>
                 </li>

@@ -1,9 +1,8 @@
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { useLocation } from "react-router-dom";
 import { routeFor } from "../../content/routes";
 import { applyHead } from "../../lib/head";
 import { isTypingTarget } from "../../lib/dom";
-import { scrollToId } from "../../hooks/useGoTo";
 import { SiteHeader } from "./SiteHeader";
 import { SiteFooter } from "./SiteFooter";
 import { CommandPalette } from "./CommandPalette";
@@ -11,9 +10,8 @@ import { CommandPalette } from "./CommandPalette";
 type Props = { children: ReactNode; notFound?: boolean };
 
 export function Layout({ children, notFound }: Props) {
-  const { pathname, hash } = useLocation();
+  const { pathname } = useLocation();
   const [paletteOpen, setPaletteOpen] = useState(false);
-  const first = useRef(true);
 
   // Head tags after in-app navigation. On first load they are already in the
   // prerendered HTML, and this writes the same values.
@@ -21,17 +19,8 @@ export function Layout({ children, notFound }: Props) {
     applyHead(notFound ? routeFor("/404") : routeFor(pathname));
   }, [pathname, notFound]);
 
-  // Hash targets once the page has rendered; otherwise start at the top.
-  useEffect(() => {
-    if (hash) {
-      const id = decodeURIComponent(hash.slice(1));
-      const frame = requestAnimationFrame(() => scrollToId(id));
-      first.current = false;
-      return () => cancelAnimationFrame(frame);
-    }
-    if (!first.current) window.scrollTo(0, 0);
-    first.current = false;
-  }, [pathname, hash]);
+  // Scrolling on navigation belongs to ScrollManager, which outlives this
+  // per-page layout.
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {

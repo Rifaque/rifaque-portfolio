@@ -20,7 +20,7 @@
   white-space: nowrap;
 }
 .brand span {
-  color: var(--accent);
+  color: var(--fg-muted);
   font-weight: 450;
 }
 .site-nav {
@@ -38,7 +38,7 @@
   font-size: 14px;
   color: var(--fg-muted);
   text-decoration: none;
-  transition: color var(--dur-1) ease;
+  transition: color var(--dur-fast) ease;
 }
 .site-nav a:hover {
   color: var(--fg);
@@ -56,7 +56,7 @@
   font: inherit;
   font-size: 14px;
   cursor: pointer;
-  transition: border-color var(--dur-1) ease;
+  transition: border-color var(--dur-fast) ease;
 }
 .jump:hover {
   border-color: var(--fg-muted);
@@ -165,10 +165,10 @@
   overflow: hidden;
 }
 .pal::backdrop {
-  background: rgb(3 4 5 / 0.72);
+  background: rgb(5 5 6 / 0.72);
 }
 .pal[open] {
-  animation: pal-in 180ms var(--ease-out);
+  animation: pal-in var(--dur-fast) var(--ease-out);
 }
 @keyframes pal-in {
   from {
@@ -239,8 +239,8 @@
   cursor: pointer;
 }
 .pal-option[aria-selected="true"] {
-  background: rgb(233 237 240 / 0.07);
-  box-shadow: inset 2px 0 0 var(--accent);
+  background: var(--emphasis-soft);
+  box-shadow: inset 2px 0 0 var(--emphasis);
 }
 .pal-option-label {
   font-size: 15px;

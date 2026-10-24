@@ -46,7 +46,7 @@
   top: 25px;
   width: 12px;
   height: 1px;
-  background: var(--accent);
+  background: var(--fg-faint);
 }
 .p-meta {
   margin-top: 28px;
@@ -95,7 +95,7 @@
   overflow: visible;
 }
 .lf-dot {
-  fill: rgb(233 237 240 / 0.07);
+  fill: rgb(242 239 233 / 0.07);
 }
 .lf-box {
   fill: none;
@@ -103,11 +103,12 @@
   stroke-width: 1;
   vector-effect: non-scaling-stroke;
 }
+/* Primary paths in warm white, secondary in grey. "--accent" and "--key"
+   name the emphasised part of a drawing, not a colour. */
 .lf-box--accent {
-  fill: var(--accent-soft);
-  fill-opacity: 0.35;
-  stroke: var(--accent);
-  stroke-opacity: 0.55;
+  fill: var(--emphasis-soft);
+  stroke: var(--emphasis);
+  stroke-opacity: 0.45;
 }
 .lf-edge {
   fill: none;
@@ -116,7 +117,7 @@
   vector-effect: non-scaling-stroke;
 }
 .lf-edge--accent {
-  stroke: var(--accent);
+  stroke: var(--emphasis);
   stroke-width: 2;
 }
 .lf-edge--dashed {
@@ -133,12 +134,12 @@
   vector-effect: non-scaling-stroke;
 }
 .lf-node--key {
-  fill: var(--accent);
-  stroke: var(--accent);
+  fill: var(--emphasis);
+  stroke: var(--emphasis);
 }
 .lf-halo {
   fill: none;
-  stroke: var(--accent);
+  stroke: var(--emphasis);
   stroke-opacity: 0.3;
   vector-effect: non-scaling-stroke;
 }
@@ -162,14 +163,14 @@
   fill: var(--fg-muted);
 }
 .lf-label--key {
-  fill: var(--accent);
-  font-weight: 500;
+  fill: var(--emphasis);
+  font-weight: 600;
 }
 .lf-note {
   fill: var(--fg-muted);
 }
 .lf-note--accent {
-  fill: var(--accent);
+  fill: var(--emphasis);
 }
 .lf-canvas--raised .lf-label,
 .lf-canvas--raised .lf-note {
@@ -266,7 +267,7 @@
   content: counter(flow, decimal-leading-zero);
   font-family: var(--mono);
   font-size: 11px;
-  color: var(--accent);
+  color: var(--fg-muted);
   padding-top: 2px;
 }
 .sw-media img,
@@ -391,7 +392,7 @@
   transition-delay: 350ms;
 }
 .sw-stage-media img {
-  box-shadow: 0 30px 80px -30px rgb(0 0 0 / 0.9);
+  box-shadow: var(--shadow-float);
 }
 .sw-caption {
   display: flex;
@@ -416,7 +417,7 @@
 }
 .sw-progress-fill {
   height: 100%;
-  background: var(--accent);
+  background: var(--emphasis);
   transform: scaleX(0);
   transform-origin: 0 50%;
 }
@@ -437,7 +438,7 @@
   font: inherit;
   font-size: 15px;
   cursor: pointer;
-  transition: color var(--dur-1) ease;
+  transition: color var(--dur-fast) ease;
 }
 .sw-rail-btn:hover {
   color: var(--fg-muted);
@@ -450,7 +451,12 @@
   font-size: 11px;
 }
 .sw-rail-btn[aria-current="true"] .sw-rail-index {
-  color: var(--accent);
+  color: var(--emphasis);
+}
+.sw-rail-btn .glyph {
+  width: 9px;
+  height: 9px;
+  align-self: center;
 }
 
 @media (min-width: 2200px) {

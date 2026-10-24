@@ -1,38 +1,93 @@
 /*
- * Design tokens. Promoted from the Phase B /lab prototype.
- * Contrast against --bg: fg 16.9:1, fg-muted 8.0:1, fg-faint 5.4:1, accent 9.5:1.
+ * Design tokens: editorial monochrome. Colour is reserved for project
+ * status, which always travels with its text and a distinct glyph.
+ *
+ * Contrast against --bg / --bg-raised / --bg-graphite (checked in
+ * src/styles/tokens.test.ts):
+ *   fg 17.1 / 16.0 / 14.8, fg-muted 7.9 / 7.3 / 6.8, fg-faint 5.4 / 5.0 / 4.7
+ *   status colours all above 5.7:1 on every surface.
  */
 
-/* Metric-matched fallback so the swap to Geist barely moves the layout. */
+/*
+ * Metric-matched fallbacks, so text drawn before the web fonts arrive takes
+ * the same space as Geist and the swap does not move the layout.
+ *
+ * Measured in Chromium against the bundled fonts: Geist and Geist Mono both
+ * have ascent 1.005em, descent 0.295em and no line gap. size-adjust is the
+ * ratio of Geist's advance widths to the fallback's over the site's own text
+ * at each weight; the overrides are Geist's metrics divided by size-adjust
+ * (they are scaled by it). Liberation and Arimo/Cousine are metric-compatible
+ * with Arial and Courier New, so the same values hold on Linux.
+ */
 @font-face {
   font-family: "Geist Fallback";
-  src: local("Arial");
-  ascent-override: 95.94%;
-  descent-override: 28.16%;
+  font-weight: 100 449;
+  src: local("Arial"), local("ArialMT"), local("Liberation Sans"), local("Arimo");
+  size-adjust: 102.43%;
+  ascent-override: 98.11%;
+  descent-override: 28.8%;
   line-gap-override: 0%;
-  size-adjust: 104.76%;
+}
+@font-face {
+  font-family: "Geist Fallback";
+  font-weight: 450 599;
+  src: local("Arial"), local("ArialMT"), local("Liberation Sans"), local("Arimo");
+  size-adjust: 104.06%;
+  ascent-override: 96.58%;
+  descent-override: 28.35%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Geist Fallback";
+  font-weight: 600 900;
+  src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("Arimo Bold");
+  size-adjust: 99.31%;
+  ascent-override: 101.2%;
+  descent-override: 29.7%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Geist Mono Fallback";
+  src: local("Courier New"), local("CourierNewPSMT"), local("Liberation Mono"), local("Cousine");
+  size-adjust: 100.08%;
+  ascent-override: 100.42%;
+  descent-override: 29.48%;
+  line-gap-override: 0%;
 }
 
 :root {
   color-scheme: dark;
 
-  --bg: #07090b;
-  --bg-raised: #0d1114;
-  --bg-sunken: #050607;
-  --fg: #e9edf0;
-  --fg-muted: #9aa4ac;
-  --fg-faint: #7d878f;
-  --line: rgb(233 237 240 / 0.09);
-  --line-strong: rgb(233 237 240 / 0.24);
-  --accent: #3abeff;
-  --accent-ink: #001522;
-  --accent-soft: rgb(58 190 255 / 0.14);
-  --released: #6fdc9b;
-  --released-soft: rgb(111 220 155 / 0.14);
-  --retired: #9aa4ac;
+  --bg: #0b0b0c;
+  --bg-raised: #141415;
+  --bg-graphite: #1c1c1e;
+  --bg-sunken: #070708;
+  --fg: #f2efe9;
+  --fg-muted: #a8a39b;
+  --fg-faint: #8a857e;
+  --line: rgb(242 239 233 / 0.08);
+  --line-strong: rgb(242 239 233 / 0.22);
+
+  /* Emphasis is warm white: the strongest mark in a monochrome system. */
+  --emphasis: var(--fg);
+  --emphasis-soft: rgb(242 239 233 / 0.06);
+  --emphasis-hover: #ffffff;
+  --ink: #0b0b0c;
+
+  --shadow-raised: 0 1px 0 rgb(242 239 233 / 0.04) inset, 0 24px 60px -24px rgb(0 0 0 / 0.8);
+  --shadow-float: 0 30px 80px -30px rgb(0 0 0 / 0.9);
+
+  /* Project status. Meaningful colour only; never decorative. */
+  --status-released: #5fd394;
+  --status-prerelease: #7cb2ff;
+  --status-development: #f0b44c;
+  --status-alpha: #c6a8ff;
+  --status-delivered: #5fd394;
+  --status-retired: #9a958e;
+  --status-role: var(--fg-muted);
 
   --sans: "Geist Variable", "Geist Fallback", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --mono: "Geist Mono Variable", ui-monospace, "SFMono-Regular", Consolas, monospace;
+  --mono: "Geist Mono Variable", "Geist Mono Fallback", ui-monospace, "SFMono-Regular", Consolas, monospace;
 
   --step--1: 0.8125rem;
   --step-0: 1rem;
@@ -50,10 +105,24 @@
   --r-md: 8px;
   --r-full: 999px;
 
+  /*
+   * Motion. Animate transform and opacity (stroke-dashoffset, or a
+   * clip-path wipe for non-scaling hairlines, for drawn lines), never
+   * layout properties. Nothing loops. A status glyph moves
+   * only with its label. Reduced motion shows every final state at once
+   * (base.css), and hidden starting states need html.motion-ready (motion.css).
+   */
+  --dur-press: 100ms;
+  --dur-fast: 180ms;
+  --dur-base: 320ms;
+  --dur-slow: 560ms;
+  --dur-hero: 700ms;
+  --dur-draw: 1100ms;
+  --stagger: 70ms;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --dur-1: 160ms;
-  --dur-2: 300ms;
-  --dur-3: 600ms;
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --tilt-perspective: 900px;
 
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);

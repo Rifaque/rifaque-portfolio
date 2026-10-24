@@ -3,9 +3,9 @@
 // every problem in it.
 //
 // Checks: per-route titles, descriptions, robots, canonicals, Open Graph and
-// JSON-LD; the sitemap and robots.txt against the manifest; legacy domains
-// and private details; internal links and in-page anchors; one h1 per page;
-// alt text on every image.
+// JSON-LD; the sitemap and robots.txt against the manifest; legacy domains,
+// private details and the retired accent colour; internal links and in-page
+// anchors; one h1 per page; alt text on every image.
 
 import { readFile, readdir, stat } from "node:fs/promises";
 import { dirname, join } from "node:path";
@@ -156,6 +156,18 @@ for (const file of htmlFiles) {
     if (email !== site.email && !/\.(png|webp|woff2|js)$/.test(email)) fail(`${file.slice(dist.length + 1)}: contains another email address`);
   }
 }
+
+// ---- colour system ----------------------------------------------------------
+// Electric blue (#3abeff) was the decorative accent and is retired. Blue is
+// still allowed as the semantic pre-release status colour, which must remain.
+const retiredAccent = /#3abeff|58\s*,?\s*190\s*,?\s*255/i;
+const styleFiles = (await readdir(join(dist, "assets"))).filter((f) => f.endsWith(".css"));
+let css = "";
+for (const f of styleFiles) css += await readFile(join(dist, "assets", f), "utf8");
+for (const file of [...htmlFiles, ...styleFiles.map((f) => join(dist, "assets", f))]) {
+  if (retiredAccent.test(await readFile(file, "utf8"))) fail(`${file.slice(dist.length + 1)}: contains the retired accent colour`);
+}
+if (!/--status-prerelease:\s*#7cb2ff/i.test(css)) fail("CSS lacks the pre-release status colour --status-prerelease");
 
 // ---- internal links and anchors -------------------------------------------
 const routePaths = new Set(routes.map((r) => r.path));

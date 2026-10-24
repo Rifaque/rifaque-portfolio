@@ -16,10 +16,13 @@
   letter-spacing: -0.045em;
   font-weight: 600;
   text-wrap: balance;
+  color: var(--fg);
 }
+/* All warm white; the emphasised phrase differs by weight alone. */
 .hero-title em {
   font-style: normal;
-  color: var(--accent);
+  font-weight: 380;
+  letter-spacing: -0.04em;
 }
 .hero-lede {
   margin-top: 28px;
@@ -63,11 +66,14 @@
   text-decoration: none;
 }
 .now-item:hover .now-name {
-  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-color: var(--line-strong);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
 }
 .now-name {
   font-weight: 550;
-  transition: color var(--dur-1) ease;
+  transition: color var(--dur-fast) ease;
 }
 .now-status {
   font-size: 12px;
@@ -85,6 +91,104 @@
   }
   .hero {
     padding-top: 40px;
+  }
+}
+
+/* The motif: the ribbon's run and exit curve, drawn once in the upper right
+   on wide screens; a short static mark at smaller widths. Decorative, behind
+   the content, clipped to the viewport. */
+.hero-shell {
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+}
+.hero-motif {
+  position: absolute;
+  z-index: -1;
+  overflow: visible;
+  fill: none;
+  pointer-events: none;
+}
+.hero-line {
+  fill: none;
+  stroke: rgb(242 239 233 / 0.32);
+  stroke-width: 1;
+}
+.hero-line--echo {
+  stroke: rgb(242 239 233 / 0.13);
+}
+.hero-motif--wide {
+  display: none;
+}
+.hero-motif--compact {
+  top: 16px;
+  right: var(--gutter);
+  width: 132px;
+  height: 36px;
+}
+@media (min-width: 1100px) {
+  .hero-motif--wide {
+    display: block;
+    top: 6%;
+    right: 0;
+    /* From the "Right now" column's left edge to the viewport's right edge. */
+    width: calc(340px + 64px + var(--gutter) + max(0px, (100% - var(--max)) / 2));
+    height: 40%;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 22%);
+    mask-image: linear-gradient(to right, transparent, #000 22%);
+  }
+  .hero-motif--compact {
+    display: none;
+  }
+}
+
+/* Entrance: the first page load only (html.intro-done stops replays), and
+   only with JavaScript (the .js class) and motion allowed. CSS keyframes
+   filled backwards: hidden during their delay, then gone, so the end state
+   is the element's own style and never waits on hydration. The headline moves but never
+   fades, so it paints at once. About 1.6 s in all. */
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+}
+@keyframes hero-lift {
+  from {
+    transform: translate3d(0, 12px, 0);
+  }
+}
+/* The motif is drawn by a left-to-right wipe rather than stroke-dashoffset:
+   its hairline uses non-scaling-stroke, which measures dashes in screen
+   pixels. The line always advances rightward, so the wipe draws it in order. */
+@keyframes hero-draw {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .js:not(.intro-done) .hero-kicker {
+    animation: hero-rise 400ms var(--ease-out) backwards;
+  }
+  .js:not(.intro-done) .hero-title {
+    animation: hero-lift var(--dur-hero) var(--ease-out) 60ms backwards;
+  }
+  .js:not(.intro-done) .hero-lede {
+    animation: hero-rise var(--dur-slow) var(--ease-out) 200ms backwards;
+  }
+  .js:not(.intro-done) .hero-actions,
+  .js:not(.intro-done) .hero-meta {
+    animation: hero-rise var(--dur-slow) var(--ease-out) 280ms backwards;
+  }
+  .js:not(.intro-done) .now-title,
+  .js:not(.intro-done) .now-list > li {
+    animation: hero-rise 480ms var(--ease-out) calc(380ms + var(--i, 0) * 60ms) backwards;
+  }
+  .js:not(.intro-done) .hero-motif--wide {
+    animation: hero-draw var(--dur-draw) var(--ease-in-out) 500ms backwards;
   }
 }
 
@@ -141,7 +245,7 @@
   top: 22px;
   width: 12px;
   height: 1px;
-  background: var(--accent);
+  background: var(--fg-faint);
 }
 .xp-work {
   margin-top: 32px;
@@ -225,10 +329,11 @@
   stroke: var(--line-strong);
   stroke-width: 1.25;
 }
+/* "--accent" marks the emphasised element of a drawing: warm white. */
 .mini-box--accent {
-  fill: var(--accent-soft);
-  stroke: var(--accent);
-  stroke-opacity: 0.6;
+  fill: var(--emphasis-soft);
+  stroke: var(--emphasis);
+  stroke-opacity: 0.7;
 }
 .mini-edge {
   fill: none;
@@ -236,7 +341,7 @@
   stroke-width: 1.25;
 }
 .mini-edge--accent {
-  stroke: var(--accent);
+  stroke: var(--emphasis);
   stroke-width: 1.75;
 }
 .mini-edge--dashed {
@@ -274,7 +379,7 @@
 }
 .smaller-limits .tag {
   margin-right: 6px;
-  color: var(--accent);
+  color: var(--fg);
 }
 .smaller-role {
   font-family: var(--mono);
@@ -378,7 +483,7 @@
 .contact-email a {
   color: var(--fg);
   text-decoration: underline;
-  text-decoration-color: var(--accent);
+  text-decoration-color: var(--fg-faint);
   text-decoration-thickness: 2px;
   text-underline-offset: 0.18em;
 }
@@ -455,7 +560,7 @@
   margin-top: 20px;
   max-width: 62ch;
   padding-left: 16px;
-  border-left: 2px solid var(--accent);
+  border-left: 2px solid var(--line-strong);
   line-height: 1.6;
 }
 .cs-facts {
@@ -545,7 +650,7 @@
   top: 21px;
   width: 12px;
   height: 1px;
-  background: var(--accent);
+  background: var(--fg-faint);
 }
 @media (min-width: 900px) {
   .cs-section {
@@ -581,10 +686,13 @@
   letter-spacing: -0.035em;
   font-weight: 600;
   line-height: 1.05;
-  transition: color var(--dur-1) ease;
+  transition: color var(--dur-fast) ease;
 }
 .cs-next-link:hover .cs-next-title {
-  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-color: var(--line-strong);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.14em;
 }
 .cs-next-kicker {
   font-family: var(--mono);
@@ -681,4 +789,34 @@
 .lab-switch a[aria-current="page"] {
   color: var(--fg);
   border-color: var(--line-strong);
+}
+.lab-motion {
+  padding-top: 120px;
+  padding-bottom: 160px;
+  border-top: 1px solid var(--line);
+}
+.lab-motion-list {
+  margin-top: 32px;
+  display: grid;
+  gap: 12px;
+  max-width: 560px;
+}
+.lab-motion-item {
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--bg-raised);
+}
+.lab-tilt {
+  margin-top: 48px;
+  max-width: 420px;
+  padding: 28px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+  background: var(--bg-raised);
+  box-shadow: var(--shadow-raised);
+}
+.lab-tilt p + p {
+  margin-top: 10px;
+  color: var(--fg-muted);
 }

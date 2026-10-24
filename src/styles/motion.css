@@ -1,0 +1,30 @@
+/*
+ * Shared motion utilities. Tokens and rules: tokens.css. Hidden starting
+ * states apply only once the app has hydrated (html.motion-ready, set by
+ * MotionRoot) and only with motion allowed, so content is always readable
+ * without JavaScript, before hydration and with reduced motion.
+ */
+
+/* Reveal once, below the fold (reveal.ts). */
+@media (prefers-reduced-motion: no-preference) {
+  .motion-ready [data-reveal] {
+    transition:
+      opacity var(--dur-slow) var(--ease-out),
+      transform var(--dur-slow) var(--ease-out);
+    transition-delay: calc(var(--reveal-index, 0) * var(--stagger));
+  }
+  .motion-ready [data-reveal]:not([data-revealed]) {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+  }
+}
+
+/* Pointer tilt (usePointerTilt). Eases back to flat when the pointer leaves;
+   follows closely while it moves. */
+.tilt {
+  transform: perspective(var(--tilt-perspective)) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.tilt[data-tilt="active"] {
+  transition-duration: 120ms;
+}

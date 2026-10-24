@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { Layout } from "../components/layout/Layout";
 import { ExternalLink } from "../components/ExternalLink";
-import { StatusLine } from "../components/StatusLine";
+import { StatusBadge } from "../components/StatusBadge";
 import { ProjectFigure } from "../components/work/ProjectFigure";
 import { ProjectMedia } from "../components/work/ProjectMedia";
 import { caseStudySlugs, pick, projectBySlug } from "../content/projects";
@@ -37,7 +37,7 @@ export default function WorkPage() {
           <h1 id="cs-title" className="cs-title">
             {p.title}
           </h1>
-          <StatusLine project={p} className="cs-status" />
+          <StatusBadge stage={p.stage} text={p.status} className="cs-status" />
           {p.question && <p className="cs-question">{p.question}</p>}
           <p className="cs-summary">{p.summary}</p>
           {p.attribution && <p className="cs-attribution">{p.attribution}</p>}

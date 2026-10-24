@@ -18,7 +18,7 @@ export type FieldNode = {
   y: number;
   label?: string;
   anchor?: Anchor;
-  /** The node that carries the project's point; drawn in the accent colour. */
+  /** The node that carries the project's point; drawn in the emphasis colour. */
   key?: boolean;
   hidden?: boolean;
   mono?: boolean;

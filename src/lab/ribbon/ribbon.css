@@ -1,0 +1,219 @@
+/*
+ * Project ribbon prototype (/lab only). Static editorial list by default;
+ * the pinned stage only under the live query (keep equal to RIBBON_QUERY in
+ * ribbonController.ts) and with JavaScript (.js, set before first paint).
+ */
+
+.ribbon {
+  border-top: 1px solid var(--line);
+}
+.ribbon-head {
+  padding-top: clamp(56px, 10vh, 120px);
+  padding-bottom: 32px;
+}
+.ribbon-head .h2 {
+  margin-top: 12px;
+}
+.ribbon-intro {
+  margin-top: 16px;
+  max-width: 60ch;
+  color: var(--fg-muted);
+  font-size: 15px;
+}
+
+/* ---------- static list (default) ---------- */
+
+.ribbon-path,
+.ribbon-counter {
+  display: none;
+}
+.ribbon-stage {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gutter) 96px;
+}
+.ribbon-cards {
+  display: grid;
+  gap: 24px;
+}
+@media (min-width: 720px) {
+  .ribbon-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1200px) {
+  .ribbon-cards {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.ribbon-article {
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+  background: var(--bg-raised);
+  overflow: hidden;
+}
+.ribbon-visual {
+  margin: 0;
+  position: relative;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+}
+.ribbon-visual img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 7 / 5;
+  object-fit: cover;
+  object-position: top left;
+}
+.ribbon-visual--diagram .lf-canvas--raised {
+  border: 0;
+  border-radius: 0;
+}
+.ribbon-visual figcaption {
+  position: absolute;
+  left: 12px;
+  bottom: 10px;
+  padding: 2px 6px;
+  border-radius: var(--r-sm);
+  background: rgb(11 11 12 / 0.82);
+  color: var(--fg-muted);
+}
+.ribbon-copy {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 20px 22px 22px;
+}
+/* On the narrowest cards (the pinned ribbon at 1200–1250px wide), tighten
+   the kicker slightly so the longest label keeps to one line beside its
+   number. Body copy keeps its size. */
+.ribbon-article {
+  container-type: inline-size;
+}
+@container (max-width: 360px) {
+  .ribbon-copy .kicker {
+    column-gap: 8px;
+    letter-spacing: 0.05em;
+  }
+}
+.ribbon-title {
+  font-size: var(--step-2);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  font-weight: 600;
+}
+.ribbon-question {
+  font-size: 15px;
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+.ribbon-limit {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--fg-muted);
+}
+.ribbon-limit .tag {
+  margin-right: 6px;
+  color: var(--fg);
+}
+.ribbon-link {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 14px;
+}
+
+/* ---------- pinned stage ---------- */
+
+@media (min-width: 1200px) and (min-height: 680px) and (prefers-reduced-motion: no-preference) {
+  .js .ribbon-track {
+    /* One stage height to pin through, plus the travel set in --ribbon-steps
+       (stage heights; scrollSteps() in ribbonLayout.ts). */
+    height: calc(100svh + var(--ribbon-steps) * 100svh);
+  }
+  .js .ribbon-stage {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    max-width: none;
+    padding: 0;
+    overflow: hidden;
+    /* PERSPECTIVE in ribbonLayout.ts. */
+    perspective: 1600px;
+  }
+  .js .ribbon-path {
+    display: block;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .js .ribbon-path path {
+    fill: none;
+    stroke: rgb(242 239 233 / 0.26);
+    stroke-width: 1;
+  }
+  .js .ribbon-cards {
+    display: block;
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    /* The list's own (empty) plane sits in front of receded cards; let
+       pointers through to them. */
+    pointer-events: none;
+  }
+  .js .ribbon-card {
+    pointer-events: auto;
+  }
+  .js .ribbon-card {
+    position: absolute;
+    width: clamp(340px, 28vw, 420px);
+    /* Before the controller takes over (or if it never does): a readable
+       row along the level run. */
+    left: calc(14% + var(--i) * 24%);
+    top: 53%;
+    transform: translate(-50%, -50%) scale(0.72);
+    transform-origin: 50% 50%;
+    backface-visibility: hidden;
+  }
+  .js .ribbon-stage[data-live] .ribbon-card {
+    left: 0;
+    top: 0;
+    will-change: transform, opacity;
+  }
+  .js .ribbon-article {
+    box-shadow: var(--shadow-float);
+  }
+  /* Depth is position, perspective, scale and distance. The only shade is
+     over the picture, beneath its caption; the text is never dimmed. */
+  .js .ribbon-visual::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--bg);
+    opacity: var(--shade, 0);
+    pointer-events: none;
+  }
+  .js .ribbon-card[data-active] .ribbon-article {
+    border-color: rgb(242 239 233 / 0.34);
+  }
+  .js .ribbon-counter {
+    display: block;
+    position: absolute;
+    left: var(--gutter);
+    top: 28px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--fg-faint);
+  }
+  .js .ribbon-counter span {
+    color: var(--fg);
+  }
+}

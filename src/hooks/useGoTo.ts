@@ -23,11 +23,12 @@ export function useGoTo() {
   );
 }
 
-export function scrollToId(id: string) {
+/** Scroll to an element and focus it. Smooth unless motion is reduced or a behaviour is given. */
+export function scrollToId(id: string, behavior?: ScrollBehavior) {
   const el = document.getElementById(id);
   if (!el) return;
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  el.scrollIntoView({ block: "start", behavior: reduce ? "auto" : "smooth" });
+  el.scrollIntoView({ block: "start", behavior: behavior ?? (reduce ? "instant" : "smooth") });
   // Move focus with the view so keyboard and screen-reader users land there.
   if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "-1");
   el.focus({ preventScroll: true });

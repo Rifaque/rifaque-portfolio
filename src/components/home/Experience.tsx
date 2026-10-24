@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { experiences } from "../../content/experience";
 import { pick } from "../../content/projects";
 import { ExternalLink } from "../ExternalLink";
-import { StatusLine } from "../StatusLine";
+import { StatusBadge } from "../StatusBadge";
 
 export function Experience() {
   return (
@@ -48,7 +48,7 @@ export function Experience() {
                         <li key={p.slug} className="xp-card">
                           <p className="kicker">{p.kicker}</p>
                           <h5 className="xp-card-title">{p.title}</h5>
-                          <StatusLine project={p} />
+                          <StatusBadge stage={p.stage} text={p.status} />
                           <p className="xp-card-attr">{p.attribution}</p>
                           <p className="xp-card-period">{p.period}</p>
                           <Link to={`/work/${p.slug}`} className="text-link xp-card-link">

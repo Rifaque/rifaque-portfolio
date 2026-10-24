@@ -2,7 +2,7 @@ import type { Ref } from "react";
 import { Link } from "react-router-dom";
 import type { Project } from "../../content/projects";
 import { ExternalLink } from "../ExternalLink";
-import { StatusLine } from "../StatusLine";
+import { StatusBadge } from "../StatusBadge";
 
 type Props = {
   project: Project;
@@ -22,7 +22,7 @@ export function ProjectText({ project: p, index, headingId, headingRef }: Props)
       <h3 ref={headingRef} id={headingId} tabIndex={-1} className="p-title">
         {p.title}
       </h3>
-      <StatusLine project={p} className="p-status" />
+      <StatusBadge stage={p.stage} text={p.status} className="p-status" />
       {p.question && <p className="p-question">{p.question}</p>}
       <p className="p-summary">{p.summary}</p>
       <ul className="p-points">
