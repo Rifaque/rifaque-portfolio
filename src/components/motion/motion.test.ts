@@ -56,11 +56,12 @@ describe("reveal", () => {
     expect(isPastOrVisible({ top: 801 }, 800)).toBe(false);
   });
 
-  it("hides content only under html.motion-ready with motion allowed", () => {
+  it("hides only pending content (measured below the fold), under html.motion-ready with motion allowed", () => {
     const motion = css("motion.css");
     const hidden = motion.match(/([^{}]+)\{\s*opacity: 0;/g) ?? [];
     expect(hidden.length).toBeGreaterThan(0);
-    for (const rule of hidden) expect(rule).toMatch(/\.motion-ready \[data-reveal\]:not\(\[data-revealed\]\)/);
+    // Not every [data-reveal]: content on screen when measured is never hidden.
+    for (const rule of hidden) expect(rule).toMatch(/\.motion-ready \[data-reveal="pending"\]:not\(\[data-revealed\]\)/);
     expect(motion).toMatch(/@media \(prefers-reduced-motion: no-preference\) \{\s*\.motion-ready \[data-reveal\] \{/);
   });
 });
@@ -100,5 +101,11 @@ describe("hero entrance CSS", () => {
   it("keeps the whole headline warm white", () => {
     expect(pages).toMatch(/\.hero-title \{[^}]*color: var\(--fg\);/);
     expect(pages).not.toMatch(/\.hero-title em \{[^}]*color:/);
+  });
+
+  it("draws the emphasised phrase in the headline's own weight and tracking", () => {
+    const em = pages.match(/\.hero-title em \{([^}]*)\}/)![1];
+    expect(em).toMatch(/font-weight: inherit;/);
+    expect(em).toMatch(/letter-spacing: inherit;/);
   });
 });

@@ -5,7 +5,8 @@
  * without JavaScript, before hydration and with reduced motion.
  */
 
-/* Reveal once, below the fold (reveal.ts). */
+/* Reveal once, below the fold (reveal.ts). Only pending elements, measured
+   below the fold, are ever hidden. */
 @media (prefers-reduced-motion: no-preference) {
   .motion-ready [data-reveal] {
     transition:
@@ -13,7 +14,7 @@
       transform var(--dur-slow) var(--ease-out);
     transition-delay: calc(var(--reveal-index, 0) * var(--stagger));
   }
-  .motion-ready [data-reveal]:not([data-revealed]) {
+  .motion-ready [data-reveal="pending"]:not([data-revealed]) {
     opacity: 0;
     transform: translate3d(0, 12px, 0);
   }

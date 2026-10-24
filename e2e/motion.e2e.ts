@@ -138,6 +138,96 @@ test("reveal: below the fold waits, on-screen content never hides, and each reve
   expect(await items.first().evaluate((el) => el.getAnimations().length)).toBe(0);
 });
 
+/**
+ * The lowest opacity any on-screen .lab-motion-item shows over `ms`, sampled
+ * every frame, and how many frames had one on screen.
+ */
+const onScreenRevealOpacity = (page: Page, ms: number) =>
+  page.evaluate(
+    (ms) =>
+      new Promise<{ min: number; frames: number }>((resolve) => {
+        let min = 1;
+        let frames = 0;
+        const start = performance.now();
+        const tick = () => {
+          const onScreen = [...document.querySelectorAll(".lab-motion-item")].filter((el) => {
+            const r = el.getBoundingClientRect();
+            return r.bottom > 0 && r.top < innerHeight;
+          });
+          if (onScreen.length) frames++;
+          for (const el of onScreen) min = Math.min(min, Number(getComputedStyle(el).opacity));
+          if (performance.now() - start < ms) requestAnimationFrame(tick);
+          else resolve({ min, frames });
+        };
+        tick();
+      }),
+    ms,
+  );
+
+test("reveal after a client-side visit: content below the fold still waits, then reveals", async ({ page }) => {
+  await page.goto("/");
+  await hydrated(page);
+  // /lab is deliberately unlinked; navigate the way the router would.
+  await page.evaluate(() => {
+    history.pushState({}, "", "/lab");
+    dispatchEvent(new PopStateEvent("popstate"));
+  });
+  const items = page.locator("[data-reveal]");
+  await expect(items).toHaveCount(4);
+  await expect(items.first()).toHaveAttribute("data-reveal", "pending");
+  await expect(items.first()).toHaveCSS("opacity", "0");
+
+  await items.first().scrollIntoViewIfNeeded();
+  for (let i = 0; i < 4; i++) await expect(items.nth(i)).toHaveAttribute("data-revealed", "");
+  await expect(items.last()).toHaveCSS("opacity", "1");
+});
+
+test("reveal after Back: content on screen at the restored position never fades in", async ({ page }) => {
+  await page.goto("/lab");
+  await hydrated(page);
+  const items = page.locator("[data-reveal]");
+  await items.first().scrollIntoViewIfNeeded();
+  for (let i = 0; i < 4; i++) await expect(items.nth(i)).toHaveAttribute("data-revealed", "");
+
+  // Clicked programmatically so Playwright does not scroll the link into view.
+  await page
+    .getByRole("navigation", { name: "Primary" })
+    .getByRole("link", { name: "Archive" })
+    .evaluate((a: HTMLAnchorElement) => a.click());
+  await expect(page).toHaveURL(/\/archive$/);
+
+  // html.motion-ready is already set: the remounted lab must not hide what
+  // the restored scroll position puts on screen.
+  const back = page.goBack();
+  await page.waitForFunction(() => location.pathname === "/lab" && !!document.querySelector(".lab-motion-item"));
+  const { min, frames } = await onScreenRevealOpacity(page, 800);
+  await back;
+  expect(frames, "the restored position shows the revealed items").toBeGreaterThan(10);
+  expect(min).toBe(1);
+  const onScreenAnimations = await items.evaluateAll((els) =>
+    els.filter((el) => el.getBoundingClientRect().top < innerHeight).flatMap((el) => el.getAnimations()).length,
+  );
+  expect(onScreenAnimations).toBe(0);
+});
+
+for (const viewport of [
+  { width: 1440, height: 900 },
+  { width: 390, height: 844 },
+]) {
+  test(`the whole headline shares one colour, weight and tracking at ${viewport.width}px`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("/");
+    const style = (selector: string) =>
+      page.locator(selector).evaluate((el) => {
+        const cs = getComputedStyle(el);
+        return { color: cs.color, fontWeight: cs.fontWeight, letterSpacing: cs.letterSpacing, fontStyle: cs.fontStyle };
+      });
+    const title = await style(".hero-title");
+    expect(title.fontWeight).toBe("600");
+    expect(await style(".hero-title em")).toEqual(title);
+  });
+}
+
 test("pointer tilt follows a fine pointer within 3° and settles flat on leave", async ({ page }) => {
   await page.goto("/lab");
   await hydrated(page);

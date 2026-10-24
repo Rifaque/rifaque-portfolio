@@ -5,10 +5,11 @@ import { useLayoutEffect, type CSSProperties, type RefObject } from "react";
  *
  * Mark elements with revealProps(i) and call useReveal(containerRef) once
  * for the container. One IntersectionObserver serves the whole page. The
- * hidden starting state lives in motion.css and applies only under
- * html.motion-ready with motion allowed, so without JavaScript, before
+ * hidden starting state lives in motion.css and applies only to elements
+ * useReveal has marked pending (below the fold when measured), under
+ * html.motion-ready with motion allowed. So without JavaScript, before
  * hydration, after a failed hydration or with reduced motion, everything is
- * simply visible.
+ * simply visible, and content already on screen is never hidden.
  */
 
 export const MAX_STAGGER = 6;
@@ -60,9 +61,14 @@ function unwatch(el: Element) {
 
 /**
  * Registers the container's [data-reveal] elements. Runs as a layout effect,
- * before html.motion-ready is set on first load (MotionRoot sets it in a
- * passive effect), so anything already on screen or scrolled past is marked
- * revealed before it could ever be hidden: no flash and no replay.
+ * before paint. Only elements below the fold are marked pending, the one
+ * state motion.css hides; anything already on screen or scrolled past is
+ * marked revealed and never takes the hidden style. That holds after a
+ * client-side navigation too, where html.motion-ready is already set: had
+ * on-screen content matched the hidden style, measuring it would have
+ * computed that style and revealing it would fade it in. (ScrollManager
+ * restores the scroll position in an earlier layout effect, so this measures
+ * the restored view.)
  */
 export function useReveal(container: RefObject<HTMLElement>) {
   useLayoutEffect(() => {
@@ -73,6 +79,9 @@ export function useReveal(container: RefObject<HTMLElement>) {
       if (isPastOrVisible(el.getBoundingClientRect(), window.innerHeight)) {
         reveal(el);
       } else {
+        // React rendered data-reveal="" and leaves it alone while the prop is
+        // unchanged.
+        el.setAttribute("data-reveal", "pending");
         shared().observe(el);
         watched++;
         pending.push(el);

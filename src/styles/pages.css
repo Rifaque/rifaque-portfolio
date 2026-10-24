@@ -18,11 +18,12 @@
   text-wrap: balance;
   color: var(--fg);
 }
-/* All warm white; the emphasised phrase differs by weight alone. */
+/* One colour, weight and tracking throughout: the <em> keeps its meaning
+   but is drawn like the rest of the headline. */
 .hero-title em {
   font-style: normal;
-  font-weight: 380;
-  letter-spacing: -0.04em;
+  font-weight: inherit;
+  letter-spacing: inherit;
 }
 .hero-lede {
   margin-top: 28px;
