@@ -10,6 +10,8 @@ export default defineConfig(({ isSsrBuild }) => ({
   },
   plugins: [react()],
   build: {
+    // The prerender reads it to link lazy routes' stylesheets, then deletes it.
+    manifest: !isSsrBuild,
     rollupOptions: isSsrBuild
       ? {}
       : {

@@ -208,6 +208,56 @@ for (const [path, html] of pages) {
   }
 }
 
+// ---- code splitting ---------------------------------------------------------
+// /lab is a lazy route (src/labRoute.ts): no other page may load its code or
+// styles, and lab.html must still be complete, styled and free of Suspense
+// fallbacks.
+// (The small .lab-switch/.lab-motion rules in pages.css are shared CSS, not
+// part of the chunk, so only the motion fixture's script is checked.)
+const labMarkers = [
+  ["Selected work, isolated", "the lab page", "js"],
+  ["ribbon-counter", "the project ribbon", "js"],
+  ["(min-width: 1200px) and (min-height: 680px)", "the ribbon controller", "js"],
+  ["lab-motion-item", "the motion fixture", "js"],
+  [".ribbon-stage", "the ribbon styles", "css"],
+];
+const assetsOf = (html) => matchAll(html, /(?:src|href)="\/(assets\/[^"]+\.(?:js|css))"/g).map((m) => m[1]);
+for (const [path, html] of pages) {
+  // Every page's HTML must be complete and hydrate in one pass: no Suspense
+  // boundary at all (a loaded lazy route renders inline; labRoute.ts).
+  if (/<!--\$[?!]?-->/.test(html)) fail(`${path}: contains a Suspense boundary`);
+  if (path === "/lab") continue;
+  for (const asset of assetsOf(html)) {
+    if (/LabPage/.test(asset)) fail(`${path}: loads the lab chunk ${asset}`);
+    const text = await readFile(join(dist, asset), "utf8").catch(() => "");
+    if (!text) fail(`${path}: references missing asset ${asset}`);
+    for (const [marker, label, type] of labMarkers) {
+      if (asset.endsWith(`.${type}`) && text.includes(marker)) fail(`${path}: ${asset} contains ${label} ("${marker}")`);
+    }
+  }
+}
+const lab = pages.get("/lab");
+if (lab) {
+  const labCss = assetsOf(lab).filter((a) => /LabPage-[^/]+\.css$/.test(a));
+  if (labCss.length !== 1) fail(`/lab: expected its chunk's stylesheet linked in the HTML, found ${labCss.length}`);
+  for (const a of labCss) {
+    if (!(await readFile(join(dist, a), "utf8").catch(() => "")).includes(".ribbon-stage")) fail(`/lab: ${a} lacks the ribbon styles`);
+  }
+  if (!assetsOf(lab).some((a) => /LabPage-[^/]+\.js$/.test(a))) fail("/lab: does not preload its chunk");
+  // Chunk CSS after the app's, as in a single bundle, so the cascade is unchanged.
+  const order = assetsOf(lab).filter((a) => a.endsWith(".css"));
+  if (order.findIndex((a) => /LabPage-/.test(a)) < order.findIndex((a) => /\/index-/.test(a))) {
+    fail(`/lab: its chunk stylesheet must come after the app stylesheet (${order.join(", ")})`);
+  }
+  for (const needle of ["Selected work, isolated", 'class="ribbon-stage"', 'class="lab-motion']) {
+    if (!lab.includes(needle)) fail(`/lab: prerendered HTML lacks ${needle}`);
+  }
+  // React separates adjacent text with <!-- --> in server output.
+  const ribbon = lab.slice(lab.indexOf('<section class="ribbon"')).replace(/<!-- -->/g, "");
+  const caseLinks = matchAll(ribbon, /<a [^>]*href="\/work\/([a-z-]+)"[^>]*>Read the [^<]+ case study<\/a>/g).map((m) => m[1]);
+  if (caseLinks.length !== 4) fail(`/lab: expected 4 ribbon case-study links, found ${caseLinks.length}`);
+}
+
 if (problems.length) {
   console.error(`check-dist: ${problems.length} problem(s)\n  ${problems.join("\n  ")}`);
   process.exit(1);

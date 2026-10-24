@@ -11,6 +11,7 @@ import "./styles/work.css";
 import "./styles/pages.css";
 import "./styles/motion.css";
 import { AppRoutes } from "./AppRoutes";
+import { preloadLab } from "./labRoute";
 import { ScrollManager } from "./components/motion/ScrollManager";
 import { MotionRoot } from "./components/motion/MotionRoot";
 
@@ -27,5 +28,12 @@ const app = (
 
 // Production pages arrive prerendered (scripts/prerender.mjs); attach to
 // that markup. The dev server serves an empty root, so render from scratch.
-if (root.firstElementChild) hydrateRoot(root, app);
-else createRoot(root).render(app);
+const start = () => {
+  if (root.firstElementChild) hydrateRoot(root, app);
+  else createRoot(root).render(app);
+};
+// A direct visit to the lazy /lab route hydrates once its chunk is in (it is
+// preloaded in lab.html), matching its prerendered HTML, which has no Suspense
+// boundary (labRoute.ts); the prerendered page is on screen meanwhile.
+if (root.firstElementChild && /^\/lab\/?$/.test(location.pathname)) preloadLab().then(start, start);
+else start();
