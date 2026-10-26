@@ -158,6 +158,26 @@ test.describe("project space @core", () => {
 });
 
 test.describe("project space input details", () => {
+  test("project handoff recedes the outgoing scene with a responsive exit curve", async ({ page }) => {
+    await page.goto("/");
+    await hydrated(page);
+    await page.evaluate(() => {
+      const w = window as unknown as { __sceneExits: string[] };
+      w.__sceneExits = [];
+      const original = Element.prototype.animate;
+      Element.prototype.animate = function (frames, options) {
+        const opts = typeof options === "number" ? {} : options ?? {};
+        if (this.closest(".ps-scene.leaving")) {
+          w.__sceneExits.push(String(opts.easing));
+        }
+        return original.call(this, frames, options);
+      };
+    });
+    await page.locator('.ps-sd-btn[data-slug="nexus"]').click();
+    await expect(page.locator("#work .ps-scene:not(.leaving)")).toHaveAttribute("data-scene", "nexus");
+    await expect.poll(() => page.evaluate(() => (window as unknown as { __sceneExits: string[] }).__sceneExits)).toEqual(["ease-out", "ease-out"]);
+  });
+
   test("dragging turns the scene; a vertical wheel is left to the page", async ({ page }) => {
     await page.goto("/");
     await hydrated(page);

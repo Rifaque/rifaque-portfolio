@@ -86,8 +86,20 @@ for (const f of htmlFiles) {
   const desc = html.match(/<meta name="description" content="([^"]+)"/)?.[1];
   const canonical = html.match(/<link rel="canonical" href="([^"]+)"/)?.[1];
   const robots = html.match(/<meta name="robots" content="([^"]+)"/)?.[1];
+  const metaContent = (key) => html.match(new RegExp(`<meta (?:name|property)="${key}" content="([^"]+)"`))?.[1];
+  const ogImage = metaContent("og:image");
   if (!title) fail(`${f}: no <title>`);
   if (!desc) fail(`${f}: no description`);
+  if (metaContent("og:title") !== title) fail(`${f}: Open Graph title differs from the page title`);
+  if (metaContent("og:description") !== desc) fail(`${f}: Open Graph description differs from the page description`);
+  if (!['website', 'article', 'profile'].includes(metaContent("og:type"))) fail(`${f}: missing or invalid Open Graph type`);
+  if (f !== "404.html" && metaContent("og:url") !== canonical) fail(`${f}: Open Graph URL differs from canonical`);
+  if (ogImage !== `${SITE}/og-image.png`) fail(`${f}: Open Graph image URL is incorrect`);
+  if (metaContent("og:image:width") !== "1200" || metaContent("og:image:height") !== "630") fail(`${f}: Open Graph image dimensions are incorrect`);
+  if (metaContent("twitter:title") !== title) fail(`${f}: Twitter title differs from the page title`);
+  if (metaContent("twitter:description") !== desc) fail(`${f}: Twitter description differs from the page description`);
+  if (metaContent("twitter:card") !== "summary_large_image") fail(`${f}: Twitter card type is incorrect`);
+  if (metaContent("twitter:image") !== ogImage) fail(`${f}: Twitter image differs from the Open Graph image`);
   if (titles.has(title)) fail(`${f}: duplicate title with ${titles.get(title)}`);
   if (descs.has(desc)) fail(`${f}: duplicate description with ${descs.get(desc)}`);
   titles.set(title, f);
@@ -103,7 +115,6 @@ for (const f of htmlFiles) {
     if (!/<h1[\s>]/.test(html)) fail(`${f}: no <h1> in prerendered HTML`);
   }
   if (!/<main[^>]*>[\s\S]{200,}<\/main>/.test(html)) fail(`${f}: prerendered <main> is empty`);
-  if (!html.includes('<meta property="og:image" content="https://rsxdevelops.dev/og-image.png"')) fail(`${f}: og:image missing`);
   for (const m of html.matchAll(/<img\b[^>]*>/g)) if (!/\salt="/.test(m[0])) fail(`${f}: <img> without alt: ${m[0].slice(0, 80)}`);
   for (const m of html.matchAll(/<(script|link)\b[^>]*(src|href)="(https?:)?\/\/[^"]+"[^>]*>/g)) {
     if (/rel="(canonical)"/.test(m[0])) continue;

@@ -300,8 +300,8 @@ export function mount(host: HTMLElement, slug: string, label: string, s: Scene, 
       old.inert = true;
       old.setAttribute("aria-hidden", "true");
       old.removeAttribute("tabindex");
-      old.querySelector(".ps-enter")?.animate([{ transform: "none" }, { transform: "translateZ(-6cqw) rotateY(7deg)" }], { duration: 200, easing: "ease-in", fill: "forwards" });
-      old.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200, easing: "ease-in", fill: "forwards" }).finished.then(() => old.remove(), () => old.remove());
+      old.querySelector(".ps-enter")?.animate([{ transform: "none" }, { transform: "translateZ(-6cqw) rotateY(7deg)" }], { duration: 200, easing: "ease-out", fill: "forwards" });
+      old.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200, easing: "ease-out", fill: "forwards" }).finished.then(() => old.remove(), () => old.remove());
     } else old.remove();
   }
   if (!opts.animate) return scene._turn;
