@@ -1,34 +1,21 @@
-import { Layout } from "../components/layout/Layout";
-import { Hero } from "../components/home/Hero";
-import { Experience } from "../components/home/Experience";
-import { SmallerBuilds } from "../components/home/SmallerBuilds";
-import { About } from "../components/home/About";
-import { Contact } from "../components/home/Contact";
-import { SelectedWork } from "../components/work/SelectedWork";
-import { pick, selectedSlugs } from "../content/projects";
+import { Hero } from "../hero/HeroSection";
+import { ProjectSpace } from "../space/ProjectSpace";
+import { BillOfMaterials, Contact, Experience, HowIWork } from "../components/HomeSections";
 
+/**
+ * The homepage, in the accepted order: the RSX solid as the landing gate,
+ * Projects (Project Space with Also built and Archive builds), How I work,
+ * Experience and education, the bill of materials, and contact.
+ */
 export default function Home() {
   return (
-    <Layout>
+    <>
       <Hero />
-      <section id="work" className="section" aria-labelledby="work-title">
-        <div className="container">
-          <header className="section-head">
-            <h2 id="work-title" className="h2">
-              Selected work
-            </h2>
-            <p>
-              Four personal projects, each with its status and its limits. Diagrams are explanatory illustrations; the
-              one screenshot is labelled as such.
-            </p>
-          </header>
-          <SelectedWork projects={pick(selectedSlugs)} />
-        </div>
-      </section>
+      <ProjectSpace />
+      <HowIWork />
       <Experience />
-      <SmallerBuilds />
-      <About />
+      <BillOfMaterials />
       <Contact />
-    </Layout>
+    </>
   );
 }

@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en-GB" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reflux · Case study · Rifaque Akrami</title>
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#08090b">
+<script>
+  (function () {
+    var d = document.documentElement, t = "dark", m;
+    try { if (localStorage.getItem("rsx-theme") === "light") t = "light"; } catch (e) {}
+    if ((m = /[?&]theme=(dark|light)/.exec(location.search))) t = m[1];
+    d.dataset.theme = t;
+    if (/[?&]motion=reduce/.test(location.search)) d.dataset.motion = "reduce";
+    document.querySelector('meta[name="theme-color"]').content = t === "light" ? "#f4f5f7" : "#08090b";
+  })();
+</script>
+<link rel="icon" href="../../brand/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../../brand/favicon-32-dark.png">
+<link rel="apple-touch-icon" href="../../brand/favicon-180-dark.png">
+<link rel="stylesheet" href="../../css/tokens.css">
+<link rel="stylesheet" href="../../css/app.css">
+<link rel="stylesheet" href="../../css/stage3d.css">
+<link rel="stylesheet" href="../../css/projects.css">
+<link rel="stylesheet" href="../../css/cs.css">
+</head>
+<body data-project="reflux">
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="wrap top-row">
+    <a class="mark" href="../../" aria-label="RSX Develops, home"><img class="wm wm-dark" src="../../brand/rsx-develops-wordmark-dark.png" srcset="../../brand/rsx-develops-wordmark-dark-2x.png 2x" width="774" height="109" alt=""><img class="wm wm-light" src="../../brand/rsx-develops-wordmark-light.png" srcset="../../brand/rsx-develops-wordmark-light-2x.png 2x" width="612" height="94" alt=""></a>
+    <nav class="nav" aria-label="Sections">
+      <a href="../../?project=reflux#work" data-sound="press">Work</a>
+      <a href="../../#about" data-sound="press">About</a>
+      <a href="../../#experience" data-sound="press">Experience</a>
+      <a href="../../#contact" data-sound="press">Contact</a>
+    </nav>
+    <div class="prefs">
+      <button class="pref" id="theme-switch" type="button" aria-label="Switch to light theme" title="Switch to light theme">
+        <svg class="pref-icon" viewBox="0 0 20 20" aria-hidden="true"><circle class="i-sun" cx="10" cy="10" r="3.6"/><path class="i-rays" d="M10 1.8v2.4M10 15.8v2.4M1.8 10h2.4M15.8 10h2.4M4.2 4.2l1.7 1.7M14.1 14.1l1.7 1.7M4.2 15.8l1.7-1.7M14.1 5.9l1.7-1.7"/><path class="i-moon" d="M15.5 12.6A6.5 6.5 0 0 1 7.4 4.5a6.5 6.5 0 1 0 8.1 8.1z"/></svg>
+        <span class="pref-label">Light</span>
+      </button>
+      <button class="pref pref-square" id="sound-switch" type="button" data-on="false" aria-label="Enable sound" title="Enable sound">
+        <svg class="pref-icon" viewBox="0 0 20 20" aria-hidden="true"><path class="i-spk" d="M3.5 7.5h3l4-3.2v11.4l-4-3.2h-3z"/><path class="i-wave" d="M13.4 7.2a4 4 0 0 1 0 5.6M15.6 5a7 7 0 0 1 0 10"/><path class="i-mute" d="M13.5 7.5l4 5M17.5 7.5l-4 5"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+<main id="main" class="cs wrap">
+  <nav class="crumbs cs-crumb" aria-label="Breadcrumb"><a data-back href="../../#work">Projects</a><span aria-hidden="true">/</span><span aria-current="page">Reflux</span></nav>
+
+  <header class="cs-intro">
+    <div>
+      <p class="cs-kicker">Local-first media client · case study</p>
+      <h1>Reflux</h1>
+      <div data-status></div>
+      <p class="cs-sum">A Kotlin Multiplatform media client in which a work is distinct from the versions and sources that provide it. Watch and resume state belong to the work, so playback continues from any copy: a local folder, a Jellyfin server or a network share.</p>
+    </div>
+    <dl class="cs-facts">
+      <dt>Role</dt><dd>Personal project</dd>
+      <dt>Period</dt><dd>Oct 2026 to now</dd>
+      <dt>Runs on</dt><dd>Windows, Linux, Android, Android TV</dd>
+      <dt>Licence</dt><dd>Proprietary, source-available; not open source</dd>
+      <dt>Stack</dt><dd>Kotlin Multiplatform · Compose · Media3 · libmpv · Jellyfin · TMDB</dd>
+    </dl>
+  </header>
+
+  <section class="cs-open" aria-label="The Reflux media model and its platforms">
+    <div class="cs-3d" data-scene="reflux" data-label="the media model on a glass panel, with desktop, TV and phone outlines that carry no capture"></div>
+  </section>
+
+  <section class="cs-sec" aria-labelledby="h-model">
+    <div class="cs-text">
+      <h2 id="h-model">Works, versions and sources</h2>
+      <p class="cs-q">What if a film were one thing, no matter how many files it lives in?</p>
+      <p>Most players treat a file as the thing you watch. Reflux treats the film or show as the thing, and files as versions of it that sources happen to provide. A 1080p copy on a laptop, a 4K copy on a Jellyfin server and an extended edition on a network share are <b>three versions of one work</b>.</p>
+      <p>Library state lives in the platform's data directory and never in your media folders; nothing is renamed or moved.</p>
+    </div>
+    <div class="cs-vis">
+      <div class="cs-3d" data-scene="reflux" data-only="model" data-w="62" data-pw="88" data-ar="16 / 11" data-kind="illustration" data-label="the media model alone on a glass panel; turn it to see the drawing through the glass" data-cap="The same drawing, turnable: from behind it shows through the glass, reversed."></div>
+    </div>
+  </section>
+
+  <section class="cs-sec flip" aria-labelledby="h-identify">
+    <div class="cs-text">
+      <h2 id="h-identify">Identification</h2>
+      <ul class="works">
+        <li>Titles are read from ordinary filenames: a title ends at the first unambiguous release token, and ambiguous words are only hints.</li>
+        <li>Embedded IDs such as <b>{tmdb-123}</b> and IMDb IDs, and Plex <b>{edition-…}</b> tags, are honoured.</li>
+        <li>A file without a year joins its title's only known year; with several, it stays separate rather than being guessed into the wrong work.</li>
+        <li>A metadata match is accepted only when it is strong and clearly ahead of the runner-up. Anything else goes to an Identify flow.</li>
+      </ul>
+    </div>
+    <div class="cs-vis">
+      <figure class="cs-fig" data-dia="reflux-identify" data-cap="From filename to one work, or to a person's decision."></figure>
+    </div>
+  </section>
+
+  <section class="cs-sec" aria-labelledby="h-play">
+    <div class="cs-text">
+      <h2 id="h-play">Playback</h2>
+      <p>One engine drives every form factor: <b>Media3 on Android and libmpv on desktop</b>. Reflux picks the best available version for the device, and input adapts to touch, mouse and keyboard, game controllers and TV remotes.</p>
+      <p>The platform outlines in the 3D view are labelled "No capture published": no interface capture is shown, and none would use copyrighted artwork.</p>
+    </div>
+    <div class="cs-vis">
+      <figure class="cs-fig" data-dia="reflux-playback" data-cap="One shared engine, two playback back ends."></figure>
+    </div>
+  </section>
+
+  <section class="cs-sec solo" aria-labelledby="h-status">
+    <div class="cs-text">
+      <h2 id="h-status">Status and limits</h2>
+      <div data-status></div>
+      <ul class="works">
+        <li>Pre-release; nothing has been published.</li>
+        <li>Android and television builds have been verified mainly on emulators.</li>
+        <li>Accessibility is partial: contrast and system text size are tested; screen-reader labels on every control, focus order, reduced motion and a TalkBack or Narrator pass are not done yet.</li>
+        <li>Reflux is proprietary. Source visibility grants no permission to redistribute, modify or reuse it.</li>
+      </ul>
+      <div class="cs-links" data-links data-skip="repo" data-none="No release or demo yet."></div>
+    </div>
+  </section>
+
+  <nav class="cs-next" id="cs-next" aria-label="Other case studies"></nav>
+</main>
+<footer class="foot"><div class="wrap foot-row"><p>© 2026 Rifaque Akrami</p></div></footer>
+<script type="module" src="../../js/projects/space/case-studies/cs.js"></script>
+</body>
+</html>

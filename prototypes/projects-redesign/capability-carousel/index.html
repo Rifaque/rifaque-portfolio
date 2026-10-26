@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en-GB" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projects · Concept A, Capability Carousel · RSX Develops</title>
+<meta name="color-scheme" content="dark light">
+<script>
+  (function () {
+    var d = document.documentElement, t = "dark", m;
+    try { if (localStorage.getItem("rsx-theme") === "light") t = "light"; } catch (e) {}
+    if ((m = /[?&]theme=(dark|light)/.exec(location.search))) t = m[1];
+    d.dataset.theme = t;
+    if (/[?&]motion=reduce/.test(location.search)) d.dataset.motion = "reduce";
+  })();
+</script>
+<link rel="icon" href="../../../public/rsx-develops-brand-assets/favicon-32-dark.png">
+<link rel="stylesheet" href="../shared/base.css">
+<link rel="stylesheet" href="carousel.css">
+</head>
+<body>
+<nav aria-label="Skip link"><a class="skip" href="#projects">Skip to the projects</a></nav>
+<aside class="ctx ctx-hero" aria-label="Context: hero"><div class="wrap"><h1 class="sr-only">Projects section prototype: Concept A, Capability Carousel</h1><b>Hero (unchanged, not shown)</b><span>The Projection room sits above this section. Only the Projects section is being explored here.</span></div></aside>
+
+<main>
+  <section class="cc" id="projects" aria-labelledby="cc-title" data-mode="flow">
+    <div class="wrap cc-head">
+      <div class="sec-head">
+        <h2 id="cc-title">Projects</h2>
+        <p>Six projects, one at a time. Scroll through them, or jump straight to one.</p>
+      </div>
+      <a class="cc-skip" href="#next-section">Skip to the next section</a>
+    </div>
+    <div class="cc-track" id="cc-track">
+      <div class="cc-frame wrap" id="cc-frame">
+        <nav class="cc-rail" aria-label="Projects">
+          <ol id="cc-rail"></ol>
+        </nav>
+        <div class="cc-stage" id="cc-stage"></div>
+      </div>
+      <div class="cc-markers" id="cc-markers" aria-hidden="true"></div>
+    </div>
+    <div class="wrap" id="also"></div>
+  </section>
+</main>
+
+<aside class="ctx ctx-next" id="next-section" aria-label="Context: next section"><div class="wrap"><h2>Bill of materials</h2><span>Next section (unchanged, not shown).</span></div></aside>
+<script type="module" src="carousel.js"></script>
+</body>
+</html>

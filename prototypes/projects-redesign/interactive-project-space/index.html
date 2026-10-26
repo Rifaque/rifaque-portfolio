@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en-GB" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projects · Concept B, Interactive Project Space · RSX Develops</title>
+<meta name="color-scheme" content="dark light">
+<script>
+  (function () {
+    var d = document.documentElement, t = "dark", m;
+    try { if (localStorage.getItem("rsx-theme") === "light") t = "light"; } catch (e) {}
+    if ((m = /[?&]theme=(dark|light)/.exec(location.search))) t = m[1];
+    d.dataset.theme = t;
+    if (/[?&]motion=reduce/.test(location.search)) d.dataset.motion = "reduce";
+  })();
+</script>
+<link rel="icon" href="../../../public/rsx-develops-brand-assets/favicon-32-dark.png">
+<link rel="stylesheet" href="../shared/base.css">
+<link rel="stylesheet" href="space.css">
+</head>
+<body>
+<nav aria-label="Skip link"><a class="skip" href="#projects">Skip to the projects</a></nav>
+<aside class="ctx ctx-hero" aria-label="Context: hero"><div class="wrap"><h1 class="sr-only">Projects section prototype: Concept B, Interactive Project Space</h1><b>Hero (unchanged, not shown)</b><span>The Projection room sits above this section. Only the Projects section is being explored here.</span></div></aside>
+
+<main>
+  <section class="ps wrap" id="projects" aria-labelledby="ps-title">
+    <div class="ps-head">
+      <div class="sec-head">
+        <h2 id="ps-title">Projects</h2>
+        <p>Each project sits on the devices it runs on. Choose one to bring it forward.</p>
+      </div>
+    </div>
+    <div class="ps-space" id="space" data-view="overview">
+      <div class="ps-bar" id="bar" hidden>
+        <button class="btn" type="button" id="back">← All projects</button>
+        <nav class="ps-switch" aria-label="Other projects" id="switch"></nav>
+      </div>
+      <div class="ps-stage" id="stage"></div>
+      <aside class="ps-detail" id="detail" aria-live="polite" hidden></aside>
+    </div>
+    <ul class="ps-list" id="list" aria-label="Projects"></ul>
+    <div id="also"></div>
+  </section>
+</main>
+
+<aside class="ctx ctx-next" id="next-section" aria-label="Context: next section"><div class="wrap"><h2>Bill of materials</h2><span>Next section (unchanged, not shown).</span></div></aside>
+<script type="module" src="space.js"></script>
+</body>
+</html>

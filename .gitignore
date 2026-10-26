@@ -34,3 +34,9 @@ blob-report
 # Private career notes — never publish to this public repository.
 # Contains compensation and positioning strategy (see its section 56).
 Rifaque_Profile_Knowledge_Base.md
+
+# Local Playwright inspection artifacts
+.playwright-mcp/
+
+# Private portfolio source material
+knowledge-base/

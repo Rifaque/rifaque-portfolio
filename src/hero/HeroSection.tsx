@@ -1,0 +1,213 @@
+import { useEffect, useRef } from "react";
+import { site } from "../content/site";
+import { reducedMotion, sound, type Theme } from "../lib/prefs";
+import { createHero, posterSVG, type Hero as HeroScene, type HeroView } from "./hero.js";
+
+const VIEW_TEXT: Record<HeroView, string> = {
+  axo: "Its three shadows each spell a letter.",
+  r: "Seen along x, the solid is its own R.",
+  s: "Seen from above, it is the S on the floor.",
+  x: "Seen along z, it reads X.",
+};
+// The drawing of the same geometry: the no-WebGL fallback (and what shows without JavaScript).
+const POSTER = { __html: posterSVG({ label: "A solid made of small cubes in the corner of a room. Its shadows on the two walls and the floor spell R, S and X." }) };
+
+/**
+ * The landing gate: the RSX solid in the corner of a room, whose three
+ * shadows spell R, S and X (Three.js, loaded on demand). While WebGL starts
+ * the room stays empty (CSS, keyed to html.js), so no finished poster flashes
+ * before the entrance takes it apart; the poster is shown only as the
+ * deliberate fallback (.gl-off). The text layer above the canvas passes the
+ * pointer through except over the copy and the controls.
+ */
+export function Hero() {
+  const stageRef = useRef<HTMLDivElement>(null);
+  const objectRef = useRef<HTMLDivElement>(null);
+  const viewsRef = useRef<HTMLDivElement>(null);
+  const nowRef = useRef<HTMLSpanElement>(null);
+  const hintRef = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    const stage = stageRef.current!;
+    const object = objectRef.current!;
+    const views = viewsRef.current!;
+    const poster = stage.querySelector<SVGSVGElement>(".hero-poster")!;
+    const params = new URLSearchParams(location.search);
+    const fine = matchMedia("(hover: hover) and (pointer: fine)");
+    let hero: HeroScene | null = null;
+    let cancelled = false;
+    // A page being left (reload, navigation) aborts the scene's download; that is not a failure.
+    let leaving = false;
+    const onLeave = () => (leaving = true);
+    addEventListener("pagehide", onLeave);
+
+    /** The solid sits at the centre of the grid's object column, so text and object stay together. */
+    const frame = () => {
+      const s = stage.getBoundingClientRect();
+      const o = object.getBoundingClientRect();
+      const stacked = innerWidth <= 900;
+      const cx = (o.left + o.width / 2 - s.left) / s.width;
+      const cy = stacked ? 0.5 : (o.top + o.height * 0.44 - s.top) / s.height;
+      const height = stacked ? 33 : Math.max(40, Math.min(48, 40 * (860 / Math.max(s.height, 560))));
+      return { cx, cy, height };
+    };
+    const placePoster = () => {
+      const r = stage.getBoundingClientRect();
+      const f = frame();
+      const vb = poster.viewBox.baseVal;
+      const scale = r.height / f.height;
+      Object.assign(poster.style, {
+        width: `${vb.width * scale}px`,
+        height: `${vb.height * scale}px`,
+        left: `${f.cx * r.width + vb.x * scale}px`,
+        top: `${f.cy * r.height + vb.y * scale}px`,
+      });
+    };
+    const reframe = () => {
+      placePoster();
+      hero?.frame(frame());
+    };
+    const ro = new ResizeObserver(reframe);
+    ro.observe(stage);
+    reframe();
+
+    const setView = (name: HeroView) => {
+      views.querySelectorAll<HTMLButtonElement>(".view-key[data-view]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.view === name)));
+      if (nowRef.current) nowRef.current.textContent = VIEW_TEXT[name];
+    };
+    const onViews = (e: MouseEvent) => {
+      const b = (e.target as Element).closest<HTMLButtonElement>(".view-key");
+      if (!b) return;
+      if (b.id === "nudge") {
+        hero?.nudge();
+        sound.play("press");
+        return;
+      }
+      if (!hero || b.getAttribute("aria-pressed") === "true") return;
+      sound.play("turn");
+      hero.setView(b.dataset.view as HeroView);
+    };
+    views.addEventListener("click", onViews);
+    if (hintRef.current) hintRef.current.textContent = fine.matches ? "Drag the solid to turn it. It settles back into place." : "Swipe sideways across the solid to turn it.";
+
+    const onTheme = (e: Event) => hero?.theme((e as CustomEvent<Theme>).detail);
+    window.addEventListener("rsx-theme", onTheme);
+
+    const fallback = () => {
+      stage.classList.add("gl-off"); // the drawing is now the deliberate fallback
+      views.hidden = true;
+      if (hintRef.current) hintRef.current.textContent = "This is a drawing of the solid. Turning it needs WebGL.";
+    };
+    const glOK = (() => {
+      if (params.get("webgl") === "off") return false;
+      try {
+        return !!document.createElement("canvas").getContext("webgl2");
+      } catch {
+        return false;
+      }
+    })();
+    if (!glOK) fallback();
+    else
+      createHero(stage, { reduced: reducedMotion, onView: setView, onSettle: () => sound.play("settle") })
+        .then((h) => {
+          if (cancelled) return h?.destroy();
+          if (!h) return fallback();
+          hero = h;
+          h.frame(frame());
+          h.theme(document.documentElement.dataset.theme === "light" ? "light" : "dark");
+          let played = false;
+          try {
+            played = sessionStorage.getItem("rsx-intro") === "1";
+          } catch {
+            /* storage unavailable */
+          }
+          if (!played && !params.has("nointro")) {
+            h.intro();
+            try {
+              sessionStorage.setItem("rsx-intro", "1");
+            } catch {
+              /* storage unavailable */
+            }
+          }
+          requestAnimationFrame(() => {
+            h.canvas.classList.add("is-ready");
+            stage.classList.add("has-gl");
+          });
+        })
+        .catch((e) => {
+          if (cancelled || leaving) return;
+          console.warn("Hero scene unavailable:", e);
+          fallback();
+        });
+
+    return () => {
+      cancelled = true;
+      removeEventListener("pagehide", onLeave);
+      ro.disconnect();
+      views.removeEventListener("click", onViews);
+      window.removeEventListener("rsx-theme", onTheme);
+      hero?.destroy();
+      stage.classList.remove("has-gl", "gl-off");
+    };
+  }, []);
+
+  return (
+    <section className="hero" id="top" aria-labelledby="hero-name">
+      <div className="hero-stage" id="hero-stage" aria-hidden="true" ref={stageRef} dangerouslySetInnerHTML={POSTER} suppressHydrationWarning />
+      <div className="wrap hero-grid">
+        <div className="hero-copy">
+          <h1 className="hero-name" id="hero-name">
+            <span>Rifaque</span> <span>Akrami</span>
+          </h1>
+          <p className="hero-role">
+            Software engineer, working as <b>RSX Develops</b>.
+          </p>
+          <p className="hero-lede">I build software that stays understandable as it becomes more capable: local-first AI tools, developer systems and client products.</p>
+          <div className="hero-actions">
+            <a className="btn btn-primary" href="#work" data-sound="press">
+              See the work
+            </a>
+            <a className="btn" href={`mailto:${site.email}`} data-sound="press">
+              Email
+            </a>
+            <a className="link resume-link" href={site.resume}>
+              Résumé (PDF)
+            </a>
+          </div>
+          <p className="hero-meta">Bhatkal, India. Open to relocation and remote roles.</p>
+        </div>
+        <div className="hero-object" ref={objectRef}>
+          <div className="hero-instrument" role="group" aria-labelledby="solid-caption">
+            <p className="solid-caption" id="solid-caption">
+              <span className="solid-what">RSX, as one solid.</span> <span ref={nowRef}>{VIEW_TEXT.axo}</span>
+            </p>
+            <div className="views" ref={viewsRef}>
+              <button type="button" className="view-key" data-view="axo" aria-pressed="true" aria-label="Corner view: the solid and all three shadows">
+                <svg viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="M2 5l6-3 6 3v6l-6 3-6-3z M2 5l6 3 6-3M8 8v6" fill="none" stroke="currentColor" strokeWidth="1.3" />
+                </svg>
+              </button>
+              <button type="button" className="view-key" data-view="r" aria-pressed="false" aria-label="Look along x: the solid reads R">
+                R
+              </button>
+              <button type="button" className="view-key" data-view="s" aria-pressed="false" aria-label="Look from above: the solid reads S">
+                S
+              </button>
+              <button type="button" className="view-key" data-view="x" aria-pressed="false" aria-label="Look along z: the solid reads X">
+                X
+              </button>
+              <button type="button" className="view-key view-nudge" id="nudge" aria-label="Knock the solid out of alignment and let it settle">
+                <svg viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="M13 8a5 5 0 1 1-1.5-3.6M13 2.5v2.6h-2.6" fill="none" stroke="currentColor" strokeWidth="1.4" />
+                </svg>
+              </button>
+            </div>
+            <p className="solid-hint" ref={hintRef}>
+              Drag the solid to turn it. It settles back into place.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

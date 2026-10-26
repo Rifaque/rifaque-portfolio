@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en-GB" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ExtendSpace · Case study · Concept D · RSX Develops</title>
+<meta name="color-scheme" content="dark light">
+<script>
+  (function () {
+    var d = document.documentElement, t = "dark", m;
+    try { if (localStorage.getItem("rsx-theme") === "light") t = "light"; } catch (e) {}
+    if ((m = /[?&]theme=(dark|light)/.exec(location.search))) t = m[1];
+    d.dataset.theme = t;
+    if (/[?&]motion=reduce/.test(location.search)) d.dataset.motion = "reduce";
+  })();
+</script>
+<link rel="icon" href="../../../../../public/rsx-develops-brand-assets/favicon-32-dark.png">
+<link rel="stylesheet" href="../../../shared/base.css">
+<link rel="stylesheet" href="../../stage3d.css">
+<link rel="stylesheet" href="../cs.css">
+</head>
+<body data-project="extendspace">
+<nav aria-label="Skip link"><a class="skip" href="#main">Skip to the case study</a></nav>
+<main id="main" class="cs wrap">
+  <p class="cs-crumb"><a data-back href="../../">← Project Space</a></p>
+
+  <header class="cs-intro">
+    <div>
+      <p class="cs-kicker">Windows to Android second screen · case study</p>
+      <h1>ExtendSpace</h1>
+      <div data-status></div>
+      <p class="cs-sum">A Windows host and an Android companion that stream the desktop to a tablet over USB. The wired path is the first milestone and the current focus; ordinary use is not possible yet, because Connect is still disabled.</p>
+    </div>
+    <dl class="cs-facts">
+      <dt>Role</dt><dd>Personal project, sole author</dd>
+      <dt>Period</dt><dd>2026 to now</dd>
+      <dt>Runs on</dt><dd>Windows host, Android tablet</dd>
+      <dt>Licence</dt><dd>MIT</dd>
+      <dt>Stack</dt><dd>C# / .NET 10 · WinUI 3 · Kotlin · Jetpack Compose · H.264 (Media Foundation, MediaCodec) · USB transport</dd>
+    </dl>
+  </header>
+
+  <section class="cs-open" aria-label="Windows host, USB cable and Android tablet">
+    <div class="cs-3d" data-scene="extendspace" data-label="a Windows host monitor and an Android tablet joined by a USB cable"></div>
+  </section>
+
+  <section class="cs-sec" aria-labelledby="h-aim">
+    <div class="cs-text">
+      <h2 id="h-aim">The aim, and the order of work</h2>
+      <p class="cs-q">Can a tablet on a USB cable become a dependable second screen for Windows?</p>
+      <p>Mirroring first, true extension later; extension needs a virtual display driver on Windows. The work so far is the streaming pipeline and the session machinery around it.</p>
+      <ul class="works">
+        <li><b>First: USB, wired.</b> The current focus is finishing this path.</li>
+        <li><b>Then: Wi-Fi, wireless.</b> Planned after the wired milestone, when development resumes. It is not implemented.</li>
+      </ul>
+    </div>
+    <div class="cs-vis">
+      <figure class="cs-fig" data-dia="extendspace-roadmap" data-cap="Wired first; wireless only after the wired milestone."></figure>
+    </div>
+  </section>
+
+  <section class="cs-sec flip" aria-labelledby="h-built">
+    <div class="cs-text">
+      <h2 id="h-built">How it is put together</h2>
+      <ul class="works">
+        <li><b>Windows host</b> in C# and WinUI 3: display capture and hardware H.264 encoding behind a production session owner.</li>
+        <li><b>Android companion</b> in Kotlin and Jetpack Compose: link, decoder ownership and surface handling, with a session state model covered by unit tests.</li>
+        <li><b>A draft wire protocol</b>, implemented on both sides, over a USB transport with reconnection.</li>
+      </ul>
+      <p>The host screen in the 3D view is an illustration: no capture of the host interface is published.</p>
+    </div>
+    <div class="cs-vis">
+      <figure class="cs-fig" data-dia="extendspace" data-cap="Capture and encode on Windows, USB, decode and draw on the tablet."></figure>
+    </div>
+  </section>
+
+  <section class="cs-sec" aria-labelledby="h-tested">
+    <div class="cs-text">
+      <h2 id="h-tested">What has been tested</h2>
+      <p>On one PC and one tablet over USB, the production session path streamed a <b>1080p60 test pattern for ten minutes: 36,081 frames</b> sent, all decoded and released to the tablet's surface.</p>
+      <p>These runs were driven by gated acceptance tests on the PC and a debug-only screen on the tablet. They show the pipeline working on one setup; they are not broad device validation.</p>
+    </div>
+    <div class="cs-vis">
+      <figure class="cs-fig" data-media="extendspace 0"></figure>
+    </div>
+  </section>
+
+  <section class="cs-sec flip" aria-labelledby="h-recover">
+    <div class="cs-text">
+      <h2 id="h-recover">Recovering, not restarting</h2>
+      <p>The USB link recovers from a pulled cable with video still flowing afterwards.</p>
+      <p>Decoders are created on a dedicated owner thread, never on the reader thread, and a creation is used only if it still matches the stream that is wanted. Frames that arrive meanwhile wait in order, within limits; beyond that, the stream skips to the next keyframe.</p>
+    </div>
+    <div class="cs-vis">
+      <figure class="cs-fig" data-dia="extendspace-recovery" data-cap="A pulled cable costs a keyframe, not the session."></figure>
+    </div>
+  </section>
+
+  <section class="cs-sec solo" aria-labelledby="h-status">
+    <div class="cs-text">
+      <h2 id="h-status">Status and limits</h2>
+      <div data-status></div>
+      <ul class="works">
+        <li>Connect is disabled in both apps, and each says so in its own interface.</li>
+        <li>Wi-Fi is planned after the wired milestone. Pairing and input forwarding do not exist yet.</li>
+        <li>The virtual display driver for extension is not implemented; only its feasibility has been researched.</li>
+        <li>Tested on one PC and one tablet only.</li>
+      </ul>
+      <div class="cs-links" data-links data-none="No public link: the public repository predates this work."></div>
+    </div>
+  </section>
+
+  <nav class="cs-next" id="cs-next" aria-label="Other case studies"></nav>
+</main>
+<script type="module" src="../cs.js"></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en-GB" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Layers by RSX · Case study · Concept D · RSX Develops</title>
+<meta name="color-scheme" content="dark light">
+<script>
+  (function () {
+    var d = document.documentElement, t = "dark", m;
+    try { if (localStorage.getItem("rsx-theme") === "light") t = "light"; } catch (e) {}
+    if ((m = /[?&]theme=(dark|light)/.exec(location.search))) t = m[1];
+    d.dataset.theme = t;
+    if (/[?&]motion=reduce/.test(location.search)) d.dataset.motion = "reduce";
+  })();
+</script>
+<link rel="icon" href="../../../../../public/rsx-develops-brand-assets/favicon-32-dark.png">
+<link rel="stylesheet" href="../../../shared/base.css">
+<link rel="stylesheet" href="../../stage3d.css">
+<link rel="stylesheet" href="../cs.css">
+</head>
+<body data-project="layers">
+<nav aria-label="Skip link"><a class="skip" href="#main">Skip to the case study</a></nav>
+<main id="main" class="cs wrap">
+  <p class="cs-crumb"><a data-back href="../../">← Project Space</a></p>
+
+  <header class="cs-intro">
+    <div>
+      <p class="cs-kicker">Android widget platform · case study</p>
+      <h1>Layers by RSX</h1>
+      <div data-status></div>
+      <p class="cs-sum">A customisable Android widget platform built around one portable widget definition, validated, themed and sized by a shared runtime. A browser editor, Layers Studio, is planned; it is not built.</p>
+    </div>
+    <dl class="cs-facts">
+      <dt>Role</dt><dd>Personal project, sole author</dd>
+      <dt>Period</dt><dd>2026 to now</dd>
+      <dt>Runs on</dt><dd>Android</dd>
+      <dt>Source</dt><dd>Private repository</dd>
+      <dt>Stack</dt><dd>Kotlin · Jetpack Compose · RemoteViews</dd>
+    </dl>
+  </header>
+
+  <section class="cs-open" aria-label="Layers on a tablet and a phone">
+    <div class="cs-3d" data-scene="layers" data-label="the large-window editor on a tablet and home-screen widgets on a phone, both emulator captures"></div>
+  </section>
+
+  <section class="cs-sec" aria-labelledby="h-runtime">
+    <div class="cs-text">
+      <h2 id="h-runtime">One definition, one runtime</h2>
+      <p>Every widget, first-party or imported, is a portable definition that goes through the same steps: a bounded parse, schema checks, resolution against theme, defaults and per-instance overrides, sizing from the widget's real dimensions, and rendering with <b>RemoteViews</b>.</p>
+      <p>Seven widget families are merged: Clock, Battery, Music, Calendar/Date, Countdown, Shortcuts and Device/System. Others exist on branches only.</p>
+    </div>
+    <div class="cs-vis">
+      <figure class="cs-fig" data-dia="layers-pipeline" data-cap="From a .layers definition to a widget on the home screen."></figure>
+    </div>
+  </section>
+
+  <section class="cs-sec flip" aria-labelledby="h-sizes">
+    <div class="cs-text">
+      <h2 id="h-sizes">Real sizes, previewed</h2>
+      <p>Widgets size from their actual dimensions, with global and per-instance overrides in an explicit order. The editor previews compact, wide and large sizes side by side and adapts to large windows.</p>
+      <p>This capture is from an Android emulator with a large-window display override. It is <b>not a physical tablet</b>; physical tablets have not been verified.</p>
+    </div>
+    <div class="cs-vis">
+      <figure class="cs-fig" data-media="layers tablet"></figure>
+    </div>
+  </section>
+
+  <section class="cs-sec" aria-labelledby="h-home">
+    <div class="cs-text">
+      <h2 id="h-home">On the home screen</h2>
+      <p>The same runtime draws the widgets on the launcher. Imported packages use a bounded, validated <b>.layers</b> format; it is internal and provisional, not a public standard.</p>
+      <p>Widgets never run arbitrary code or intents: Shortcuts and Device/System use allowlisted host actions and typed capabilities.</p>
+    </div>
+    <div class="cs-vis">
+      <div class="cs-pair">
+        <figure class="cs-fig" data-media="layers 1"></figure>
+        <figure class="cs-fig" data-media="layers 2"></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-sec flip" aria-labelledby="h-studio">
+    <div class="cs-text">
+      <h2 id="h-studio">What exists, and what is planned</h2>
+      <p>The Android runtime, editor, themes and .layers import and export are implemented. <b>Layers Studio</b> is specified as a browser editor that opens the same .layers packages, with visual editing, live previews at several sizes and local use without an account.</p>
+      <p>No Studio source exists yet, so it has no screen to show anywhere on this page.</p>
+    </div>
+    <div class="cs-vis">
+      <figure class="cs-fig" data-dia="layers-scope" data-cap="Implemented on Android; Studio planned, not built."></figure>
+    </div>
+  </section>
+
+  <section class="cs-sec solo" aria-labelledby="h-status">
+    <div class="cs-text">
+      <h2 id="h-status">Status and limits</h2>
+      <div data-status></div>
+      <ul class="works">
+        <li>No public release; V1 is not released.</li>
+        <li>The .layers package format is internal and provisional.</li>
+        <li>Physical tablets, other launchers and spoken TalkBack have not been verified. Captures are from the emulator.</li>
+      </ul>
+      <div class="cs-links" data-links data-none="No public release or repository."></div>
+    </div>
+  </section>
+
+  <nav class="cs-next" id="cs-next" aria-label="Other case studies"></nav>
+</main>
+<script type="module" src="../cs.js"></script>
+</body>
+</html>

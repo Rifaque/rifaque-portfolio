@@ -1,0 +1,83 @@
+/* Concept D case studies. Shared tokens in ../../shared/base.css, devices in ../stage3d.css. */
+
+/* Monochrome: status is carried by the glyph's shape, not its colour. */
+.cs [data-stage] { --st: var(--fg); }
+
+.cs { padding-block: 28px 72px; }
+.cs-crumb { font-size: 0.86rem; }
+.cs-crumb a { color: var(--fg-2); text-decoration: none; }
+.cs-crumb a:hover { color: var(--fg); text-decoration: underline; text-underline-offset: 4px; }
+
+/* Opening: who and what, then the object. */
+.cs-intro { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 20px clamp(24px, 4vw, 64px); padding-block: 28px 20px; align-items: end; }
+.cs-kicker { font-size: 0.86rem; color: var(--fg-3); }
+.cs-intro h1 { font-size: clamp(2.2rem, 4.4vw, 3.4rem); font-weight: 470; font-stretch: 115%; letter-spacing: -0.035em; line-height: 1; margin: 8px 0 12px; }
+.cs-sum { font-size: 1.08rem; color: var(--fg); text-wrap: pretty; margin-top: 12px; max-width: 58ch; }
+.cs-facts { display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; font-size: 0.86rem; align-self: end; padding-top: 14px; border-top: 1px solid var(--line-2); }
+.cs-facts dt { color: var(--fg-3); }
+.cs-open { display: grid; gap: 12px; margin-block: 8px 24px; }
+.cs-open .cs-3d { width: 100%; max-width: 940px; margin-inline: auto; }
+
+/* Sections: text beside the visual it explains. */
+.cs-sec { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 20px clamp(24px, 4vw, 56px); padding-block: 44px; border-top: 1px solid var(--line-2); align-items: start; }
+.cs-sec.flip > .cs-vis { order: -1; }
+.cs-sec.solo { grid-template-columns: minmax(0, 1fr); }
+.cs-sec.solo .cs-text { max-width: 68ch; }
+.cs-text { display: grid; gap: 14px; align-content: start; min-width: 0; }
+.cs-text h2 { font-size: clamp(1.4rem, 2.2vw, 1.8rem); font-weight: 490; font-stretch: 110%; letter-spacing: -0.02em; line-height: 1.15; }
+.cs-text p { color: var(--fg-2); text-wrap: pretty; }
+.cs-text p b, .cs-text li b { color: var(--fg); font-weight: 560; }
+.cs-text .works { font-size: 0.95rem; }
+.cs-q { font-size: 1.12rem; color: var(--fg) !important; padding-left: 14px; border-left: 2px solid var(--fg); }
+.cs-vis { display: grid; gap: 18px; align-content: start; min-width: 0; }
+.cs-note { font-size: 0.84rem; color: var(--fg-3); }
+.cs-links { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* Figures. */
+.cs-fig { margin: 0; display: grid; gap: 8px; }
+.cs-fig img { width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--line-2); background: var(--surf); }
+.cs-fig.is-tall img { width: auto; max-width: 100%; max-height: 520px; justify-self: center; }
+.cs-dia { background: var(--surf); border-radius: 10px; padding: 14px; }
+.cs-dia svg { width: 100%; height: auto; }
+.cs-fig figcaption { display: flex; gap: 8px; align-items: baseline; font-size: 0.76rem; color: var(--fg-3); }
+.cs-fig figcaption .tag { font-size: 0.58rem; padding: 3px 5px; white-space: nowrap; }
+.cs-pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; align-items: start; }
+/* Half-width columns are narrow at any size: label above its caption there too. */
+.cs-pair figcaption, .cs-pair .scene-cap > span { display: grid; gap: 4px; justify-items: start; overflow-wrap: break-word; }
+.cs-pair .scene-cap { display: grid; gap: 8px; }
+.cs-pair .scene-foot { flex-direction: column; align-items: stretch; }
+.cs-3d { position: relative; display: grid; gap: 10px; }
+/* A single object on its own stage uses the proportions the page gives it. */
+.cs-3d .stage3[style*="--sar"] .scene { aspect-ratio: var(--sar); }
+
+/* Neighbours. */
+.cs-next { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 24px; padding-top: 28px; border-top: 1px solid var(--line-2); }
+.cs-next a { display: grid; gap: 2px; padding: 14px 16px; border: 1px solid var(--line-2); border-radius: var(--r-surf); text-decoration: none; }
+.cs-next a:hover { border-color: var(--line-3); background: var(--surf); }
+.cs-next small { color: var(--fg-3); font-size: 0.76rem; }
+.cs-next b { font-weight: 540; }
+.cs-next a:nth-child(2) { text-align: center; }
+.cs-next a:nth-child(3) { text-align: right; }
+
+@media (max-width: 860px) {
+  .cs-intro, .cs-sec { grid-template-columns: minmax(0, 1fr); }
+  .cs-sec.flip > .cs-vis { order: 0; }
+  .cs-sec { padding-block: 32px; }
+}
+@media (max-width: 640px) {
+  /* Evidence label above its caption, both full width. */
+  .cs-fig figcaption { display: grid; gap: 4px; justify-items: start; overflow-wrap: break-word; }
+  /* Wide diagrams keep a readable size and scroll sideways inside their own box;
+     the page itself never scrolls sideways. */
+  .cs-dia { overflow-x: auto; overscroll-behavior-x: contain; padding: 12px; }
+  .cs-dia svg { min-width: 540px; }
+}
+@media (max-width: 560px) {
+  .cs-pair { grid-template-columns: minmax(0, 1fr); }
+  .cs-next { grid-template-columns: minmax(0, 1fr); }
+  .cs-next a:nth-child(n) { text-align: left; }
+}
+
+/* The shared stylesheet shows the muted glyph while sound is on; corrected locally. */
+#sound-btn[aria-pressed="true"] .i-wave, #sound-btn[aria-pressed="false"] .i-x { display: inline; }
+#sound-btn[aria-pressed="true"] .i-x, #sound-btn[aria-pressed="false"] .i-wave { display: none; }

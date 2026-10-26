@@ -1,0 +1,131 @@
+/* Concept D: Project Space. Shared tokens in ../shared/base.css. */
+
+/* Monochrome: status is carried by the glyph's shape, not its colour. */
+.sp [data-stage], .sp-detail [data-stage] { --st: var(--fg); }
+
+.sp { padding-top: clamp(72px, 8vw, 120px); }
+.sp-head { margin-bottom: 36px; }
+
+/* ------------------------------------------------------------ three columns */
+.sp-grid { display: grid; grid-template-columns: 196px minmax(0, 1fr) 288px; gap: clamp(20px, 2.4vw, 36px); align-items: start; }
+
+/* Sidebar: the project list. */
+.sp-side ol { display: grid; gap: 2px; }
+.sd-group { font-size: 0.74rem; color: var(--fg-3); padding: 16px 10px 4px; border-top: 1px solid var(--line-2); margin-top: 10px; }
+.sd-btn {
+  display: grid; gap: 2px; width: 100%; padding: 10px 10px 10px 14px; border: 0; border-radius: 8px; position: relative;
+  background: transparent; color: var(--fg-2); text-align: left; cursor: pointer; transition: background-color 160ms ease, color 160ms ease;
+}
+.sd-btn::before { content: ""; position: absolute; left: 0; top: 12px; bottom: 12px; width: 2px; border-radius: 2px; background: var(--fg); transform: scaleY(0); transition: transform 220ms var(--ease-out); }
+.sd-btn:hover { color: var(--fg); background: var(--surf); }
+.sd-btn[aria-current="true"] { color: var(--fg); background: var(--surf-2); }
+.sd-btn[aria-current="true"]::before { transform: scaleY(1); }
+.sd-name { display: flex; align-items: center; gap: 8px; font-size: 1.02rem; font-weight: 540; font-stretch: 108%; letter-spacing: -0.01em; }
+.sd-name .glyph { margin-left: auto; width: 10px; height: 10px; }
+.sd-line { font-size: 0.76rem; color: var(--fg-3); }
+
+/* ------------------------------------------------------------ stage (3D rules in stage3d.css) */
+.sp-stage { position: relative; display: grid; gap: 10px; min-width: 0; }
+
+/* Info column. */
+.sp-info, .in-a, .in-b { display: grid; gap: 14px; align-content: start; }
+.in-line { font-size: 0.84rem; color: var(--fg-3); }
+.in-title { font-size: clamp(1.9rem, 2.6vw, 2.4rem); font-weight: 470; font-stretch: 115%; letter-spacing: -0.035em; line-height: 1; }
+.in-blurb { text-wrap: pretty; }
+.in-part { font-size: 0.9rem; color: var(--fg-2); padding-top: 12px; border-top: 1px solid var(--line-2); }
+.in-part b { display: block; color: var(--fg-3); font-size: 0.76rem; font-weight: 520; margin-bottom: 2px; }
+.in-runs { font-size: 0.82rem; color: var(--fg-3); }
+.in-cta { justify-self: start; height: 46px; padding: 0 20px; margin-top: 4px; }
+.in-cta svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; }
+
+/* ------------------------------------------------------------ detail overlay */
+.sp-detail {
+  width: min(1180px, calc(100vw - 48px)); max-width: none; max-height: calc(100dvh - 48px); padding: 0; margin: auto;
+  border: 1px solid var(--line-3); border-radius: 16px; background: var(--bg); color: var(--fg); overflow: auto; overscroll-behavior: contain;
+}
+.sp-detail::backdrop { background: rgb(4 5 7 / 0.72); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+:root[data-theme="light"] .sp-detail::backdrop { background: rgb(30 36 48 / 0.42); }
+html:has(.sp-detail[open]) { overflow: hidden; }
+.dt-panel { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); grid-template-areas: "head head" "media text"; gap: 24px clamp(20px, 3vw, 44px); padding: 0 clamp(18px, 3vw, 36px) 36px; }
+.dt-head { grid-area: head; position: sticky; top: 0; z-index: 2; display: flex; align-items: center; gap: 14px; padding: 16px 0 14px; background: var(--bg); border-bottom: 1px solid var(--line-2); }
+.dt-head h2 { font-size: clamp(1.6rem, 2.6vw, 2.2rem); font-weight: 470; font-stretch: 115%; letter-spacing: -0.035em; line-height: 1; }
+.dt-head .in-line { margin-left: 4px; }
+.dt-close { margin-left: auto; width: 44px; height: 44px; }
+.dt-close svg { width: 20px; height: 20px; }
+.dt-media { grid-area: media; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.dt-fig { margin: 0; display: grid; gap: 10px; }
+.dt-fig img, .dt-fig svg { width: 100%; height: auto; max-height: 68dvh; object-fit: contain; border-radius: 10px; border: 1px solid var(--line-2); background: var(--surf); }
+.dt-fig svg { padding: 8px; }
+.dt-fig figcaption { display: flex; gap: 8px; align-items: baseline; font-size: 0.82rem; color: var(--fg-2); }
+.dt-thumbs { display: flex; flex-wrap: wrap; gap: 8px; }
+.th { width: 76px; height: 54px; padding: 0; border-radius: 6px; border: 1px solid var(--line-2); background: var(--surf); cursor: pointer; overflow: hidden; display: grid; place-items: center; font-size: 0.62rem; color: var(--fg-2); }
+.th img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.th[aria-pressed="true"] { outline: 2px solid var(--fg); outline-offset: 2px; }
+.dt-text { grid-area: text; display: grid; gap: 22px; align-content: start; }
+.dt-sec { display: grid; gap: 8px; }
+.dt-sec h3 { font-size: 0.78rem; font-weight: 560; color: var(--fg-3); letter-spacing: 0.01em; }
+.dt-sec p { text-wrap: pretty; }
+.hl { display: grid; gap: 10px; }
+.hl dt { font-weight: 600; }
+.hl dd { color: var(--fg-2); font-size: 0.94rem; }
+.split { display: grid; gap: 6px; font-size: 0.9rem; }
+.split div { display: flex; justify-content: space-between; gap: 16px; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+.split dd { color: var(--fg-2); text-align: right; }
+.studio { display: grid; gap: 8px; padding: 14px 16px; border: 1.5px dashed var(--line-3); border-radius: 10px; font-size: 0.9rem; }
+.studio b { display: flex; gap: 10px; align-items: center; }
+.dt-links { display: flex; flex-wrap: wrap; gap: 8px; }
+.dt-note { font-size: 0.82rem; color: var(--fg-3); }
+
+/* ------------------------------------------------------------ narrower */
+@media (max-width: 1100px) {
+  .sp-grid { grid-template-columns: minmax(0, 1fr); }
+  .sp-side { margin-inline: calc(-1 * var(--gutter)); }
+  /* One row that scrolls on its own: no visible scrollbar, and a soft fade only on
+     an edge that has more chips beyond it (space.js sets more-l / more-r). */
+  .sp-side ol {
+    --fade-l: 0px; --fade-r: 0px;
+    display: flex; gap: 8px; overflow-x: auto; overscroll-behavior-x: contain; padding: 6px var(--gutter) 12px;
+    scroll-padding-inline: var(--gutter); scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 var(--fade-l), #000 calc(100% - var(--fade-r)), transparent);
+    mask-image: linear-gradient(to right, transparent, #000 var(--fade-l), #000 calc(100% - var(--fade-r)), transparent);
+  }
+  .sp-side ol::-webkit-scrollbar { display: none; }
+  .sp-side ol.more-l { --fade-l: 32px; }
+  .sp-side ol.more-r { --fade-r: 32px; }
+  .sp-side li { flex: none; }
+  .sd-group { display: none; }
+  .sd-btn { display: flex; align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid var(--line-2); border-radius: var(--r-ctl); white-space: nowrap; }
+  .sd-btn::before, .sd-line { display: none; }
+  .sd-btn[aria-current="true"] { background: var(--inv-bg); color: var(--inv-fg); border-color: var(--inv-bg); }
+  .sd-name { font-size: 0.94rem; }
+  .sd-name .glyph { margin-left: 0; }
+  .sd-btn[aria-current="true"] .glyph { --st: var(--inv-fg); }
+  .sp-info { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: var(--col-gap); }
+  .in-part { border-top: 0; padding-top: 0; }
+  .dt-panel { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "media" "text"; }
+}
+
+@media (max-width: 640px) {
+  .sp-info { grid-template-columns: minmax(0, 1fr); }
+  .in-part { border-top: 1px solid var(--line-2); padding-top: 12px; }
+  .in-cta { justify-self: stretch; justify-content: center; }
+  /* Full-screen detail. */
+  .sp-detail { width: 100vw; max-height: none; height: 100dvh; border: 0; border-radius: 0; }
+  .dt-panel { padding-bottom: 48px; }
+  .dt-head .in-line { display: none; }
+  .split div { display: grid; gap: 2px; }
+  /* Evidence label above its caption in the detail view too. */
+  .dt-fig figcaption { display: grid; gap: 4px; justify-items: start; overflow-wrap: break-word; }
+  .split dd { text-align: left; }
+}
+
+/* ------------------------------------------------------------ motion */
+@media (prefers-reduced-motion: reduce) {
+  .sd-btn, .sd-btn::before { transition: none; }
+}
+:root[data-motion="reduce"] .sd-btn, :root[data-motion="reduce"] .sd-btn::before { transition: none; }
+
+/* The shared stylesheet shows the muted glyph while sound is on; this page
+   corrects it locally (pressed = sound on = speaker with waves). */
+#sound-btn[aria-pressed="true"] .i-wave, #sound-btn[aria-pressed="false"] .i-x { display: inline; }
+#sound-btn[aria-pressed="true"] .i-x, #sound-btn[aria-pressed="false"] .i-wave { display: none; }

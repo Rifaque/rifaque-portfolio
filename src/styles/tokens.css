@@ -1,131 +1,121 @@
 /*
- * Design tokens: editorial monochrome. Colour is reserved for project
- * status, which always travels with its text and a distinct glyph.
+ * RSX Develops design tokens (the accepted Projection design). Mono.
  *
- * Contrast against --bg / --bg-raised / --bg-graphite (checked in
- * src/styles/tokens.test.ts):
- *   fg 17.1 / 16.0 / 14.8, fg-muted 7.9 / 7.3 / 6.8, fg-faint 5.4 / 5.0 / 4.7
- *   status colours all above 5.7:1 on every surface.
- */
-
-/*
- * Metric-matched fallbacks, so text drawn before the web fonts arrive takes
- * the same space as Geist and the swap does not move the layout.
+ * Two environments, designed separately:
+ *   dark  "Night room"  near-black, pools of light, a pale ceramic solid.
+ *   light "Day room"    cool white studio, soft grey shadow, a graphite solid.
  *
- * Measured in Chromium against the bundled fonts: Geist and Geist Mono both
- * have ascent 1.005em, descent 0.295em and no line gap. size-adjust is the
- * ratio of Geist's advance widths to the fallback's over the site's own text
- * at each weight; the overrides are Geist's metrics divided by size-adjust
- * (they are scaled by it). Liberation and Arimo/Cousine are metric-compatible
- * with Arial and Courier New, so the same values hold on Linux.
+ * No hue carries the identity. Selection, focus and the primary action use
+ * the foreground itself (white on black, black on white); depth comes from
+ * surface steps, line weights, light falloff and material finish. Hue is
+ * reserved for project status, always with a glyph shape and text.
  */
 @font-face {
-  font-family: "Geist Fallback";
-  font-weight: 100 449;
-  src: local("Arial"), local("ArialMT"), local("Liberation Sans"), local("Arimo");
-  size-adjust: 102.43%;
-  ascent-override: 98.11%;
-  descent-override: 28.8%;
-  line-gap-override: 0%;
+  font-family: "Archivo";
+  src: url("../assets/fonts/archivo-latin-wdth-wght.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-display: swap;
 }
 @font-face {
-  font-family: "Geist Fallback";
-  font-weight: 450 599;
-  src: local("Arial"), local("ArialMT"), local("Liberation Sans"), local("Arimo");
-  size-adjust: 104.06%;
-  ascent-override: 96.58%;
-  descent-override: 28.35%;
-  line-gap-override: 0%;
-}
-@font-face {
-  font-family: "Geist Fallback";
-  font-weight: 600 900;
-  src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("Arimo Bold");
-  size-adjust: 99.31%;
-  ascent-override: 101.2%;
-  descent-override: 29.7%;
-  line-gap-override: 0%;
-}
-@font-face {
-  font-family: "Geist Mono Fallback";
-  src: local("Courier New"), local("CourierNewPSMT"), local("Liberation Mono"), local("Cousine");
-  size-adjust: 100.08%;
-  ascent-override: 100.42%;
-  descent-override: 29.48%;
-  line-gap-override: 0%;
+  font-family: "Martian Mono";
+  src: url("../assets/fonts/martian-mono-latin-wdth-wght.woff2") format("woff2-variations");
+  font-weight: 100 800;
+  font-stretch: 75% 112.5%;
+  font-display: swap;
 }
 
 :root {
+  --sans: "Archivo", system-ui, "Segoe UI", sans-serif;
+  --mono: "Martian Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+  /* Layout: one container, one 12-column grid. */
+  --max: 1240px;
+  --gutter: clamp(16px, 4vw, 48px);
+  --col-gap: clamp(16px, 2vw, 28px);
+  --section: clamp(88px, 10vw, 148px);
+
+  --r-ctl: 999px; /* controls are pills */
+  --r-surf: 14px; /* surfaces */
+  --r-obj: 6px; /* physical objects: plates, cells */
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-io: cubic-bezier(0.77, 0, 0.175, 1);
+  --t-press: 140ms;
+  --t-ui: 220ms;
+  --t-move: 420ms;
+}
+
+/* ------------------------------------------------------------- dark */
+:root,
+:root[data-theme="dark"] {
   color-scheme: dark;
+  --bg: #08090b;
+  --bg-2: #0c0d10;
+  --surf: #111316;
+  --surf-2: #17191d;
+  --surf-3: #202328;
+  --line: rgb(236 240 247 / 0.08);
+  --line-2: rgb(236 240 247 / 0.15);
+  --line-3: rgb(236 240 247 / 0.3);
+  --fg: #f1f3f6;
+  --fg-2: #aab1bc;
+  --fg-3: #8b93a0;
+  --shade: rgb(0 0 0 / 0.6);
+  --face: #101215;
 
-  --bg: #0b0b0c;
-  --bg-raised: #141415;
-  --bg-graphite: #1c1c1e;
-  --bg-sunken: #070708;
-  --fg: #f2efe9;
-  --fg-muted: #a8a39b;
-  --fg-faint: #8a857e;
-  --line: rgb(242 239 233 / 0.08);
-  --line-strong: rgb(242 239 233 / 0.22);
+  /* Plates in the work drawing: lighter is nearer the surface. */
+  --plate-top: #1b1e23;
+  --plate-1: #15171b;
+  --plate-edge: #2b2f36;
+  --plate-edge-2: #23262c;
+  --plate-line: rgb(236 240 247 / 0.24);
+  --hatch: rgb(236 240 247 / 0.22);
 
-  /* Emphasis is warm white: the strongest mark in a monochrome system. */
-  --emphasis: var(--fg);
-  --emphasis-soft: rgb(242 239 233 / 0.06);
-  --emphasis-hover: #ffffff;
-  --ink: #0b0b0c;
+  --acc: #f1f3f6;
+  --acc-fill: #f1f3f6;
+  --on-acc: #08090b;
+  --acc-wash: rgb(241 243 246 / 0.08);
 
-  --shadow-raised: 0 1px 0 rgb(242 239 233 / 0.04) inset, 0 24px 60px -24px rgb(0 0 0 / 0.8);
-  --shadow-float: 0 30px 80px -30px rgb(0 0 0 / 0.9);
+  --s-released: #5fd393;
+  --s-pre: #e9bb4a;
+  --s-dev: #f283bb;
+  --s-alpha: #c4a3ff;
+  --s-retired: #8f97a3;
+}
 
-  /* Project status. Meaningful colour only; never decorative. */
-  --status-released: #5fd394;
-  --status-prerelease: #7cb2ff;
-  --status-development: #f0b44c;
-  --status-alpha: #c6a8ff;
-  --status-delivered: #5fd394;
-  --status-retired: #9a958e;
-  --status-role: var(--fg-muted);
+/* ------------------------------------------------------------- light */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f4f5f7;
+  --bg-2: #eceef1;
+  --surf: #ffffff;
+  --surf-2: #f0f2f5;
+  --surf-3: #e3e6eb;
+  --line: rgb(16 22 34 / 0.09);
+  --line-2: rgb(16 22 34 / 0.16);
+  --line-3: rgb(16 22 34 / 0.34);
+  --fg: #0c0e12;
+  --fg-2: #454c57;
+  --fg-3: #5a626f;
+  --shade: rgb(30 40 60 / 0.16);
+  --face: #ffffff;
 
-  --sans: "Geist Variable", "Geist Fallback", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --mono: "Geist Mono Variable", "Geist Mono Fallback", ui-monospace, "SFMono-Regular", Consolas, monospace;
+  --plate-top: #ffffff;
+  --plate-1: #f3f4f7;
+  --plate-edge: #d9dde3;
+  --plate-edge-2: #cdd2d9;
+  --plate-line: rgb(16 22 34 / 0.3);
+  --hatch: rgb(16 22 34 / 0.22);
 
-  --step--1: 0.8125rem;
-  --step-0: 1rem;
-  --step-1: clamp(1.125rem, 1rem + 0.4vw, 1.3rem);
-  --step-2: clamp(1.25rem, 1rem + 0.9vw, 1.75rem);
-  --step-3: clamp(1.75rem, 1.2rem + 1.8vw, 3rem);
-  --step-4: clamp(2.75rem, 1.4rem + 4.4vw, 6rem);
-  --step-5: clamp(2.5rem, 1.1rem + 5.2vw, 6.5rem);
+  --acc: #0c0e12;
+  --acc-fill: #0c0e12;
+  --on-acc: #ffffff;
+  --acc-wash: rgb(12 14 18 / 0.06);
 
-  --gutter: clamp(16px, 4vw, 56px);
-  --max: 1520px;
-  --measure: 60ch;
-
-  --r-sm: 4px;
-  --r-md: 8px;
-  --r-full: 999px;
-
-  /*
-   * Motion. Animate transform and opacity (stroke-dashoffset, or a
-   * clip-path wipe for non-scaling hairlines, for drawn lines), never
-   * layout properties. Nothing loops. A status glyph moves
-   * only with its label. Reduced motion shows every final state at once
-   * (base.css), and hidden starting states need html.motion-ready (motion.css).
-   */
-  --dur-press: 100ms;
-  --dur-fast: 180ms;
-  --dur-base: 320ms;
-  --dur-slow: 560ms;
-  --dur-hero: 700ms;
-  --dur-draw: 1100ms;
-  --stagger: 70ms;
-  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
-  --tilt-perspective: 900px;
-
-  --safe-top: env(safe-area-inset-top, 0px);
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
-  --safe-left: env(safe-area-inset-left, 0px);
-  --safe-right: env(safe-area-inset-right, 0px);
+  --s-released: #147a44;
+  --s-pre: #8a6200;
+  --s-dev: #b0246a;
+  --s-alpha: #6a44c2;
+  --s-retired: #5a626f;
 }

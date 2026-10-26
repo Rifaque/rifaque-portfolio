@@ -1,0 +1,116 @@
+{
+  "errors": [],
+  "overflow": {
+    "1440-dark-home": 0,
+    "1440-dark-study": 0,
+    "1440-light-home": 0,
+    "1440-light-study": 0,
+    "1920-dark-home": 0,
+    "1920-dark-study": 0,
+    "1920-light-home": 0,
+    "1920-light-study": 0,
+    "768-dark-home": 0,
+    "768-dark-study": 0,
+    "768-light-home": 0,
+    "768-light-study": 0,
+    "390-dark-home": 0,
+    "390-dark-study": 0,
+    "390-light-home": 0,
+    "390-light-study": 0,
+    "320-dark-front": 0,
+    "320-dark-state": 0,
+    "320-light-front": 0,
+    "320-light-state": 0,
+    "1024-dark-front": 0,
+    "1024-dark-state": 0,
+    "1024-light-front": 0,
+    "1024-light-state": 0,
+    "2560-dark-front": 0,
+    "2560-dark-state": 0,
+    "2560-light-front": 0,
+    "2560-light-state": 0
+  },
+  "axe": {
+    "home-dark-front": [],
+    "home-dark-inside": [],
+    "home-dark-state": [],
+    "home-light-front": [],
+    "home-light-inside": [],
+    "home-light-state": [],
+    "study-dark": [],
+    "study-light": [],
+    "home-390-dark": []
+  },
+  "checks": {
+    "noWebGL-dark": {
+      "canvas": false,
+      "viewsHidden": true
+    },
+    "noWebGL-light": {
+      "canvas": false,
+      "viewsHidden": true
+    },
+    "tabOrder": [
+      "skip | Skip to content",
+      "mark | RSX Develops, back to the ",
+      "A | Work",
+      "A | About",
+      "A | Experience",
+      "A | Contact",
+      "theme-switch | Light theme",
+      "sound-switch | Sound",
+      "btn btn-primary | See the work",
+      "btn | Email",
+      "link resume-link | Résumé (PDF)",
+      "view-key | Corner view: the solid and",
+      "view-key | Look along x: the solid re",
+      "view-key | Look from above: the solid",
+      "view-key | Look along z: the solid re",
+      "nudge | Knock the solid out of ali",
+      "tab-atlas | Atlasv1.0.3 released · not",
+      "turn-front | What it is"
+    ],
+    "keyboardBench": {
+      "selected": "tab-nexus",
+      "view": "inside",
+      "focus": "turn-inside",
+      "url": "?nointro=&clean=&project=nexus&view=inside",
+      "labelsReachable": 5
+    },
+    "bomKeyboard": {
+      "pressed": "true",
+      "out": "Kotlin is used in Reflux, ExtendSpace, Layers by RSX and BlueTap."
+    },
+    "navigation": {
+      "themeAfter": [
+        "light",
+        "light"
+      ],
+      "study": {
+        "url": "/prototypes/projection/work/atlas/",
+        "h1": "Atlas",
+        "theme": "light",
+        "title": "Atlas · Rifaque Akrami"
+      },
+      "back": {
+        "url": "?nointro=&clean=&project=atlas&view=inside",
+        "selected": "tab-atlas"
+      },
+      "direct": {
+        "h1": "Nexus",
+        "next": "../reflux/"
+      },
+      "legacyRedirect": "http://localhost:8765/prototypes/projection/work/querycraft/"
+    },
+    "idleFramesIn2s": 0,
+    "reducedMotion": {
+      "labelsVisibleImmediately": "visible",
+      "heroReady": true,
+      "viewTransitionsOff": true
+    },
+    "sound": {
+      "pressed": "true",
+      "stored": "on"
+    }
+  }
+}

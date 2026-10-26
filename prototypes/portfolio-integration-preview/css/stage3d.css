@@ -1,0 +1,209 @@
+/*
+ * Concept D 3D stage: scenes, devices (front, back, edges, stands), glass
+ * diagram panels, the USB cable, and the flat strips around a scene. Shared
+ * by the Projects section and the case studies. All scene geometry is in
+ * container-width units (cqw) of the .stage3 element.
+ */
+.stage3 {
+  position: relative; container-type: inline-size;
+  --shell: linear-gradient(155deg, #30343b 0%, #1d2025 38%, #16181c 100%);
+  --shell-back: linear-gradient(200deg, #262a30 0%, #181a1e 55%, #121418 100%);
+  --shell-edge: #0d0f12; --shell-side: #23262c; --shell-line: rgb(255 255 255 / 0.09); --shell-glint: rgb(255 255 255 / 0.12);
+  --mark: rgb(255 255 255 / 0.42); --vent: rgb(0 0 0 / 0.55); --port: #050607;
+  --glass: rgb(26 30 36 / 0.6); --glass-back: rgb(18 21 26 / 0.55); --glass-edge: rgb(255 255 255 / 0.2); --glass-glint: rgb(255 255 255 / 0.16);
+  --cable: #454a52; --plug: #b9bec6;
+}
+:root[data-theme="light"] .stage3 {
+  --shell: linear-gradient(155deg, #f4f5f7 0%, #dcdfe4 40%, #cfd3d9 100%);
+  --shell-back: linear-gradient(200deg, #e8eaee 0%, #d3d7dd 55%, #c6cbd2 100%);
+  --shell-edge: #aeb4bd; --shell-side: #bfc4cb; --shell-line: rgb(0 0 0 / 0.1); --shell-glint: rgb(255 255 255 / 0.7);
+  --mark: rgb(16 22 34 / 0.46); --vent: rgb(16 22 34 / 0.22); --port: #3c424b;
+  --glass: rgb(250 251 253 / 0.62); --glass-back: rgb(236 239 243 / 0.55); --glass-edge: rgb(16 22 34 / 0.22); --glass-glint: rgb(255 255 255 / 0.9);
+  --cable: #8d939c; --plug: #4d535c;
+}
+.scene {
+  position: relative; aspect-ratio: 16 / 9.8; perspective: 170cqw; perspective-origin: 50% 42%;
+  touch-action: pan-y pinch-zoom; user-select: none; -webkit-user-select: none; cursor: grab; border-radius: 12px;
+}
+.scene:focus-visible { outline: 2px solid var(--fg); outline-offset: 4px; }
+.scene.is-dragging { cursor: grabbing; }
+.scene.leaving { position: absolute; inset: 0 0 auto 0; pointer-events: none; }
+.enter, .rig { position: absolute; inset: 0; transform-style: preserve-3d; pointer-events: none; }
+/* Devices take the press themselves; empty stage space still turns the group via .scene. */
+.d3 { pointer-events: auto; }
+.rig { transform-origin: 50% 50%; will-change: transform; }
+
+/* ------------------------------------------------------------ device body */
+/* Placed from the stage centre, extruded by its own depth. */
+.d3 {
+  --x: var(--dx); --y: var(--dy); --z: var(--dz); --w: var(--dw);
+  --bz: calc(var(--w) * var(--bk) * 1cqw); --dp: calc(var(--w) * var(--dk) * 1cqw); --rad: calc(var(--w) * var(--rk) * 1cqw);
+  position: absolute; left: 50%; top: 50%; width: calc(var(--w) * 1cqw); transform-style: preserve-3d;
+  transform: translate(-50%, -50%) translate3d(calc(var(--x) * 1cqw), calc(var(--y) * 1cqw), calc(var(--z) * 1cqw)) rotateY(calc(var(--ry) * 1deg));
+}
+.d3[data-origin="left"] { transform-origin: 0 50%; }
+.d3-body { position: relative; transform-style: preserve-3d; }
+.d3-face {
+  position: relative; padding: var(--bz); border-radius: var(--rad); background: var(--shell);
+  box-shadow: inset 0 0 0 1px var(--shell-line), inset 0 1px 0 var(--shell-glint), 0 3cqw 5cqw -3cqw rgb(0 0 0 / 0.55);
+}
+:root[data-theme="light"] .d3-face { box-shadow: inset 0 0 0 1px var(--shell-line), inset 0 1px 0 var(--shell-glint), 0 3cqw 5cqw -3cqw rgb(30 40 60 / 0.35); }
+.d3-e { position: absolute; background: var(--shell-side); }
+.d3-t { left: var(--rad); right: var(--rad); top: 0; height: var(--dp); transform-origin: top; transform: rotateX(-90deg); background: var(--shell-edge); }
+.d3-b { left: var(--rad); right: var(--rad); bottom: 0; height: var(--dp); transform-origin: bottom; transform: rotateX(90deg); background: var(--shell-edge); }
+.d3-l { top: var(--rad); bottom: var(--rad); left: 0; width: var(--dp); transform-origin: left; transform: rotateY(90deg); }
+.d3-r { top: var(--rad); bottom: var(--rad); right: 0; width: var(--dp); transform-origin: right; transform: rotateY(-90deg); }
+
+/* ------------------------------------------------------------ backs */
+/* Turned to face backwards, so its details read correctly from behind. */
+.d3-back {
+  position: absolute; inset: 0; overflow: hidden; border-radius: var(--rad); background: var(--shell-back);
+  box-shadow: inset 0 0 0 1px var(--shell-line), inset 0 1px 0 var(--shell-glint);
+  transform: translateZ(calc(-1 * var(--dp))) rotateY(180deg);
+}
+.d3-back > * { position: absolute; }
+.bk-mark {
+  left: 50%; top: 44%; transform: translate(-50%, -50%); color: var(--mark);
+  font: 700 calc(var(--w) * 0.024cqw) / 1 var(--sans); font-stretch: 125%; letter-spacing: 0.24em; text-indent: 0.24em;
+}
+.d3-tablet .bk-mark { top: 50%; font-size: calc(var(--w) * 0.04cqw); }
+.d3-phone .bk-mark { top: 62%; font-size: calc(var(--w) * 0.1cqw); letter-spacing: 0.18em; }
+/* Monitor and TV: a raised rear casing, a vent band, a stand mount and a port row. */
+.bk-panel { inset: 12% 9% 18%; border-radius: calc(var(--rad) * 3); background: var(--shell); opacity: 0.55; box-shadow: inset 0 0 0 1px var(--shell-line); }
+.d3-window .bk-panel { inset: 6%; border-radius: var(--rad); opacity: 0.35; }
+.bk-vent { left: 20%; right: 20%; top: 5%; height: 5%; border-radius: 2px; background: repeating-linear-gradient(90deg, var(--vent) 0 2px, transparent 2px 7px); }
+.bk-mount { left: 50%; top: 62%; width: 17%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 6%; background: var(--shell); box-shadow: inset 0 0 0 1px var(--shell-line), 0 0 0 1px rgb(0 0 0 / 0.15); }
+.bk-ports { right: 8%; bottom: 8%; display: flex; gap: calc(var(--w) * 0.008cqw); }
+.bk-ports i { width: calc(var(--w) * 0.02cqw); height: calc(var(--w) * 0.009cqw); border-radius: 1px; background: var(--port); }
+.d3-tv .bk-ports { bottom: 14%; }
+/* Tablet and phone: a camera where a real one would be. */
+.bk-cam { left: 5%; top: 7%; width: calc(var(--w) * 0.05cqw); aspect-ratio: 1; border-radius: 50%; background: var(--port); box-shadow: 0 0 0 calc(var(--w) * 0.008cqw) var(--shell-side); display: grid; place-items: center; }
+.bk-cam i { width: 46%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 35% 35%, rgb(255 255 255 / 0.35), transparent 40%), #1b2027; }
+.bk-cam-2 { left: 8%; top: 4%; width: 30%; aspect-ratio: 0.72; border-radius: 22%; background: var(--shell); box-shadow: inset 0 0 0 1px var(--shell-line), 0 0 0 1px rgb(0 0 0 / 0.2); display: grid; align-content: space-evenly; justify-items: center; }
+.bk-cam-2 i { width: 58%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 35% 35%, rgb(255 255 255 / 0.3), transparent 40%), var(--port); box-shadow: 0 0 0 2px var(--shell-side); }
+
+/* ------------------------------------------------------------ stands */
+/* A monitor stand: a neck with four sides, behind the back plate, on a flat foot. */
+.d3-stand {
+  position: absolute; left: 50%; top: 60%; width: 8%; height: calc(40% + 4.6cqw); transform-style: preserve-3d;
+  transform: translateX(-50%) translateZ(calc(-1 * var(--dp) - 0.25cqw));
+}
+.d3-stand > i { position: absolute; }
+.st-f, .st-b { inset: 0; background: var(--shell-side); }
+.st-b { transform: translateZ(-1.4cqw); background: var(--shell-edge); }
+.st-l, .st-r { top: 0; bottom: 0; width: 1.4cqw; background: var(--shell-edge); }
+.st-l { left: 0; transform-origin: left; transform: rotateY(90deg); }
+.st-r { right: 0; transform-origin: right; transform: rotateY(-90deg); }
+.d3-foot {
+  position: absolute; left: 50%; top: calc(100% + 4.6cqw); width: 30%; height: 8cqw; border-radius: 1cqw;
+  background: var(--shell); box-shadow: inset 0 0 0 1px var(--shell-line);
+  transform: translate(-50%, -50%) translateZ(calc(-1 * var(--dp) - 0.95cqw)) rotateX(90deg);
+}
+.d3-feet { position: absolute; left: 12%; right: 12%; top: 100%; height: 1.4cqw; border-inline: 0.6cqw solid var(--shell-side); transform: translateZ(calc(-0.5 * var(--dp))); }
+
+/* ------------------------------------------------------------ screens */
+/* Dark glass; captures keep their own pixels and proportions. */
+.d3:not(.d3-glass) .d3-screen { --fg: #f1f3f6; --fg-2: #aab1bc; --fg-3: #8b93a0; --surf: #111316; --line-2: rgb(236 240 247 / 0.15); --line-3: rgb(236 240 247 / 0.3); }
+.d3-screen {
+  position: relative; aspect-ratio: var(--ar); overflow: hidden; background: #07080a; color: var(--fg);
+  border-radius: max(1px, calc(var(--rad) - var(--bz)));
+}
+.d3-screen::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(125deg, rgb(255 255 255 / 0.07), transparent 32%); }
+.d3-screen img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.d3-bar { display: flex; align-items: center; gap: 0.6cqw; height: calc(var(--w) * 0.04cqw); padding: 0 1cqw; background: #16181c; font: 500 clamp(0.5rem, 1.1cqw, 0.66rem) var(--mono); color: #8b93a0; }
+.d3-bar i { width: 0.8cqw; height: 0.8cqw; border-radius: 50%; border: 1px solid #5d6470; }
+.d3-bar span { margin-left: 0.8cqw; }
+.d3-bar + .d3-screen { border-radius: 0; }
+.d3-window .d3-screen { opacity: 0.88; }
+
+/* Text-only screens: what is there, said plainly. */
+.scr-note { display: grid; place-content: center; justify-items: center; gap: 0.9cqw; height: 100%; padding: 1.4cqw; text-align: center; font-size: clamp(0.56rem, 1.25cqw, 0.8rem); color: var(--fg-2); }
+.scr-note b { color: var(--fg); font-weight: 600; font-size: 1.15em; }
+.scr-none { outline: 1px dashed var(--line-3); outline-offset: -1.2cqw; }
+.d3-phone .scr-note { font-size: clamp(0.5rem, 1cqw, 0.66rem); padding: 0.6cqw; }
+.d3-phone .scr-none { outline-offset: -0.6cqw; }
+.scr-host { justify-items: start; text-align: left; padding: 2cqw 2.6cqw; outline: 1px dashed var(--line-3); outline-offset: -1cqw; }
+.scr-steps { display: grid; gap: 0.5cqw; counter-reset: s; font-family: var(--mono); font-size: 0.88em; }
+.scr-steps li { counter-increment: s; }
+.scr-steps li::before { content: counter(s) "  "; color: var(--fg-3); }
+.scr-off { font-family: var(--mono); font-size: 0.88em; color: var(--fg); padding: 0.3cqw 0.8cqw; border: 1px solid var(--line-3); border-radius: 0.5cqw; }
+.d3-screen .tag { font-size: clamp(0.5rem, 1cqw, 0.62rem); }
+
+/* ------------------------------------------------------------ glass panels */
+/* Smoked glass carrying one drawing. Seen from behind, the same drawing shows
+   through reversed and dimmed by the rear sheet; nothing is drawn twice. */
+.d3-glass .d3-face {
+  background: var(--glass); border: 1px solid var(--glass-edge);
+  box-shadow: inset 0 1px 0 var(--glass-glint), inset 0 0 2cqw rgb(255 255 255 / 0.03), 0 3cqw 5cqw -3cqw var(--shade);
+}
+.d3-glass .d3-screen { background: none; overflow: visible; color: inherit; }
+.d3-glass .d3-screen::after { content: none; }
+.d3-glass .il { width: 100%; height: auto; }
+.d3-glass .d3-back { background: var(--glass-back); box-shadow: inset 0 0 0 1px var(--glass-edge); }
+.d3-glass .d3-e { background: var(--glass-edge); }
+
+/* Labels belong to the front; from behind they are hidden rather than mirrored. */
+.d3-label { position: absolute; left: -20%; right: -20%; top: calc(100% + 1.2cqw); margin: 0; text-align: center; font-size: clamp(0.62rem, 1.25cqw, 0.78rem); color: var(--fg-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; backface-visibility: hidden; }
+.d3-monitor .d3-label { top: calc(100% + 6cqw); }
+.d3-tv .d3-label { top: calc(100% + 2.4cqw); }
+
+/* ------------------------------------------------------------ USB cable */
+/* Segments, each two crossed strips, built in stage3d.js in the rig's space. */
+.cable3 { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform-style: preserve-3d; pointer-events: none; }
+.cable3 > i { position: absolute; left: 0; top: 0; border-radius: 1cqw; background: var(--cable); }
+.cable3 > .cb-plug { border-radius: 0.2cqw; background: var(--plug); }
+
+/* ------------------------------------------------------------ around the scene */
+/* Quiet and compact: the devices lead; disclosures stay, in small type. */
+.scene-aside { display: grid; gap: 6px; font-size: 0.8rem; color: var(--fg-2); }
+.road { display: flex; flex-wrap: wrap; gap: 4px 18px; }
+.road b { color: var(--fg); font-weight: 560; }
+.road-now { padding-left: 12px; position: relative; }
+.road-now::before { content: ""; position: absolute; left: 0; top: 0.5em; width: 6px; height: 6px; border-radius: 50%; background: var(--fg); }
+.road-next { padding-left: 12px; position: relative; }
+.road-next::before { content: ""; position: absolute; left: 0; top: 0.5em; width: 6px; height: 6px; border-radius: 50%; border: 1px dashed var(--fg-2); box-sizing: border-box; }
+.pipe-line { display: flex; flex-wrap: wrap; gap: 2px 0; font: 500 0.7rem/1.6 var(--mono); color: var(--fg-3); }
+.pipe-line span + span::before { content: "→"; margin: 0 8px; color: var(--line-3); }
+.studio-flat { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+.studio-flat b { color: var(--fg); font-weight: 560; }
+.as-text { font-size: 0.8rem; color: var(--fg-2); }
+.as-text summary { cursor: pointer; color: var(--fg-2); width: max-content; text-decoration: underline; text-decoration-color: var(--line-3); text-underline-offset: 3px; }
+.as-text summary:hover { color: var(--fg); }
+.as-text ol { display: grid; gap: 2px; margin-top: 6px; padding-left: 1.4em; list-style: decimal; }
+.scene-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px 16px; min-height: 32px; }
+.scene-cap { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 0.76rem; color: var(--fg-3); flex: 1 1 auto; min-width: 0; }
+.scene-cap span { display: inline-flex; gap: 8px; align-items: center; }
+.scene-cap .tag { font-size: 0.58rem; padding: 3px 5px; white-space: nowrap; }
+/* Reset view: discreet, and only there once the scene has been turned. */
+.view-reset {
+  flex: none; height: 30px; padding: 0 12px; border-radius: var(--r-ctl); border: 1px solid var(--line-2);
+  background: transparent; color: var(--fg-2); font: 520 0.76rem var(--sans); cursor: pointer;
+  transition: opacity 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+.view-reset:hover { color: var(--fg); border-color: var(--line-3); }
+.view-reset svg { display: none; width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+:not([data-turned="true"]) > .scene-foot > .view-reset, .sp-stage:not([data-turned="true"]) .view-reset { visibility: hidden; opacity: 0; }
+@media (prefers-reduced-motion: reduce) { .view-reset { transition: none; } }
+:root[data-motion="reduce"] .view-reset { transition: none; }
+
+/* ------------------------------------------------------------ sizes */
+@media (max-width: 1100px) { .scene { aspect-ratio: 16 / 9.6; } }
+@media (max-width: 640px) {
+  /* Phones: their own composition, one main device and at most one companion. */
+  .scene { aspect-ratio: 1 / 0.92; perspective: 210cqw; }
+  .d3 { --x: var(--px, var(--dx)); --y: var(--py, var(--dy)); --z: var(--pz, var(--dz)); --w: var(--pw, var(--dw)); }
+  .d3[data-phone="hide"], .d3-label { display: none; }
+  /* Evidence captions: each label above its explanation, both full width. */
+  .scene-foot { flex-direction: column; align-items: stretch; }
+  .scene-cap { display: grid; gap: 10px; flex: none; width: 100%; }
+  .scene-cap span { display: grid; gap: 4px; justify-items: start; overflow-wrap: break-word; }
+  /* Reset view becomes a small icon button in the stage's top-right corner, which
+     every phone composition leaves clear, so it takes no width from the caption. */
+  .view-reset { position: absolute; top: 4px; right: 0; z-index: 2; width: 36px; height: 36px; padding: 0; display: grid; place-items: center; background: color-mix(in srgb, var(--bg) 82%, transparent); }
+  .view-reset svg { display: block; }
+  .vr-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+}
+/* Short landscape screens: size the stage by height so the whole scene fits. */
+@media (orientation: landscape) and (max-height: 520px) {
+  .stage3 { max-width: calc(78svh * 16 / 9.6); margin-inline: auto; width: 100%; }
+}

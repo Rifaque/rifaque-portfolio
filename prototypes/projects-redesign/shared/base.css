@@ -1,0 +1,131 @@
+/*
+ * Shared foundation for the three Projects-section concepts: Mono tokens
+ * (as in the Projection prototype), the 1240px container, the header with
+ * the approved wordmark, labels, and the context bands that stand in for the
+ * unchanged neighbouring sections. Each concept adds only its own section CSS.
+ */
+@font-face { font-family: "Archivo"; src: url("../../projection/fonts/archivo-latin-wdth-wght.woff2") format("woff2-variations"); font-weight: 100 900; font-stretch: 62% 125%; font-display: swap; }
+@font-face { font-family: "Martian Mono"; src: url("../../projection/fonts/martian-mono-latin-wdth-wght.woff2") format("woff2-variations"); font-weight: 100 800; font-stretch: 75% 112.5%; font-display: swap; }
+
+:root {
+  --sans: "Archivo", system-ui, "Segoe UI", sans-serif;
+  --mono: "Martian Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --max: 1240px;
+  --gutter: clamp(16px, 4vw, 48px);
+  --col-gap: clamp(16px, 2vw, 28px);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-io: cubic-bezier(0.77, 0, 0.175, 1);
+  --r-ctl: 999px;
+  --r-surf: 12px;
+}
+:root, :root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #08090b; --surf: #111316; --surf-2: #17191d; --surf-3: #202328;
+  --line: rgb(236 240 247 / 0.08); --line-2: rgb(236 240 247 / 0.15); --line-3: rgb(236 240 247 / 0.3);
+  --fg: #f1f3f6; --fg-2: #aab1bc; --fg-3: #8b93a0;
+  --inv-bg: #f1f3f6; --inv-fg: #08090b;
+  --shade: rgb(0 0 0 / 0.55);
+  --s-released: #5fd393; --s-pre: #e9bb4a; --s-dev: #f283bb; --s-alpha: #c4a3ff; --s-retired: #8f97a3;
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f4f5f7; --surf: #ffffff; --surf-2: #f0f2f5; --surf-3: #e3e6eb;
+  --line: rgb(16 22 34 / 0.09); --line-2: rgb(16 22 34 / 0.16); --line-3: rgb(16 22 34 / 0.34);
+  --fg: #0c0e12; --fg-2: #454c57; --fg-3: #5a626f;
+  --inv-bg: #0c0e12; --inv-fg: #ffffff;
+  --shade: rgb(30 40 60 / 0.16);
+  --s-released: #147a44; --s-pre: #8a6200; --s-dev: #b0246a; --s-alpha: #6a44c2; --s-retired: #5a626f;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 76px; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 400 1.0625rem/1.55 var(--sans); -webkit-font-smoothing: antialiased; overflow-x: clip; }
+img, svg { display: block; max-width: 100%; }
+[hidden] { display: none !important; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+h1, h2, h3, h4, p, ol, ul, dl, dd, figure { margin: 0; }
+ol, ul { padding: 0; list-style: none; }
+:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; border-radius: 4px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.wrap { width: 100%; max-width: calc(var(--max) + 2 * var(--gutter)); margin-inline: auto; padding-inline: var(--gutter); }
+.skip { position: fixed; left: 12px; top: -60px; z-index: 50; background: var(--inv-bg); color: var(--inv-fg); padding: 10px 16px; border-radius: var(--r-ctl); text-decoration: none; font-weight: 600; }
+.skip:focus { top: 12px; }
+
+/* Theme change: one coordinated cross-fade of the whole page (View Transitions). */
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 280ms; animation-timing-function: var(--ease-out); }
+@media (prefers-reduced-motion: reduce) { ::view-transition-old(root), ::view-transition-new(root) { animation: none; } }
+
+/* ------------------------------------------------------------ header */
+.site-head { position: sticky; top: 0; z-index: 30; height: 64px; background: color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+.site-head .wrap { height: 100%; display: flex; align-items: center; gap: 20px; }
+.wm-link { display: block; line-height: 0; }
+.wm { width: 150px; height: auto; object-fit: contain; }
+:root[data-theme="dark"] .wm-light, :root[data-theme="light"] .wm-dark { display: none; }
+.concept-name { color: var(--fg-3); font-size: 0.86rem; margin-left: 6px; padding-left: 16px; border-left: 1px solid var(--line-2); white-space: nowrap; }
+.head-nav { margin-left: auto; display: flex; gap: 6px; align-items: center; }
+.head-nav a { color: var(--fg-2); font-size: 0.9rem; text-decoration: none; padding: 6px 10px; border-radius: var(--r-ctl); }
+.head-nav a:hover, .head-nav a[aria-current] { color: var(--fg); }
+.icon-btn { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 12px; border-radius: var(--r-ctl); border: 1px solid var(--line-2); background: transparent; cursor: pointer; color: var(--fg-2); font-size: 0.85rem; font-weight: 520; }
+.icon-btn:hover { color: var(--fg); border-color: var(--line-3); }
+.icon-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.icon-btn.square { width: 36px; padding: 0; justify-content: center; }
+#sound-btn[aria-pressed="true"] .i-wave, #sound-btn[aria-pressed="false"] .i-x { display: none; }
+
+/* ------------------------------------------------------------ context bands */
+.ctx { border-block: 1px dashed var(--line-2); color: var(--fg-3); font-size: 0.85rem; }
+.ctx .wrap { padding-block: 22px; display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: baseline; }
+.ctx b { color: var(--fg-2); font-weight: 560; }
+.ctx-hero { min-height: 34vh; display: grid; align-content: end; }
+.ctx-next { margin-top: 0; }
+.ctx-next h2 { font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 460; font-stretch: 112%; letter-spacing: -0.03em; color: var(--fg); }
+
+/* ------------------------------------------------------------ section head */
+.sec-head { display: grid; gap: 12px; max-width: 62ch; }
+.sec-head h2 { font-size: clamp(2.1rem, 3.8vw, 3.4rem); font-weight: 460; font-stretch: 112%; letter-spacing: -0.035em; line-height: 1; }
+.sec-head p { color: var(--fg-2); font-size: 1.05rem; text-wrap: pretty; }
+
+/* ------------------------------------------------------------ shared atoms */
+.status { display: inline-flex; align-items: center; gap: 8px; font-size: 0.86rem; font-weight: 520; }
+.glyph { width: 12px; height: 12px; flex: none; color: var(--st, var(--fg-2)); }
+[data-stage="released"], [data-stage="delivered"] { --st: var(--s-released); }
+[data-stage="pre-release"] { --st: var(--s-pre); }
+[data-stage="in-development"] { --st: var(--s-dev); }
+[data-stage="private-alpha"] { --st: var(--s-alpha); }
+.tag { display: inline-flex; flex: none; font: 600 0.62rem/1 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; padding: 4px 6px; border-radius: 4px; border: 1px solid var(--line-3); color: var(--fg); }
+.tag-real { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.btn { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border-radius: var(--r-ctl); border: 1px solid var(--line-3); background: transparent; color: var(--fg); text-decoration: none; font-weight: 560; font-size: 0.92rem; cursor: pointer; white-space: nowrap; }
+.btn-solid { background: var(--inv-bg); color: var(--inv-fg); border-color: var(--inv-bg); }
+.btn:hover { background: var(--surf-2); }
+.btn-solid:hover { background: transparent; color: var(--fg); }
+.facts { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; font-size: 0.86rem; }
+.facts dt { color: var(--fg-3); }
+.works { display: grid; gap: 6px; font-size: 0.92rem; color: var(--fg-2); }
+.works li { padding-left: 16px; position: relative; }
+.works li::before { content: ""; position: absolute; left: 0; top: 0.68em; width: 8px; height: 1.5px; background: var(--fg); }
+.limits { font-size: 0.86rem; color: var(--fg-3); }
+
+/* ------------------------------------------------------------ also built */
+.also { padding-block: 30px 10px; display: grid; grid-template-columns: 160px 1fr 1fr; gap: 12px var(--col-gap); border-top: 1px solid var(--line-2); margin-top: 48px; }
+.also h3 { font-size: 0.86rem; font-weight: 520; color: var(--fg-3); }
+.also p { font-size: 0.9rem; color: var(--fg-2); }
+.also b { color: var(--fg); font-weight: 600; }
+@media (max-width: 760px) { .also { grid-template-columns: 1fr; } }
+
+/* ------------------------------------------------------------ illustrations (mono) */
+.il { font-family: var(--mono); font-stretch: 80%; }
+.il text { fill: var(--fg-2); font-size: 11px; }
+.il .t-strong { fill: var(--fg); font-weight: 600; font-family: var(--sans); font-stretch: 100%; font-size: 13px; }
+.il .t-em { fill: var(--fg); font-weight: 600; }
+.il .ln { stroke: var(--fg-3); stroke-width: 1.4; fill: none; }
+.il .ln-2 { stroke: var(--fg-2); stroke-width: 1.6; fill: none; }
+.il .ln-strong { stroke: var(--fg); stroke-width: 2.2; fill: none; }
+.il .dash { stroke-dasharray: 5 5; }
+.il .box { fill: var(--surf); stroke: var(--fg-3); stroke-width: 1.4; }
+.il .box-strong { fill: var(--surf); stroke: var(--fg); stroke-width: 1.8; }
+.il .fill { fill: var(--fg); }
+
+@media (max-width: 640px) {
+  .concept-name, .head-nav a { display: none; }
+  .wm { width: 124px; }
+}

@@ -1,0 +1,106 @@
+[
+  {
+    "name": "btl-home-1440",
+    "url": "https://btl.hubzero.in/",
+    "status": 200,
+    "size": [
+      1440,
+      900
+    ],
+    "date": "2026-10-26T05:05:07.861Z",
+    "title": "Bhatkal Time Luxe",
+    "hits": [],
+    "digitRuns": [
+      "[phone number redacted]"
+    ]
+  },
+  {
+    "links": [
+      "https://btl.hubzero.in/brands",
+      "https://btl.hubzero.in/new-arrivals",
+      "https://btl.hubzero.in/faq",
+      "https://btl.hubzero.in/contact",
+      "https://btl.hubzero.in/cart",
+      "https://btl.hubzero.in/api/whatsapp"
+    ]
+  },
+  {
+    "name": "btl-new-arrivals-1440",
+    "url": "https://btl.hubzero.in/new-arrivals",
+    "status": 200,
+    "size": [
+      1440,
+      900
+    ],
+    "date": "2026-10-26T05:05:13.075Z",
+    "title": "New Arrivals | Bhatkal Time Luxe",
+    "hits": [],
+    "digitRuns": [
+      "[phone number redacted]"
+    ]
+  },
+  {
+    "name": "btl-new-arrivals-grid-1440",
+    "url": "https://btl.hubzero.in/new-arrivals",
+    "status": 200,
+    "size": [
+      1440,
+      900
+    ],
+    "date": "2026-10-26T05:05:19.225Z",
+    "title": "New Arrivals | Bhatkal Time Luxe",
+    "hits": [],
+    "digitRuns": [
+      "[phone number redacted]"
+    ]
+  },
+  {
+    "gridLinks": [
+      "https://btl.hubzero.in/",
+      "https://btl.hubzero.in/brands",
+      "https://btl.hubzero.in/faq",
+      "https://btl.hubzero.in/contact",
+      "https://btl.hubzero.in/cart"
+    ]
+  },
+  {
+    "name": "btl-brands-1440",
+    "url": "https://btl.hubzero.in/brands",
+    "status": 200,
+    "size": [
+      1440,
+      900
+    ],
+    "date": "2026-10-26T05:05:23.985Z",
+    "title": "Luxury Watch Brands | Bhatkal Time Luxe",
+    "hits": [],
+    "digitRuns": [
+      "[phone number redacted]"
+    ]
+  },
+  {},
+  {
+    "name": "btl-home-390",
+    "url": "https://btl.hubzero.in/",
+    "status": 200,
+    "size": [
+      390,
+      844
+    ],
+    "date": "2026-10-26T05:05:29.295Z",
+    "title": "Bhatkal Time Luxe",
+    "hits": [
+      {
+        "href": "https://wa.me/[phone number redacted]",
+        "box": [
+          324,
+          722,
+          50,
+          50
+        ],
+        "text": ""
+      }
+    ],
+    "digitRuns": []
+  }
+]

@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en-GB" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atlas · Case study · Rifaque Akrami</title>
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#08090b">
+<script>
+  (function () {
+    var d = document.documentElement, t = "dark", m;
+    try { if (localStorage.getItem("rsx-theme") === "light") t = "light"; } catch (e) {}
+    if ((m = /[?&]theme=(dark|light)/.exec(location.search))) t = m[1];
+    d.dataset.theme = t;
+    if (/[?&]motion=reduce/.test(location.search)) d.dataset.motion = "reduce";
+    document.querySelector('meta[name="theme-color"]').content = t === "light" ? "#f4f5f7" : "#08090b";
+  })();
+</script>
+<link rel="icon" href="../../brand/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../../brand/favicon-32-dark.png">
+<link rel="apple-touch-icon" href="../../brand/favicon-180-dark.png">
+<link rel="stylesheet" href="../../css/tokens.css">
+<link rel="stylesheet" href="../../css/app.css">
+<link rel="stylesheet" href="../../css/stage3d.css">
+<link rel="stylesheet" href="../../css/projects.css">
+<link rel="stylesheet" href="../../css/cs.css">
+</head>
+<body data-project="atlas">
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="wrap top-row">
+    <a class="mark" href="../../" aria-label="RSX Develops, home"><img class="wm wm-dark" src="../../brand/rsx-develops-wordmark-dark.png" srcset="../../brand/rsx-develops-wordmark-dark-2x.png 2x" width="774" height="109" alt=""><img class="wm wm-light" src="../../brand/rsx-develops-wordmark-light.png" srcset="../../brand/rsx-develops-wordmark-light-2x.png 2x" width="612" height="94" alt=""></a>
+    <nav class="nav" aria-label="Sections">
+      <a href="../../?project=atlas#work" data-sound="press">Work</a>
+      <a href="../../#about" data-sound="press">About</a>
+      <a href="../../#experience" data-sound="press">Experience</a>
+      <a href="../../#contact" data-sound="press">Contact</a>
+    </nav>
+    <div class="prefs">
+      <button class="pref" id="theme-switch" type="button" aria-label="Switch to light theme" title="Switch to light theme">
+        <svg class="pref-icon" viewBox="0 0 20 20" aria-hidden="true"><circle class="i-sun" cx="10" cy="10" r="3.6"/><path class="i-rays" d="M10 1.8v2.4M10 15.8v2.4M1.8 10h2.4M15.8 10h2.4M4.2 4.2l1.7 1.7M14.1 14.1l1.7 1.7M4.2 15.8l1.7-1.7M14.1 5.9l1.7-1.7"/><path class="i-moon" d="M15.5 12.6A6.5 6.5 0 0 1 7.4 4.5a6.5 6.5 0 1 0 8.1 8.1z"/></svg>
+        <span class="pref-label">Light</span>
+      </button>
+      <button class="pref pref-square" id="sound-switch" type="button" data-on="false" aria-label="Enable sound" title="Enable sound">
+        <svg class="pref-icon" viewBox="0 0 20 20" aria-hidden="true"><path class="i-spk" d="M3.5 7.5h3l4-3.2v11.4l-4-3.2h-3z"/><path class="i-wave" d="M13.4 7.2a4 4 0 0 1 0 5.6M15.6 5a7 7 0 0 1 0 10"/><path class="i-mute" d="M13.5 7.5l4 5M17.5 7.5l-4 5"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+<main id="main" class="cs wrap">
+  <nav class="crumbs cs-crumb" aria-label="Breadcrumb"><a data-back href="../../#work">Projects</a><span aria-hidden="true">/</span><span aria-current="page">Atlas</span></nav>
+
+  <header class="cs-intro">
+    <div>
+      <p class="cs-kicker">Local-first workspace intelligence · case study</p>
+      <h1>Atlas</h1>
+      <div data-status></div>
+      <p class="cs-sum">A Rust and Tauri 2 desktop app that indexes one codebase or document set and answers with inspectable evidence. A question without enough evidence in the workspace can be declined instead of answered from general model knowledge.</p>
+    </div>
+    <dl class="cs-facts">
+      <dt>Role</dt><dd>Personal project, sole author</dd>
+      <dt>Period</dt><dd>Feb to Sep 2026</dd>
+      <dt>Runs on</dt><dd>Windows x64</dd>
+      <dt>Licence</dt><dd>MIT</dd>
+      <dt>Stack</dt><dd>Rust · Tauri 2 · React 19 · TypeScript · Ollama · OpenRouter (opt-in)</dd>
+    </dl>
+  </header>
+
+  <section class="cs-open" aria-label="Atlas on a desktop">
+    <div class="cs-3d" data-scene="atlas" data-label="the Ask view on a desktop monitor, with the Workspaces window behind it"></div>
+  </section>
+
+  <section class="cs-sec" aria-labelledby="h-question">
+    <div class="cs-text">
+      <h2 id="h-question">One loop, on purpose</h2>
+      <p class="cs-q">Can an assistant answer from your workspace, and say so when it can't?</p>
+      <p>Earlier builds reached for more surfaces. For 1.0 the product was narrowed to a single loop: <b>open a workspace, index it, ask or find, inspect the evidence, follow up.</b></p>
+      <p>Agents, arbitrary shell execution, personas, graph surfaces, web search and vision attachments are not part of 1.0.</p>
+    </div>
+    <div class="cs-vis">
+      <figure class="cs-fig" data-media="atlas 1"></figure>
+    </div>
+  </section>
+
+  <section class="cs-sec flip" aria-labelledby="h-retrieval">
+    <div class="cs-text">
+      <h2 id="h-retrieval">Retrieval</h2>
+      <p>Workspace files are chunked and embedded locally through Ollama. A question gathers semantic candidates and BM25 candidates, then:</p>
+      <ul class="works">
+        <li>reciprocal-rank fusion merges the two lists</li>
+        <li>candidates are classified for relevance and de-duplicated</li>
+        <li>a bounded evidence set goes to the model, or the question is declined</li>
+      </ul>
+      <p>Indexing is incremental, and a damaged generated index can be detected and rebuilt without touching the source files.</p>
+    </div>
+    <div class="cs-vis">
+      <figure class="cs-fig" data-dia="atlas-retrieval" data-cap="Semantic and BM25 candidates, fused, checked, then answered or declined."></figure>
+    </div>
+  </section>
+
+  <section class="cs-sec" aria-labelledby="h-evidence">
+    <div class="cs-text">
+      <h2 id="h-evidence">Evidence you can inspect</h2>
+      <p>Each answer shows the material supplied to or considered for it, with files and line ranges. That is the evidence considered, <b>not sentence-level attribution</b>, and the app says so.</p>
+      <p>Ask and Find follow different rules. Ask is conservative and can decline. Find can return bounded literal matches from the workspace when Ask would not answer.</p>
+    </div>
+    <div class="cs-vis">
+      <figure class="cs-fig" data-media="atlas 0"></figure>
+    </div>
+  </section>
+
+  <section class="cs-sec flip" aria-labelledby="h-cloud">
+    <div class="cs-text">
+      <h2 id="h-cloud">An explicit cloud boundary</h2>
+      <p>With local Ollama, indexing, embeddings, generation and evidence stay on the machine. OpenRouter is optional, enabled per request; a request that has not authorised it is blocked.</p>
+      <p>When it is enabled, Atlas assembles the complete bounded payload first and <b>Secret Shield</b> scans it for known secret formats, such as AWS keys, GitHub tokens and API keys. A match blocks the request. The OpenRouter key is held by the Rust side in the operating system's credential store.</p>
+    </div>
+    <div class="cs-vis">
+      <figure class="cs-fig" data-dia="atlas-boundary" data-cap="Local by default; the opt-in cloud path passes Secret Shield first."></figure>
+    </div>
+  </section>
+
+  <section class="cs-sec solo" aria-labelledby="h-decisions">
+    <div class="cs-text">
+      <h2 id="h-decisions">Decisions and trade-offs</h2>
+      <ul class="works">
+        <li><b>Fewer surfaces.</b> One loop done properly rather than many half-finished ones; removed areas are not described as current.</li>
+        <li><b>Declining is a feature.</b> Ask would rather say it lacks evidence than answer from general model knowledge.</li>
+        <li><b>Workspace authorization in the backend.</b> Requested paths are canonicalised and confined to the workspace root in Rust.</li>
+        <li><b>A safety net, not a guarantee.</b> Secret Shield matches known patterns; it protects the cloud path without promising more.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="cs-sec solo" aria-labelledby="h-status">
+    <div class="cs-text">
+      <h2 id="h-status">Status and limits</h2>
+      <div data-status></div>
+      <ul class="works">
+        <li>Windows x64 only. The installer is unsigned, so SmartScreen shows an Unknown Publisher warning; the release publishes a SHA-256 checksum.</li>
+        <li>The updater is disabled. Linux is configured but unverified, and macOS is unsupported.</li>
+        <li>PDF and generic-file chunking is basic, relevance calibration is heuristic and context budgeting is approximate.</li>
+      </ul>
+      <div class="cs-links" data-links></div>
+    </div>
+  </section>
+
+  <nav class="cs-next" id="cs-next" aria-label="Other case studies"></nav>
+</main>
+<footer class="foot"><div class="wrap foot-row"><p>© 2026 Rifaque Akrami</p></div></footer>
+<script type="module" src="../../js/projects/space/case-studies/cs.js"></script>
+</body>
+</html>

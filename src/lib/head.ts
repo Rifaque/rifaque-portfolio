@@ -1,19 +1,14 @@
 import { site } from "../content/site";
 import { canonicalFor, type RouteMeta } from "../content/routes";
 
-/**
- * Head tags for a route, as data. The prerender step serialises them into
- * each page's HTML; on the client, RouteHead applies the same values after
- * in-app navigation, so the canonical never disagrees with the original HTML.
- */
-
 type Tag =
   | { kind: "meta"; attr: "name" | "property"; key: string; content: string }
   | { kind: "link"; rel: string; href: string };
 
+/** Every per-page head tag, used by the prerender and by client-side navigation. */
 export function headTags(route: RouteMeta): Tag[] {
   const canonical = canonicalFor(route);
-  const image = `${site.url}${site.ogImage}`;
+  const image = site.url + site.ogImage;
   const tags: Tag[] = [
     { kind: "meta", attr: "name", key: "description", content: route.description },
     { kind: "meta", attr: "name", key: "robots", content: route.indexable ? "index, follow, max-image-preview:large" : "noindex, nofollow" },
@@ -31,7 +26,7 @@ export function headTags(route: RouteMeta): Tag[] {
     { kind: "meta", attr: "name", key: "twitter:description", content: route.description },
     { kind: "meta", attr: "name", key: "twitter:image", content: image },
   ];
-  // A page that must not be indexed should not name a canonical either.
+  // A page that must not be indexed names no canonical.
   if (route.indexable) {
     tags.push({ kind: "link", rel: "canonical", href: canonical });
     tags.push({ kind: "meta", attr: "property", key: "og:url", content: canonical });
@@ -39,57 +34,45 @@ export function headTags(route: RouteMeta): Tag[] {
   return tags;
 }
 
-export function jsonLdFor(route: RouteMeta) {
-  if (!route.jsonLd?.length) return null;
-  return { "@context": "https://schema.org", "@graph": route.jsonLd };
-}
-
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-export function renderHead(route: RouteMeta): string {
+export function headHTML(route: RouteMeta): string {
   const lines = [`<title>${esc(route.title)}</title>`];
   for (const t of headTags(route)) {
-    lines.push(
-      t.kind === "meta"
-        ? `<meta ${t.attr}="${t.key}" content="${esc(t.content)}" data-head />`
-        : `<link rel="${t.rel}" href="${esc(t.href)}" data-head />`,
-    );
+    lines.push(t.kind === "meta" ? `<meta ${t.attr}="${t.key}" content="${esc(t.content)}" />` : `<link rel="${t.rel}" href="${esc(t.href)}" />`);
   }
-  const ld = jsonLdFor(route);
-  if (ld) {
-    // "<" is escaped so the payload can never close its own script element.
-    lines.push(`<script type="application/ld+json" data-head>${JSON.stringify(ld).replace(/</g, "\\u003c")}</script>`);
+  if (route.jsonLd?.length) {
+    const json = JSON.stringify({ "@context": "https://schema.org", "@graph": route.jsonLd }).replace(/</g, "\\u003c");
+    lines.push(`<script type="application/ld+json">${json}</script>`);
   }
   return lines.join("\n    ");
 }
 
-/** Client-side counterpart of renderHead, for in-app navigation. */
+/** Client-side: keep the head in step with in-app navigation. */
 export function applyHead(route: RouteMeta) {
   document.title = route.title;
-  document.head.querySelectorAll("[data-head]").forEach((el) => el.remove());
-  const frag = document.createDocumentFragment();
+  document.querySelectorAll("head [data-route-head]").forEach((n) => n.remove());
+  document.head.querySelectorAll('script[type="application/ld+json"]').forEach((n) => n.remove());
   for (const t of headTags(route)) {
+    const sel = t.kind === "meta" ? `meta[${t.attr}="${t.key}"]` : `link[rel="${t.rel}"]`;
+    document.head.querySelectorAll(sel).forEach((n) => n.remove());
+    const el = document.createElement(t.kind);
     if (t.kind === "meta") {
-      const m = document.createElement("meta");
-      m.setAttribute(t.attr, t.key);
-      m.content = t.content;
-      m.dataset.head = "";
-      frag.appendChild(m);
+      el.setAttribute(t.attr, t.key);
+      el.setAttribute("content", t.content);
     } else {
-      const l = document.createElement("link");
-      l.rel = t.rel;
-      l.href = t.href;
-      l.dataset.head = "";
-      frag.appendChild(l);
+      el.setAttribute("rel", t.rel);
+      el.setAttribute("href", t.href);
     }
+    el.setAttribute("data-route-head", "");
+    document.head.appendChild(el);
   }
-  const ld = jsonLdFor(route);
-  if (ld) {
-    const s = document.createElement("script");
-    s.type = "application/ld+json";
-    s.textContent = JSON.stringify(ld);
-    s.dataset.head = "";
-    frag.appendChild(s);
+  if (route.jsonLd?.length) {
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.textContent = JSON.stringify({ "@context": "https://schema.org", "@graph": route.jsonLd });
+    script.dataset.routeHead = "";
+    document.head.appendChild(script);
   }
-  document.head.appendChild(frag);
+  if (!route.indexable) document.head.querySelectorAll('link[rel="canonical"], meta[property="og:url"]').forEach((n) => n.remove());
 }

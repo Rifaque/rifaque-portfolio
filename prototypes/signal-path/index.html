@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en-GB" data-accent="amber" data-type="geist">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Signal Path · prototype · RSX Develops</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="css/signal.css" />
+    <script>
+      // Prototype-only switches, read before first paint so screenshots are stable:
+      // ?accent=amber|vermilion|copper  ?type=geist|alt  ?motion=reduce  ?clean (hide prototype bar)
+      (function () {
+        var q = new URLSearchParams(location.search), d = document.documentElement;
+        if (/^(amber|vermilion|copper)$/.test(q.get("accent"))) d.dataset.accent = q.get("accent");
+        if (/^(geist|alt)$/.test(q.get("type"))) d.dataset.type = q.get("type");
+        if (q.get("motion") === "reduce") d.dataset.motion = "reduce";
+        if (q.has("clean")) d.dataset.clean = "";
+        d.classList.add("js");
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#work">Skip to selected work</a>
+    <div class="grain" aria-hidden="true"></div>
+
+    <header class="top">
+      <a class="mark" href="#top" aria-label="RSX Develops, top of page">
+        <svg viewBox="0 0 28 16" aria-hidden="true"><path d="M1 8H9L13 2L17 14L21 8H27" /></svg>
+        <span>RSX</span><span class="mark-sub">Develops</span>
+      </a>
+      <nav aria-label="Primary">
+        <ul>
+          <li><a href="#work">Work</a></li>
+          <li><a href="#more">HubZero &amp; more</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span>Rifaque Akrami</span><span class="sep" aria-hidden="true"></span><span>RSX Develops</span></p>
+          <h1 id="hero-title">Product-minded engineer building full&#8209;stack software and <em>practical AI systems</em>.</h1>
+        </div>
+        <div class="hero-side">
+          <p class="lede">
+            I build local-first AI tools, developer systems and client products, from the architecture to the servers they run on,
+            and I say plainly what each one does not do yet.
+          </p>
+          <div class="actions">
+            <a class="btn btn--primary" href="#work">Explore the work</a>
+            <a class="btn" href="../../knowledge-base/assets/reference/Rifaque_Resume-2026-10.pdf">Resume (PDF)</a>
+          </div>
+          <p class="meta">Bhatkal, Karnataka, India · Open to relocation and remote roles<br />Co-founder &amp; Software Engineer, HubZero · since Jan 2025</p>
+        </div>
+      </section>
+
+      <section id="work" class="work" aria-labelledby="work-title">
+        <div class="work-head">
+          <div>
+            <h2 id="work-title" class="label">Selected work</h2>
+            <p class="work-intro">Four personal projects on one path, each with its status and its limits.</p>
+          </div>
+          <div class="ribbon-nav" aria-label="Ribbon controls" role="group">
+            <button type="button" class="nav-btn" data-step="-1" aria-label="Previous project"><span aria-hidden="true">←</span></button>
+            <p class="counter" aria-hidden="true"><span id="count-now">01</span><span class="counter-sep">/</span><span id="count-all">04</span></p>
+            <button type="button" class="nav-btn" data-step="1" aria-label="Next project"><span aria-hidden="true">→</span></button>
+          </div>
+        </div>
+
+        <div class="ribbon" id="ribbon" role="region" aria-roledescription="carousel" aria-label="Selected work. Use left and right arrow keys to move between projects.">
+          <div class="stage" id="stage">
+            <ol class="band" id="band"></ol>
+          </div>
+        </div>
+
+        <ol class="ticks" id="ticks" aria-label="Right now: project status. Select to bring a project into focus."></ol>
+        <div class="readout" id="readout" aria-live="polite"></div>
+      </section>
+
+      <section id="more" class="more" aria-labelledby="more-title">
+        <h2 id="more-title" class="label">Through HubZero, and smaller builds</h2>
+        <p class="more-intro">Prototype sample: how ownership reads for work that is not a personal RSX Develops product.</p>
+        <ul class="more-list" id="more-list"></ul>
+      </section>
+
+      <footer id="contact" class="foot">
+        <p class="foot-big">Get in touch</p>
+        <p class="foot-lede">I'm open to software engineering roles, remote or with relocation. Email is the quickest way to reach me.</p>
+        <p><a class="foot-mail" href="mailto:rifaque.rs@gmail.com">rifaque.rs@gmail.com</a></p>
+        <p class="foot-legal">© 2026 Rifaque Ahmed Akrami · RSX Develops is a personal identity, not a company.</p>
+      </footer>
+    </main>
+
+    <dialog class="dossier" id="dossier" aria-labelledby="ds-title">
+      <div class="ds-scroll" id="ds-scroll">
+        <div class="ds-bar">
+          <button type="button" class="ds-close" id="ds-close"><span aria-hidden="true">←</span> <span>Back<span class="ds-close-long"> to the work</span></span> <kbd>Esc</kbd></button>
+          <p class="ds-count mono" id="ds-count"></p>
+          <div class="ds-step">
+            <button type="button" class="ds-stepbtn" data-dstep="-1" id="ds-prev"></button>
+            <button type="button" class="ds-stepbtn" data-dstep="1" id="ds-next"></button>
+          </div>
+        </div>
+        <article class="ds-body" id="ds-body"></article>
+      </div>
+    </dialog>
+
+    <aside class="proto" aria-label="Prototype controls">
+      <details>
+        <summary>Prototype</summary>
+        <div class="proto-body">
+          <fieldset><legend>Accent</legend>
+            <label><input type="radio" name="accent" value="amber" /> Sodium amber</label>
+            <label><input type="radio" name="accent" value="vermilion" /> Signal vermilion</label>
+            <label><input type="radio" name="accent" value="copper" /> Oxidised copper-green</label>
+          </fieldset>
+          <fieldset><legend>Type</legend>
+            <label><input type="radio" name="type" value="geist" /> Geist + Geist Mono</label>
+            <label><input type="radio" name="type" value="alt" /> Bahnschrift + Cascadia Mono</label>
+          </fieldset>
+          <fieldset><legend>Motion</legend>
+            <label><input type="checkbox" name="motion" /> Simulate reduced motion</label>
+          </fieldset>
+          <p><a href="accents.html">Accent &amp; type board →</a></p>
+        </div>
+      </details>
+    </aside>
+
+    <script src="js/projects.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>

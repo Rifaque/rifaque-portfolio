@@ -1,0 +1,295 @@
+/*
+ * Homepage: the project scene ("receding corridor"), the work index and the
+ * contact block. The first viewport is the ribbon; identity is one line.
+ */
+
+/* ------------------------------------------------------------- scene */
+.scene {
+  --seg-w: min(54vw, 1000px, calc((100svh - 450px) / 0.62));
+  --seg-h: calc(var(--seg-w) * 0.62);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  height: clamp(640px, 100svh, 1120px);
+  background: linear-gradient(180deg, var(--ink-0) 0%, #12110f 58%, #080807 100%);
+}
+/* Two lights, cross-faded by the selected project's material. */
+.scene::before,
+.scene::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  transition: opacity 0.9s var(--ease-io);
+}
+.scene::before { background: radial-gradient(62% 58% at 40% 44%, rgb(232 163 61 / 0.2), rgb(232 163 61 / 0.05) 45%, transparent 72%); }
+.scene::after { background: radial-gradient(62% 58% at 40% 44%, rgb(226 222 214 / 0.16), rgb(226 222 214 / 0.04) 45%, transparent 72%); opacity: 0; }
+.scene[data-kind="screenshot"]::before { opacity: 0; }
+.scene[data-kind="screenshot"]::after { opacity: 1; }
+
+.scene-intro { position: absolute; z-index: 3; top: 88px; left: var(--gutter); max-width: min(78ch, 60vw); }
+.scene-intro h1 { font-size: clamp(1rem, 0.9rem + 0.35vw, 1.2rem); line-height: 1.35; font-weight: 450; color: var(--fg-2); letter-spacing: -0.005em; }
+.scene-intro .who { color: var(--fg); font-weight: 650; }
+.scene-meta { margin-top: 6px; font-size: 0.82rem; color: var(--fg-3); }
+.scene-hint { margin-top: 14px; display: inline-flex; align-items: center; gap: 10px; font-size: 0.85rem; color: var(--fg-2); }
+.scene-hint::before { content: ""; width: 22px; height: 2px; background: var(--acc-ink); }
+.hint-touch { display: none; }
+@media (hover: none) { .hint-pointer { display: none; } .hint-touch { display: inline; } }
+
+/* ------------------------------------------------------------- the ribbon */
+.stage {
+  position: absolute; inset: 0; z-index: 1;
+  perspective: max(1600px, 120vw);
+  perspective-origin: 36% 28%;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+@media (hover: hover) { .stage { cursor: grab; } .stage.dragging { cursor: grabbing; } }
+.band { position: absolute; left: 37%; top: max(27%, 236px); margin: 0; transform-style: preserve-3d; }
+
+.seg {
+  position: absolute; left: 0; top: 0;
+  width: var(--seg-w); height: var(--seg-h);
+  transform-origin: 0 50%;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.seg-face {
+  position: absolute; inset: 0; overflow: hidden;
+  backface-visibility: hidden;
+  box-shadow: 0 50px 90px -40px rgb(0 0 0 / 0.9);
+  -webkit-box-reflect: below 10px linear-gradient(transparent 72%, rgb(255 255 255 / 0.07));
+}
+/* Screens: a real interface, lit. */
+.seg--screen .seg-face { background: #0d0d0e; outline: 1px solid rgb(239 233 223 / 0.14); outline-offset: -1px; }
+.seg--screen img { width: 100%; height: 100%; object-fit: cover; object-position: 0 0; }
+.screen-bar {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  display: flex; align-items: baseline; gap: 12px; padding: calc(var(--seg-w) * 0.016) calc(var(--seg-w) * 0.024);
+  background: linear-gradient(180deg, transparent, rgb(8 8 7 / 0.92) 45%);
+  color: var(--ink-fg);
+}
+/* Plates: a project explained by a diagram, on paper. */
+.plate { background: var(--paper-0); color: var(--paper-fg); }
+.plate-head { position: absolute; top: 0; left: 0; right: 0; display: flex; align-items: baseline; gap: 14px; padding: calc(var(--seg-w) * 0.026) calc(var(--seg-w) * 0.03); }
+.plate-art { position: absolute; left: 3%; right: 3%; top: 17%; bottom: 3%; }
+.plate-art .il { width: 100%; height: 100%; }
+.plate .il-grid path { stroke: var(--paper-line); }
+.plate .il-edge { stroke: var(--paper-fg-3); stroke-width: 2.2; }
+.plate .il-edge--key { stroke: var(--acc-paper); stroke-width: 3; }
+.plate .il-node { fill: var(--paper-0); stroke: var(--paper-fg); stroke-width: 2; }
+.plate .il-node--key { fill: var(--acc-paper); stroke: var(--acc-paper); }
+.plate .il-box { stroke: var(--paper-line-2); stroke-width: 1.5; }
+.plate .il-box--key { stroke: var(--acc-paper); }
+.plate .il-lab { fill: var(--paper-fg); font-size: 17px; font-weight: 600; }
+.plate .il-cap { fill: var(--paper-fg-2); font-size: 13px; }
+.plate .il-cap--key { fill: var(--acc-paper); }
+.plate .il-mono { fill: var(--paper-fg-2); font-size: 14px; }
+
+.seg-index { font: 500 calc(var(--seg-w) * 0.014 + 4px) / 1 var(--mono); opacity: 0.7; }
+.seg-title { font-size: calc(var(--seg-w) * 0.042); font-weight: 650; letter-spacing: -0.03em; line-height: 1; }
+.seg-tag {
+  position: absolute; top: calc(var(--seg-w) * 0.026); right: calc(var(--seg-w) * 0.026); z-index: 2;
+  font: 600 0.62rem/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 6px 8px; border: 1px solid currentColor;
+  backface-visibility: hidden;
+}
+.seg--screen .seg-tag { color: var(--ink-fg); background: rgb(11 10 9 / 0.8); }
+.seg--plate .seg-tag { color: var(--paper-fg); }
+
+/* The band has thickness: a top face hinged on each segment's top edge. */
+.seg-edge {
+  position: absolute; left: 0; right: 0; top: 0; height: 14px;
+  transform-origin: 50% 0; transform: rotateX(-90deg);
+  background: linear-gradient(180deg, #3b362f, #1f1c19);
+}
+.seg.is-on .seg-edge { background: linear-gradient(180deg, var(--acc-ink), #7a5520); }
+.seg-node {
+  position: absolute; left: -5px; width: 9px; height: 9px; border-radius: 50%; z-index: 3;
+  background: var(--ink-0); border: 1.5px solid var(--ink-fg-3); backface-visibility: hidden;
+}
+.seg-node--top { top: -5px; }
+.seg-node--bottom { bottom: -5px; }
+.seg.is-on .seg-node { border-color: var(--acc-ink); background: var(--acc-ink); }
+.seg-shade { position: absolute; inset: 0; z-index: 2; background: #050505; opacity: var(--shade, 0); pointer-events: none; backface-visibility: hidden; transition: opacity 0.2s; }
+.seg-sweep { position: absolute; top: 0; left: 0; height: 3px; width: 100%; z-index: 3; pointer-events: none; transform-origin: 0 0; transform: scaleX(0); opacity: 0; background: #fff; }
+.seg.is-on.swept .seg-sweep { animation: sweep 0.8s var(--ease-out) 1; }
+/* Live diagram: one signal runs the selected plate's main route, then stops. */
+.il-pulse { fill: none; stroke: var(--acc-paper); stroke-width: 7; stroke-linecap: round; stroke-dasharray: 70 1000; stroke-dashoffset: 70; opacity: 0; }
+.seg.is-on.swept .il-pulse { animation: pulse 1.5s 0.35s cubic-bezier(0.45, 0, 0.2, 1) 1 both; }
+@keyframes pulse { 0% { stroke-dashoffset: 70; opacity: 1; } 92% { opacity: 1; } 100% { stroke-dashoffset: -1000; opacity: 0; } }
+@keyframes sweep { 0% { transform: scaleX(0); opacity: 0.85; } 100% { transform: scaleX(1); opacity: 0; } }
+.seg-hit { position: absolute; inset: 0; z-index: 4; backface-visibility: hidden; }
+.seg-hit:focus-visible { outline: 3px solid var(--acc-ink); outline-offset: -8px; }
+
+/* ------------------------------------------------------------- the selected project, in front */
+.focus {
+  position: absolute; z-index: 3; left: var(--gutter); right: var(--gutter); bottom: 92px;
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 18px clamp(20px, 3vw, 48px); align-items: end;
+  pointer-events: none;
+}
+.focus > * { pointer-events: auto; }
+.focus-title {
+  font-size: clamp(3.4rem, 1.4rem + 6.4vw, 9.5rem);
+  font-weight: 680; line-height: 0.84; letter-spacing: -0.055em;
+  color: var(--ink-fg);
+  /* A knock-out edge in the room's colour keeps the name legible where it crosses a light plate. */
+  -webkit-text-stroke: 10px var(--ink-0);
+  paint-order: stroke fill;
+  animation: rise 0.6s var(--ease-out) both;
+}
+.focus-meta { max-width: 46ch; padding: 14px 16px; background: rgb(11 10 9 / 0.86); box-shadow: 0 20px 50px -20px rgb(0 0 0 / 0.9); animation: rise 0.6s 0.06s var(--ease-out) both; }
+.focus-kicker { font-size: 0.95rem; color: var(--fg-2); }
+.focus-status { margin-top: 8px; color: var(--fg); }
+.focus-q { margin-top: 10px; font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem); line-height: 1.35; color: var(--fg); }
+.focus-actions { display: flex; flex-direction: column; gap: 10px; padding-bottom: 6px; }
+.focus-actions .btn { justify-content: space-between; min-width: 210px; }
+.btn--ghost { background: rgb(11 10 9 / 0.72); }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } }
+
+/* Project tabs along the floor. */
+.scene-nav {
+  position: absolute; z-index: 3; left: var(--gutter); right: var(--gutter); bottom: 22px;
+  display: flex; align-items: center; gap: 10px;
+}
+.tabs { flex: 1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.tabs a {
+  display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 14px;
+  background: #171614; text-decoration: none; color: var(--fg-2);
+  transition: background-color 0.25s, color 0.25s;
+}
+.tabs a:hover { background: #22201d; color: var(--fg); }
+.tabs a[aria-current="true"] { background: #2a2723; color: var(--fg); box-shadow: inset 0 -2px 0 var(--acc); }
+.tab-index { font: 500 0.72rem/1 var(--mono); opacity: 0.7; }
+.tab-name { flex: 1; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tabs .glyph { color: currentColor; }
+.nav-btn {
+  flex: none; width: 48px; height: 48px; display: grid; place-items: center;
+  border: 0; background: #171614; cursor: pointer; font-size: 1.1rem;
+}
+.nav-btn:hover:not(:disabled) { background: #22201d; }
+.nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+
+/* ------------------------------------------------------------- stack switchboard */
+.board { width: 100%; max-width: var(--max); margin: 0 auto; padding: clamp(72px, 12vh, 140px) var(--gutter) 0; }
+.board-title { font-size: clamp(2.2rem, 1.4rem + 3vw, 4rem); font-weight: 650; letter-spacing: -0.045em; line-height: 1; max-width: 16ch; }
+.board-lede { margin-top: 14px; color: var(--fg-2); max-width: 56ch; }
+.board-body {
+  display: grid; grid-template-columns: minmax(0, 0.85fr) 40px minmax(0, 1.4fr); gap: 0;
+  margin-top: 40px; padding: clamp(18px, 2.4vw, 32px); background: #121110;
+  box-shadow: inset 0 1px 0 rgb(239 233 223 / 0.06), 0 40px 80px -50px rgb(0 0 0 / 0.9);
+}
+.switches { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; align-content: start; }
+.switch {
+  width: 100%; display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 12px;
+  border: 0; background: #1b1916; color: var(--fg-2); font-weight: 550; text-align: left; cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+.switch:hover { background: #24211d; color: var(--fg); }
+.switch-track { position: relative; flex: none; width: 34px; height: 18px; border-radius: 9px; background: #0a0a09; box-shadow: inset 0 0 0 1px rgb(239 233 223 / 0.18); transition: background-color 0.25s; }
+.switch-knob { position: absolute; top: 3px; left: 3px; width: 12px; height: 12px; border-radius: 50%; background: var(--fg-3); transition: transform 0.25s var(--ease-out), background-color 0.25s; }
+.switch[aria-pressed="true"] { background: #2a2723; color: var(--fg); }
+.switch[aria-pressed="true"] .switch-track { background: rgb(232 163 61 / 0.25); box-shadow: inset 0 0 0 1px var(--acc-ink); }
+.switch[aria-pressed="true"] .switch-knob { transform: translateX(16px); background: var(--acc-ink); box-shadow: 0 0 12px rgb(232 163 61 / 0.7); }
+.switch-count { margin-left: auto; font: 500 0.75rem/1 var(--mono); color: var(--fg-3); }
+/* The bus carries the signal from the switch panel to the readings. */
+.bus { position: relative; }
+.bus::before { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; transform: translateX(-50%); background: linear-gradient(180deg, var(--acc-ink), rgb(232 163 61 / 0.15)); }
+.readings { min-height: 100%; }
+.readings-head { font-size: 0.95rem; color: var(--fg-2); padding: 6px 0 14px; }
+.readings-list { display: grid; gap: 10px; }
+.readings-list li { padding: 16px 18px; background: #1b1916; box-shadow: inset 2px 0 0 var(--acc-ink); animation: reading 0.45s var(--ease-out) both; }
+@keyframes reading { from { opacity: 0; transform: translateX(-10px); } }
+.reading-top { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+.reading-title { font-size: 1.25rem; font-weight: 650; letter-spacing: -0.02em; text-decoration: none; }
+.reading-title:hover { text-decoration: underline; text-decoration-color: var(--acc); text-underline-offset: 5px; }
+.reading-status { margin-left: auto; color: var(--fg-2); }
+.reading-stack { margin-top: 8px; font: 500 0.82rem/1.4 var(--mono); color: var(--acc-ink); }
+.reading-why { margin-top: 4px; color: var(--fg-2); }
+.hub-badge--small { margin: 0; padding: 2px 7px; font-size: 0.72rem; }
+@media (max-width: 860px) {
+  .board-body { grid-template-columns: 1fr; gap: 18px; }
+  .bus { height: 24px; }
+  .bus::before { left: 24px; top: 0; bottom: 0; width: 2px; }
+  .reading-status { margin-left: 0; flex-basis: 100%; }
+}
+@media (max-width: 420px) {
+  .board-body { padding: 12px; }
+  .switches { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  .switch { padding: 0 8px; gap: 8px; font-size: 0.9rem; }
+  .switch > span:nth-child(2) { min-width: 0; overflow-wrap: anywhere; }
+  .switch-track { width: 28px; }
+  .switch[aria-pressed="true"] .switch-knob { transform: translateX(10px); }
+  .switch-count { display: none; }
+}
+
+/* ------------------------------------------------------------- more work */
+.index { width: 100%; max-width: var(--max); margin: 0 auto; padding: clamp(64px, 10vh, 120px) var(--gutter) clamp(48px, 8vh, 96px); }
+.index-title { font-size: clamp(2.2rem, 1.4rem + 3vw, 4rem); font-weight: 650; letter-spacing: -0.045em; line-height: 1; }
+.index-lede { margin-top: 14px; color: var(--fg-2); max-width: 60ch; }
+.tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(20px, 3vw, 40px); margin-top: 40px; }
+.tile { display: grid; grid-template-rows: auto 1fr; background: var(--bg-2); }
+.tile-visual { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: #0d0d0e; }
+.tile-visual img { width: 100%; height: 100%; object-fit: contain; }
+.tile-visual.plate { background: var(--paper-0); }
+.tile-visual .il { width: 100%; height: 100%; padding: 4% 6%; }
+.tile-tag {
+  position: absolute; top: 12px; right: 12px; font: 600 0.62rem/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 5px 7px; border: 1px solid currentColor; color: var(--ink-fg); background: rgb(11 10 9 / 0.75);
+}
+.tile-visual.plate .tile-tag { color: var(--paper-fg); background: transparent; }
+.tile-body { padding: 22px 24px 24px; }
+.hub-badge { display: inline-block; margin-bottom: 12px; padding: 4px 9px; font-size: 0.78rem; font-weight: 650; color: var(--on-acc); background: var(--acc); }
+.tile-title { font-size: 1.6rem; font-weight: 650; letter-spacing: -0.03em; line-height: 1.05; }
+.tile-title a { text-decoration: none; }
+.tile-title a:hover { text-decoration: underline; text-decoration-color: var(--acc); text-underline-offset: 6px; }
+.tile-kicker { margin-top: 6px; color: var(--fg-2); }
+.tile-status { margin-top: 12px; color: var(--fg-2); }
+.tile-text { margin-top: 12px; color: var(--fg-2); max-width: 60ch; }
+.tile .text-btn { margin-top: 8px; }
+.index-archive { margin-top: 36px; color: var(--fg-2); }
+.index-archive a { color: var(--fg); text-decoration-color: var(--acc); text-underline-offset: 4px; }
+
+/* ------------------------------------------------------------- contact, on paper */
+.reach { padding: clamp(64px, 12vh, 140px) var(--gutter); background: var(--paper-0); color: var(--paper-fg); }
+.reach > * { max-width: var(--max); margin-left: auto; margin-right: auto; }
+.reach-title { font-size: clamp(2.6rem, 1.4rem + 5vw, 6.5rem); font-weight: 680; letter-spacing: -0.055em; line-height: 0.92; }
+.reach-lede { margin-top: 18px; color: var(--paper-fg-2); font-size: 1.1rem; }
+.reach-mail {
+  display: block; margin-top: 26px; margin-bottom: 28px;
+  font-size: clamp(1.4rem, 0.9rem + 2.4vw, 3rem); font-weight: 600; letter-spacing: -0.03em; overflow-wrap: anywhere;
+  text-decoration: underline; text-decoration-color: var(--acc-paper); text-decoration-thickness: 3px; text-underline-offset: 8px;
+}
+.reach .btn { border-color: var(--paper-line-2); color: var(--paper-fg); }
+.reach .btn:hover { border-color: var(--paper-fg); }
+.reach :focus-visible { outline-color: var(--acc-paper); }
+
+/* ------------------------------------------------------------- portrait and phones: stacked scene */
+@media (max-width: 1100px) and (min-aspect-ratio: 4 / 5) {
+  .scene { --seg-w: min(64vw, 1060px); }
+  .focus-actions { flex-direction: row; }
+  .focus { grid-template-columns: auto minmax(0, 1fr); }
+  .focus-actions { grid-column: 1 / -1; }
+  .focus .focus-q { display: none; }
+}
+@media (max-width: 760px), (max-aspect-ratio: 4 / 5) {
+  .scene { --seg-w: 70vw; --seg-h: calc(var(--seg-w) * 0.7); height: auto; overflow: hidden; padding: 84px 0 20px; }
+  .scene::before, .scene::after { background-position: 50% 0; }
+  .scene-intro { position: relative; top: 0; left: auto; max-width: none; padding: 0 var(--gutter); }
+  .stage { position: relative; inset: auto; height: calc(var(--seg-h) + 64px); margin-top: 18px; perspective: 1100px; perspective-origin: 50% 20%; }
+  .band { left: 44%; top: 24px; }
+  .focus { position: relative; left: auto; right: auto; bottom: auto; margin: -34px var(--gutter) 0; grid-template-columns: 1fr; gap: 14px; }
+  .focus-title { font-size: clamp(3rem, 1rem + 10vw, 6rem); }
+  .focus-actions { flex-direction: row; flex-wrap: wrap; }
+  .focus-actions .btn { flex: 1 1 auto; min-width: 0; }
+  .scene-nav { position: relative; left: auto; right: auto; bottom: auto; margin: 24px var(--gutter) 0; flex-wrap: wrap; }
+  .tabs { order: 3; flex-basis: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .scene-nav .nav-btn:last-of-type { margin-left: auto; }
+  .tiles { grid-template-columns: 1fr; }
+}
+@media (max-width: 760px) {
+  .scene { --seg-w: 76vw; --seg-h: calc(var(--seg-w) * 0.78); }
+  .band { left: 45%; }
+  .seg-title { font-size: calc(var(--seg-w) * 0.07); }
+  .seg-index { font-size: 0.7rem; }
+  .plate-art { top: 22%; }
+}

@@ -1,32 +1,21 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
-import path from "path";
+import { defineConfig } from "vitest/config";
+import react from "@vitejs/plugin-react";
 
-export default defineConfig(({ isSsrBuild }) => ({
-  base: "/",
-  server: {
-    host: "::",
-    port: 8080,
-  },
+export default defineConfig({
   plugins: [react()],
-  build: {
-    // The prerender reads it to link lazy routes' stylesheets, then deletes it.
-    manifest: !isSsrBuild,
-    rollupOptions: isSsrBuild
-      ? {}
-      : {
-          output: {
-            // Split the slow-moving vendor code so a content edit does not
-            // invalidate the whole cached payload.
-            manualChunks: {
-              react: ["react", "react-dom", "react-router-dom"],
-            },
-          },
-        },
-  },
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
+  server: {
+    fs: {
+      // The repository root is Vite's root, so keep private and local-only
+      // material unreachable from the dev server.
+      deny: [".env", ".env.*", "*.{crt,pem}", "**/Rifaque_Profile_Knowledge_Base.md", "**/.agents/**", "**/.claude/**", "**/.git/**"],
     },
   },
-}));
+  build: {
+    // Images come from knowledge-base/assets; never inline them into JS.
+    assetsInlineLimit: 0,
+  },
+  test: {
+    include: ["src/**/*.test.ts", "src/**/*.test.tsx"],
+    environment: "node",
+  },
+});

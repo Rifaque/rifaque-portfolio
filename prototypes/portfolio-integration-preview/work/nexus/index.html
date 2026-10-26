@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en-GB" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nexus · Case study · Rifaque Akrami</title>
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#08090b">
+<script>
+  (function () {
+    var d = document.documentElement, t = "dark", m;
+    try { if (localStorage.getItem("rsx-theme") === "light") t = "light"; } catch (e) {}
+    if ((m = /[?&]theme=(dark|light)/.exec(location.search))) t = m[1];
+    d.dataset.theme = t;
+    if (/[?&]motion=reduce/.test(location.search)) d.dataset.motion = "reduce";
+    document.querySelector('meta[name="theme-color"]').content = t === "light" ? "#f4f5f7" : "#08090b";
+  })();
+</script>
+<link rel="icon" href="../../brand/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../../brand/favicon-32-dark.png">
+<link rel="apple-touch-icon" href="../../brand/favicon-180-dark.png">
+<link rel="stylesheet" href="../../css/tokens.css">
+<link rel="stylesheet" href="../../css/app.css">
+<link rel="stylesheet" href="../../css/stage3d.css">
+<link rel="stylesheet" href="../../css/projects.css">
+<link rel="stylesheet" href="../../css/cs.css">
+</head>
+<body data-project="nexus">
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="wrap top-row">
+    <a class="mark" href="../../" aria-label="RSX Develops, home"><img class="wm wm-dark" src="../../brand/rsx-develops-wordmark-dark.png" srcset="../../brand/rsx-develops-wordmark-dark-2x.png 2x" width="774" height="109" alt=""><img class="wm wm-light" src="../../brand/rsx-develops-wordmark-light.png" srcset="../../brand/rsx-develops-wordmark-light-2x.png 2x" width="612" height="94" alt=""></a>
+    <nav class="nav" aria-label="Sections">
+      <a href="../../?project=nexus#work" data-sound="press">Work</a>
+      <a href="../../#about" data-sound="press">About</a>
+      <a href="../../#experience" data-sound="press">Experience</a>
+      <a href="../../#contact" data-sound="press">Contact</a>
+    </nav>
+    <div class="prefs">
+      <button class="pref" id="theme-switch" type="button" aria-label="Switch to light theme" title="Switch to light theme">
+        <svg class="pref-icon" viewBox="0 0 20 20" aria-hidden="true"><circle class="i-sun" cx="10" cy="10" r="3.6"/><path class="i-rays" d="M10 1.8v2.4M10 15.8v2.4M1.8 10h2.4M15.8 10h2.4M4.2 4.2l1.7 1.7M14.1 14.1l1.7 1.7M4.2 15.8l1.7-1.7M14.1 5.9l1.7-1.7"/><path class="i-moon" d="M15.5 12.6A6.5 6.5 0 0 1 7.4 4.5a6.5 6.5 0 1 0 8.1 8.1z"/></svg>
+        <span class="pref-label">Light</span>
+      </button>
+      <button class="pref pref-square" id="sound-switch" type="button" data-on="false" aria-label="Enable sound" title="Enable sound">
+        <svg class="pref-icon" viewBox="0 0 20 20" aria-hidden="true"><path class="i-spk" d="M3.5 7.5h3l4-3.2v11.4l-4-3.2h-3z"/><path class="i-wave" d="M13.4 7.2a4 4 0 0 1 0 5.6M15.6 5a7 7 0 0 1 0 10"/><path class="i-mute" d="M13.5 7.5l4 5M17.5 7.5l-4 5"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+<main id="main" class="cs wrap">
+  <nav class="crumbs cs-crumb" aria-label="Breadcrumb"><a data-back href="../../#work">Projects</a><span aria-hidden="true">/</span><span aria-current="page">Nexus</span></nav>
+
+  <header class="cs-intro">
+    <div>
+      <p class="cs-kicker">Personal AI operating layer · case study</p>
+      <h1>Nexus</h1>
+      <div data-status></div>
+      <p class="cs-sum">A local-first, voice-first layer for one owner on one Windows machine. Deterministic recognition handles what it can without a model, a reasoning step is reached only when it declines, and every effect passes through one governed tool runtime.</p>
+    </div>
+    <dl class="cs-facts">
+      <dt>Role</dt><dd>Personal project, sole author</dd>
+      <dt>Period</dt><dd>Jun 2026 to now</dd>
+      <dt>Runs on</dt><dd>Windows, one owner, one machine</dd>
+      <dt>Source</dt><dd>Private; no public demo</dd>
+      <dt>Stack</dt><dd>Python 3.13 · FastAPI · PostgreSQL + pgvector · pywebview / WebView2 · faster-whisper · Anthropic Claude · Ollama</dd>
+    </dl>
+  </header>
+
+  <section class="cs-open" aria-label="The Nexus request path">
+    <div class="cs-3d" data-scene="nexus" data-label="the governed request path on a glass panel, in front of a monitor that carries only a label"></div>
+  </section>
+
+  <section class="cs-sec" aria-labelledby="h-question">
+    <div class="cs-text">
+      <h2 id="h-question">The question</h2>
+      <p class="cs-q">How can a personal AI stay useful without capability quietly becoming authority?</p>
+      <p>Most assistants become more useful by being allowed to do more. Nexus keeps those apart: it can hold a great deal of context about its owner and their work, while what it may actually change on the machine stays <b>narrow, explicit and auditable</b>.</p>
+      <p>There is no published interface. The drawing above is an illustration, and the monitor behind it carries only a label.</p>
+    </div>
+    <div class="cs-vis">
+      <figure class="cs-fig" data-dia="nexus-layers" data-cap="Recognise and decide in front; act only inside ToolRuntime."></figure>
+    </div>
+  </section>
+
+  <section class="cs-sec flip" aria-labelledby="h-words">
+    <div class="cs-text">
+      <h2 id="h-words">From words to effects</h2>
+      <p>A request passes through layers that each decide one thing. Only the last one can change anything.</p>
+      <ul class="works">
+        <li><b>Command Fabric:</b> deterministic, model-less recognition. "Set a timer for ten minutes" becomes a typed intent with typed slots, or is marked ambiguous, unsupported or a matter for the assistant. It cannot execute anything.</li>
+        <li><b>Response engine:</b> deterministic wording for structured outcomes, with no model call.</li>
+        <li><b>Cortex:</b> reached only when the deterministic layers decline. One bounded decision: answer, pick one governed capability from a closed set, ask, or delegate.</li>
+        <li><b>ToolRuntime:</b> the only place an effect happens, behind a capability gate and a policy in which one deny beats any number of allows.</li>
+      </ul>
+    </div>
+    <div class="cs-vis">
+      <figure class="cs-fig" data-dia="nexus" data-cap="The governed request path."></figure>
+    </div>
+  </section>
+
+  <section class="cs-sec" aria-labelledby="h-approval">
+    <div class="cs-text">
+      <h2 id="h-approval">Approval that cannot drift</h2>
+      <p>A consequential call needs explicit owner confirmation, and that approval is <b>bound to a hash of the computed effect</b>. The executor computes the effect itself; the model's description of it is never trusted. If the effect changes after approval, the approval is void.</p>
+      <p>Mutations are checkpointed in a shadow Git repository, and every call is recorded in an append-only, hash-chained ledger, denials and failures included.</p>
+    </div>
+    <div class="cs-vis">
+      <figure class="cs-fig" data-dia="nexus-approval" data-cap="The owner approves an effect, not a description of one."></figure>
+    </div>
+  </section>
+
+  <section class="cs-sec solo" aria-labelledby="h-decisions">
+    <div class="cs-text">
+      <h2 id="h-decisions">Decisions and trade-offs</h2>
+      <ul class="works">
+        <li><b>The defaults refuse.</b> The standard policy stack is read-only, so every call at or above "mutate" is denied before confirmation is reached; mutating stacks are explicit opt-in configurations.</li>
+        <li><b>Dangerous capabilities stay absent.</b> Host control registers no tool at all unless configured, and there is no shell, PowerShell or run-command tool.</li>
+        <li><b>Deterministic first.</b> A model is used only where the deterministic layers cannot answer, which keeps common requests fast and predictable.</li>
+        <li><b>Voice without listening.</b> Push-to-talk with no wake word and no background listening; speech-to-text runs locally on faster-whisper.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="cs-sec solo" aria-labelledby="h-status">
+    <div class="cs-text">
+      <h2 id="h-status">Status and limits</h2>
+      <div data-status></div>
+      <ul class="works">
+        <li>Private alpha: Windows only, single owner, unreleased, with no public demo or source.</li>
+        <li>The newest tag predates the desktop shell and voice. Those exist on working branches and have not been tagged or released.</li>
+        <li>Spoken acceptance of the voice endpoint on the owner's machine is paused.</li>
+        <li>No screenshot is shown: existing Surface captures contain personal content.</li>
+      </ul>
+      <div class="cs-links" data-links data-none="No public source or demo."></div>
+    </div>
+  </section>
+
+  <nav class="cs-next" id="cs-next" aria-label="Other case studies"></nav>
+</main>
+<footer class="foot"><div class="wrap foot-row"><p>© 2026 Rifaque Akrami</p></div></footer>
+<script type="module" src="../../js/projects/space/case-studies/cs.js"></script>
+</body>
+</html>

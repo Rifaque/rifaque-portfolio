@@ -1,7 +1,0 @@
-/*
- * Tailwind supplies the reset (preflight) and a few utilities such as
- * sr-only. The design system itself lives in src/styles, imported after this
- * file in main.tsx so it wins over the reset.
- */
-@tailwind base;
-@tailwind utilities;

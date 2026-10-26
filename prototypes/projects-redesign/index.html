@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en-GB" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projects section: three concepts · RSX Develops</title>
+<meta name="color-scheme" content="dark light">
+<script>
+  (function () {
+    var t = "dark";
+    try { if (localStorage.getItem("rsx-theme") === "light") t = "light"; } catch (e) {}
+    var m = /[?&]theme=(dark|light)/.exec(location.search); if (m) t = m[1];
+    document.documentElement.dataset.theme = t;
+  })();
+</script>
+<link rel="icon" href="../../public/rsx-develops-brand-assets/favicon-32-dark.png">
+<link rel="stylesheet" href="shared/base.css">
+<style>
+  .land { padding-block: 64px 96px; display: grid; gap: 40px; }
+  .land h1 { font-size: clamp(2.2rem, 4vw, 3.4rem); font-weight: 460; font-stretch: 112%; letter-spacing: -0.035em; line-height: 1; }
+  .land > p { color: var(--fg-2); max-width: 64ch; }
+  .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--col-gap); }
+  .card { display: grid; gap: 10px; align-content: start; padding: 22px; border: 1px solid var(--line-3); border-radius: var(--r-surf); text-decoration: none; transition: background-color 180ms ease; }
+  .card:hover { background: var(--surf); }
+  .card small { color: var(--fg-3); font: 600 0.72rem var(--mono); }
+  .card h2 { font-size: 1.5rem; font-weight: 520; font-stretch: 110%; letter-spacing: -0.02em; }
+  .card p { color: var(--fg-2); font-size: 0.94rem; }
+  .card span { font-size: 0.86rem; text-decoration: underline; text-underline-offset: 4px; }
+  .land-wm { width: 180px; height: auto; }
+  :root[data-theme="dark"] .wm-light, :root[data-theme="light"] .wm-dark { display: none; }
+  @media (max-width: 860px) { .cards { grid-template-columns: minmax(0, 1fr); } }
+</style>
+</head>
+<body>
+<main class="wrap land">
+  <div>
+    <img class="land-wm wm-dark" src="../../public/rsx-develops-brand-assets/rsx-develops-wordmark-dark.png" srcset="../../public/rsx-develops-brand-assets/rsx-develops-wordmark-dark.png 1x, ../../public/rsx-develops-brand-assets/rsx-develops-wordmark-dark-2x.png 2x" width="774" height="109" alt="RSX Develops">
+    <img class="land-wm wm-light" src="../../public/rsx-develops-brand-assets/rsx-develops-wordmark-light.png" srcset="../../public/rsx-develops-brand-assets/rsx-develops-wordmark-light.png 1x, ../../public/rsx-develops-brand-assets/rsx-develops-wordmark-light-2x.png 2x" width="612" height="94" alt="RSX Develops">
+  </div>
+  <h1>Projects section: three concepts</h1>
+  <p>Three separate alternatives for the same section, with the same six projects and the same Also built line. Each opens on its own page; the hero and the other sections are unchanged and shown only as labelled bands.</p>
+  <div class="cards">
+    <a class="card" href="capability-carousel/"><small>Concept A</small><h2>Capability Carousel</h2><p>Scroll through six project stations, each with its own transition, from a sticky frame with a project rail. Becomes a plain vertical sequence on phones and with reduced motion.</p><span>Open Concept A</span></a>
+    <a class="card" href="interactive-project-space/"><small>Concept B</small><h2>Interactive Project Space</h2><p>A workbench of the devices the projects run on. Each screen lists its projects; choosing one brings its devices forward with its evidence on their screens.</p><span>Open Concept B</span></a>
+    <a class="card" href="technical-evidence-explorer/"><small>Concept C</small><h2>Technical Evidence Explorer</h2><p>Real interfaces beside the engineering that implements them. Numbered parts link the two; an evidence ledger states what is missing.</p><span>Open Concept C</span></a>
+  </div>
+</main>
+</body>
+</html>

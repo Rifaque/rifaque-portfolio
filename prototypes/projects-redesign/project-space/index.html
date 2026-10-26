@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en-GB" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projects · Concept D, Project Space · RSX Develops</title>
+<meta name="color-scheme" content="dark light">
+<script>
+  (function () {
+    var d = document.documentElement, t = "dark", m;
+    try { if (localStorage.getItem("rsx-theme") === "light") t = "light"; } catch (e) {}
+    if ((m = /[?&]theme=(dark|light)/.exec(location.search))) t = m[1];
+    d.dataset.theme = t;
+    if (/[?&]motion=reduce/.test(location.search)) d.dataset.motion = "reduce";
+  })();
+</script>
+<link rel="icon" href="../../../public/rsx-develops-brand-assets/favicon-32-dark.png">
+<link rel="stylesheet" href="../shared/base.css">
+<link rel="stylesheet" href="stage3d.css">
+<link rel="stylesheet" href="space.css">
+</head>
+<body>
+<nav aria-label="Skip link"><a class="skip" href="#projects">Skip to the projects</a></nav>
+<aside class="ctx ctx-hero" aria-label="Context: hero"><div class="wrap"><h1 class="sr-only">Projects section prototype: Concept D, Project Space</h1><b>Hero (unchanged, not shown)</b><span>The Projection room sits above this section. Only the Projects section is being explored here.</span></div></aside>
+
+<main>
+  <section class="sp wrap" id="projects" aria-labelledby="sp-title">
+    <div class="sec-head sp-head">
+      <h2 id="sp-title">Projects</h2>
+      <p>Each project in the environment it runs in. Choose one, then explore it.</p>
+    </div>
+    <div class="sp-grid">
+      <nav class="sp-side" aria-label="Projects"><ol id="side"></ol></nav>
+      <div class="sp-stage" id="stage"></div>
+      <div class="sp-info" id="info"></div>
+    </div>
+    <div id="also"></div>
+    <p class="sr-only" id="announce" aria-live="polite"></p>
+  </section>
+</main>
+
+<aside class="ctx ctx-next" id="next-section" aria-label="Context: next section"><div class="wrap"><h2>Bill of materials</h2><span>Next section (unchanged, not shown).</span></div></aside>
+
+<dialog class="sp-detail" id="detail" aria-labelledby="dt-title">
+  <div class="dt-panel" id="dt-panel"></div>
+</dialog>
+
+<script type="module" src="space.js"></script>
+</body>
+</html>

@@ -1,26 +1,30 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-GB" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <!-- Before first paint: the pinned selected-work stage needs JavaScript
-         to follow the scroll, so without it the stacked layout is used. -->
-    <script>document.documentElement.classList.add("js")</script>
-    <!--
-      Title, description, robots, canonical, Open Graph and JSON-LD are
-      written per route by scripts/prerender.mjs from src/content/routes.ts.
-      In development they are applied at runtime by RouteHead.
-    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <script>
+      // Before first paint: mark JavaScript, and apply the stored theme so the wrong one never flashes.
+      (function () {
+        var d = document.documentElement, t = "dark", m;
+        d.classList.add("js");
+        try { if (localStorage.getItem("rsx-theme") === "light") t = "light"; } catch (e) {}
+        if ((m = /[?&]theme=(dark|light)/.exec(location.search))) t = m[1];
+        d.dataset.theme = t;
+        if (/[?&]motion=reduce/.test(location.search)) d.dataset.motion = "reduce";
+      })();
+    </script>
     <!--app-head-->
     <meta name="author" content="Rifaque Ahmed Akrami" />
-    <meta name="theme-color" content="#0b0b0c" />
-    <meta name="color-scheme" content="dark" />
-    <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#08090b" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-96x96.png" sizes="96x96" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
+    <meta name="apple-mobile-web-app-title" content="RSX Develops" />
     <!--app-preload-->
   </head>
-
   <body>
     <div id="root"><!--app-html--></div>
     <script type="module" src="/src/main.tsx"></script>

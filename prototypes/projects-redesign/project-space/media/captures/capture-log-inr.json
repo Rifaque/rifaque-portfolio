@@ -1,0 +1,112 @@
+[
+  {
+    "name": "btl-home-1440-inr",
+    "url": "https://btl.hubzero.in/",
+    "status": 200,
+    "size": [
+      1440,
+      900
+    ],
+    "scroll": 0,
+    "currency": "INR",
+    "date": "2026-10-26T10:50:27.900Z",
+    "title": "Bhatkal Time Luxe",
+    "hits": [],
+    "prices": [
+      "₹3,380",
+      "₹4,609",
+      "₹9,834",
+      "₹5,531"
+    ]
+  },
+  {
+    "name": "btl-product-1440-inr",
+    "url": "https://btl.hubzero.in/product/67f2ba0c0b835fcd943706f3",
+    "status": 200,
+    "size": [
+      1440,
+      900
+    ],
+    "scroll": 0,
+    "currency": "INR",
+    "date": "2026-10-26T10:50:35.886Z",
+    "title": "Rolex Mens Watch — Rolex | Bhatkal Time Luxe",
+    "hits": [],
+    "prices": [
+      "₹5,531",
+      "₹9,527",
+      "₹5,531",
+      "₹5,531"
+    ]
+  },
+  {
+    "name": "btl-new-arrivals-grid-1440-inr",
+    "url": "https://btl.hubzero.in/new-arrivals",
+    "status": 200,
+    "size": [
+      1440,
+      900
+    ],
+    "scroll": 640,
+    "currency": "INR",
+    "date": "2026-10-26T10:50:43.851Z",
+    "title": "New Arrivals | Bhatkal Time Luxe",
+    "hits": [],
+    "prices": [
+      "₹5,531",
+      "₹9,527",
+      "₹5,531",
+      "₹9,527"
+    ]
+  },
+  {
+    "name": "btl-home-390-inr",
+    "url": "https://btl.hubzero.in/",
+    "status": 200,
+    "size": [
+      390,
+      844
+    ],
+    "scroll": 0,
+    "currency": "INR (remembered from the desktop session)",
+    "date": "2026-10-26T10:50:48.529Z",
+    "title": "Bhatkal Time Luxe",
+    "hits": [
+      {
+        "href": "https://wa.me/[phone number redacted]",
+        "box": [
+          324,
+          722,
+          50,
+          50
+        ]
+      }
+    ],
+    "prices": [
+      "₹4,609",
+      "₹9,834",
+      "₹5,531",
+      "₹10,756"
+    ]
+  },
+  {
+    "name": "btl-product-390-inr",
+    "url": "https://btl.hubzero.in/product/67f2ba0c0b835fcd943706f3",
+    "status": 200,
+    "size": [
+      390,
+      844
+    ],
+    "scroll": 0,
+    "currency": "INR (remembered from the desktop session)",
+    "date": "2026-10-26T10:50:54.116Z",
+    "title": "Rolex Mens Watch — Rolex | Bhatkal Time Luxe",
+    "hits": [],
+    "prices": [
+      "₹5,531",
+      "₹9,527",
+      "₹5,531",
+      "₹9,527"
+    ]
+  }
+]

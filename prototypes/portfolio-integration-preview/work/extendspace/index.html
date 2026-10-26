@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en-GB" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ExtendSpace · Case study · Rifaque Akrami</title>
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#08090b">
+<script>
+  (function () {
+    var d = document.documentElement, t = "dark", m;
+    try { if (localStorage.getItem("rsx-theme") === "light") t = "light"; } catch (e) {}
+    if ((m = /[?&]theme=(dark|light)/.exec(location.search))) t = m[1];
+    d.dataset.theme = t;
+    if (/[?&]motion=reduce/.test(location.search)) d.dataset.motion = "reduce";
+    document.querySelector('meta[name="theme-color"]').content = t === "light" ? "#f4f5f7" : "#08090b";
+  })();
+</script>
+<link rel="icon" href="../../brand/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../../brand/favicon-32-dark.png">
+<link rel="apple-touch-icon" href="../../brand/favicon-180-dark.png">
+<link rel="stylesheet" href="../../css/tokens.css">
+<link rel="stylesheet" href="../../css/app.css">
+<link rel="stylesheet" href="../../css/stage3d.css">
+<link rel="stylesheet" href="../../css/projects.css">
+<link rel="stylesheet" href="../../css/cs.css">
+</head>
+<body data-project="extendspace">
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="wrap top-row">
+    <a class="mark" href="../../" aria-label="RSX Develops, home"><img class="wm wm-dark" src="../../brand/rsx-develops-wordmark-dark.png" srcset="../../brand/rsx-develops-wordmark-dark-2x.png 2x" width="774" height="109" alt=""><img class="wm wm-light" src="../../brand/rsx-develops-wordmark-light.png" srcset="../../brand/rsx-develops-wordmark-light-2x.png 2x" width="612" height="94" alt=""></a>
+    <nav class="nav" aria-label="Sections">
+      <a href="../../?project=extendspace#work" data-sound="press">Work</a>
+      <a href="../../#about" data-sound="press">About</a>
+      <a href="../../#experience" data-sound="press">Experience</a>
+      <a href="../../#contact" data-sound="press">Contact</a>
+    </nav>
+    <div class="prefs">
+      <button class="pref" id="theme-switch" type="button" aria-label="Switch to light theme" title="Switch to light theme">
+        <svg class="pref-icon" viewBox="0 0 20 20" aria-hidden="true"><circle class="i-sun" cx="10" cy="10" r="3.6"/><path class="i-rays" d="M10 1.8v2.4M10 15.8v2.4M1.8 10h2.4M15.8 10h2.4M4.2 4.2l1.7 1.7M14.1 14.1l1.7 1.7M4.2 15.8l1.7-1.7M14.1 5.9l1.7-1.7"/><path class="i-moon" d="M15.5 12.6A6.5 6.5 0 0 1 7.4 4.5a6.5 6.5 0 1 0 8.1 8.1z"/></svg>
+        <span class="pref-label">Light</span>
+      </button>
+      <button class="pref pref-square" id="sound-switch" type="button" data-on="false" aria-label="Enable sound" title="Enable sound">
+        <svg class="pref-icon" viewBox="0 0 20 20" aria-hidden="true"><path class="i-spk" d="M3.5 7.5h3l4-3.2v11.4l-4-3.2h-3z"/><path class="i-wave" d="M13.4 7.2a4 4 0 0 1 0 5.6M15.6 5a7 7 0 0 1 0 10"/><path class="i-mute" d="M13.5 7.5l4 5M17.5 7.5l-4 5"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+<main id="main" class="cs wrap">
+  <nav class="crumbs cs-crumb" aria-label="Breadcrumb"><a data-back href="../../#work">Projects</a><span aria-hidden="true">/</span><span aria-current="page">ExtendSpace</span></nav>
+
+  <header class="cs-intro">
+    <div>
+      <p class="cs-kicker">Windows to Android second screen · case study</p>
+      <h1>ExtendSpace</h1>
+      <div data-status></div>
+      <p class="cs-sum">A Windows host and an Android companion that stream the desktop to a tablet over USB. The wired path is the first milestone and the current focus; ordinary use is not possible yet, because Connect is still disabled.</p>
+    </div>
+    <dl class="cs-facts">
+      <dt>Role</dt><dd>Personal project, sole author</dd>
+      <dt>Period</dt><dd>Oct 2026 to now</dd>
+      <dt>Runs on</dt><dd>Windows host, Android tablet</dd>
+      <dt>Licence</dt><dd>MIT</dd>
+      <dt>Stack</dt><dd>C# / .NET 10 · WinUI 3 · Kotlin · Jetpack Compose · H.264 (Media Foundation, MediaCodec) · USB transport</dd>
+    </dl>
+  </header>
+
+  <section class="cs-open" aria-label="Windows host, USB cable and Android tablet">
+    <div class="cs-3d" data-scene="extendspace" data-label="a Windows host monitor and an Android tablet joined by a USB cable"></div>
+  </section>
+
+  <section class="cs-sec" aria-labelledby="h-aim">
+    <div class="cs-text">
+      <h2 id="h-aim">The aim, and the order of work</h2>
+      <p class="cs-q">Can a tablet on a USB cable become a dependable second screen for Windows?</p>
+      <p>Mirroring first, true extension later; extension needs a virtual display driver on Windows. The work so far is the streaming pipeline and the session machinery around it.</p>
+      <ul class="works">
+        <li><b>First: USB, wired.</b> The current focus is finishing this path.</li>
+        <li><b>Then: Wi-Fi, wireless.</b> Planned after the wired milestone, when development resumes. It is not implemented.</li>
+      </ul>
+    </div>
+    <div class="cs-vis">
+      <figure class="cs-fig" data-dia="extendspace-roadmap" data-cap="Wired first; wireless only after the wired milestone."></figure>
+    </div>
+  </section>
+
+  <section class="cs-sec flip" aria-labelledby="h-built">
+    <div class="cs-text">
+      <h2 id="h-built">How it is put together</h2>
+      <ul class="works">
+        <li><b>Windows host</b> in C# and WinUI 3: display capture and hardware H.264 encoding behind a production session owner.</li>
+        <li><b>Android companion</b> in Kotlin and Jetpack Compose: link, decoder ownership and surface handling, with a session state model covered by unit tests.</li>
+        <li><b>A draft wire protocol</b>, implemented on both sides, over a USB transport with reconnection.</li>
+      </ul>
+      <p>The host screen in the 3D view is an illustration: no capture of the host interface is published.</p>
+    </div>
+    <div class="cs-vis">
+      <figure class="cs-fig" data-dia="extendspace" data-cap="Capture and encode on Windows, USB, decode and draw on the tablet."></figure>
+    </div>
+  </section>
+
+  <section class="cs-sec" aria-labelledby="h-tested">
+    <div class="cs-text">
+      <h2 id="h-tested">What has been tested</h2>
+      <p>On one PC and one tablet over USB, the production session path streamed a <b>1080p60 test pattern for ten minutes: 36,081 frames</b> sent, all decoded and released to the tablet's surface.</p>
+      <p>These runs were driven by gated acceptance tests on the PC and a debug-only screen on the tablet. They show the pipeline working on one setup; they are not broad device validation.</p>
+    </div>
+    <div class="cs-vis">
+      <figure class="cs-fig" data-media="extendspace 0"></figure>
+    </div>
+  </section>
+
+  <section class="cs-sec flip" aria-labelledby="h-recover">
+    <div class="cs-text">
+      <h2 id="h-recover">Recovering, not restarting</h2>
+      <p>The USB link recovers from a pulled cable with video still flowing afterwards.</p>
+      <p>Decoders are created on a dedicated owner thread, never on the reader thread, and a creation is used only if it still matches the stream that is wanted. Frames that arrive meanwhile wait in order, within limits; beyond that, the stream skips to the next keyframe.</p>
+    </div>
+    <div class="cs-vis">
+      <figure class="cs-fig" data-dia="extendspace-recovery" data-cap="A pulled cable costs a keyframe, not the session."></figure>
+    </div>
+  </section>
+
+  <section class="cs-sec solo" aria-labelledby="h-status">
+    <div class="cs-text">
+      <h2 id="h-status">Status and limits</h2>
+      <div data-status></div>
+      <ul class="works">
+        <li>Connect is disabled in both apps, and each says so in its own interface.</li>
+        <li>Wi-Fi is planned after the wired milestone. Pairing and input forwarding do not exist yet.</li>
+        <li>The virtual display driver for extension is not implemented; only its feasibility has been researched.</li>
+        <li>Tested on one PC and one tablet only.</li>
+      </ul>
+      <div class="cs-links" data-links data-none="No public link: the public repository predates this work."></div>
+    </div>
+  </section>
+
+  <nav class="cs-next" id="cs-next" aria-label="Other case studies"></nav>
+</main>
+<footer class="foot"><div class="wrap foot-row"><p>© 2026 Rifaque Akrami</p></div></footer>
+<script type="module" src="../../js/projects/space/case-studies/cs.js"></script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en-GB" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RSX Develops · Exploded View prototype</title>
+<meta name="description" content="Design prototype: RSX Develops, the work of Rifaque Akrami, shown as projects taken apart into their layers.">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#060a13">
+<script>
+  // Before first paint: dark unless the visitor chose light. No flash.
+  (function () {
+    var t = "dark";
+    try { if (localStorage.getItem("rsx-theme") === "light") t = "light"; } catch (e) {}
+    var q = /[?&]theme=(dark|light)/.exec(location.search);
+    if (q) t = q[1];
+    document.documentElement.dataset.theme = t;
+    if (/[?&]motion=reduce/.test(location.search)) document.documentElement.dataset.motion = "reduce";
+  })();
+</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect x=%224%22 y=%2210%22 width=%2220%22 height=%2214%22 rx=%224%22 fill=%22none%22 stroke=%22%2345c3ff%22 stroke-width=%223%22/%3E%3Cpath d=%22M10 7h16a3 3 0 0 1 3 3v11%22 fill=%22none%22 stroke=%22%238693ab%22 stroke-width=%222.5%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<a class="skip" href="#work">Skip to the work</a>
+
+<header class="top">
+  <a class="mark" href="#top" aria-label="RSX Develops, home">
+    <span class="mark-glyph" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="mark-word"><b>RSX</b> Develops</span>
+  </a>
+  <nav class="nav" aria-label="Sections">
+    <a href="#work">Work</a>
+    <a href="#profile">Profile</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <div class="prefs">
+    <button class="switch" id="theme-switch" type="button" role="switch" aria-checked="false">
+      <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+      <span class="switch-label">Light theme</span>
+    </button>
+    <button class="switch" id="sound-switch" type="button" role="switch" aria-checked="false">
+      <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+      <span class="switch-label">Sound</span>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" id="work" aria-labelledby="hero-title">
+    <div class="hero-intro">
+      <p class="who"><b>RSX Develops</b> is where Rifaque Akrami, a software engineer, builds products and systems.</p>
+      <h1 id="hero-title" class="hero-line">Every project, <em>taken apart.</em></h1>
+      <p class="hero-hint">Pick one. The interface sits in front; the layers underneath are how it actually works.</p>
+
+      <div class="rail" role="tablist" aria-label="Projects" aria-orientation="vertical" id="rail"></div>
+      <a class="rail-more" href="#more">Layers, BlueTap, QueryCraft and the archive ↓</a>
+    </div>
+
+    <div class="stage-wrap">
+      <div class="stage" id="stage" aria-hidden="true">
+        <div class="rig" id="rig"></div>
+      </div>
+      <div class="readout" id="readout" role="tabpanel" aria-live="off"></div>
+    </div>
+  </section>
+
+  <section class="band trace" id="trace" aria-labelledby="trace-title">
+    <div class="band-head">
+      <h2 id="trace-title">Follow a technology into the work</h2>
+      <p>Switch one on. Every project that used it lights up, straight from the project records.</p>
+    </div>
+    <div class="trace-body">
+      <div class="trace-switches" id="tech" role="group" aria-label="Technologies"></div>
+      <ol class="trace-map" id="trace-map" aria-live="polite"></ol>
+    </div>
+  </section>
+
+  <section class="band profile" id="profile" aria-labelledby="profile-title">
+    <div class="profile-intro">
+      <h2 id="profile-title">The person behind the layers</h2>
+      <p class="profile-lede">I'm Rifaque Akrami. I work across the stack, and the parts I keep returning to are backend architecture and retrieval: making software more capable without making it less understandable or controllable.</p>
+      <p>Alongside the personal projects above, I co-founded HubZero, an engineering studio, where I work on client delivery, reusable foundations and the infrastructure things run on.</p>
+      <p class="profile-where">Bhatkal, Karnataka, India · Open to relocation and remote roles.</p>
+    </div>
+    <ol class="strata" id="strata" aria-label="Experience and education"></ol>
+    <div class="rules">
+      <h3>How the work tends to go</h3>
+      <ul id="rules"></ul>
+    </div>
+  </section>
+
+  <section class="band more" id="more" aria-labelledby="more-title">
+    <div class="band-head">
+      <h2 id="more-title">More work</h2>
+      <p>Smaller and earlier builds. Each one says where it stands.</p>
+    </div>
+    <ul class="more-list" id="more-list"></ul>
+    <p class="archive-link"><a href="#more" data-note="archive">Archive: DevPilot, ZeroLink and coursework →</a></p>
+  </section>
+
+  <section class="band contact" id="contact" aria-labelledby="contact-title">
+    <h2 id="contact-title">Talk about a role or a build</h2>
+    <p class="contact-sub">Software engineering roles. Open to relocation and remote roles.</p>
+    <div class="contact-actions">
+      <a class="key key-primary" href="mailto:rifaque.rs@gmail.com" data-sound="press">rifaque.rs@gmail.com</a>
+      <a class="key" href="https://github.com/Rifaque" data-sound="press">GitHub</a>
+      <a class="key" href="https://www.linkedin.com/in/rifaque-akrami/" data-sound="press">LinkedIn</a>
+      <a class="key" id="resume-link" href="../../public/resume/Rifaque_Resume.pdf" hidden data-sound="press">Résumé (PDF)</a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <p><b>RSX Develops</b> is a personal identity, not a company. © 2026 Rifaque Ahmed Akrami.</p>
+  <p class="foot-quiet">Support the work: <a href="https://github.com/sponsors/Rifaque">GitHub Sponsors</a> · <a href="https://www.buymeacoffee.com/rsxdevelops">Buy Me a Coffee</a></p>
+</footer>
+
+<dialog class="dossier" id="dossier" aria-labelledby="d-title">
+  <div class="dossier-sheet" id="dossier-sheet">
+    <div class="dossier-bar">
+      <button class="key key-small" type="button" id="d-close" data-sound="none">← Back to the work <kbd>Esc</kbd></button>
+      <span class="dossier-count" id="d-count"></span>
+      <span class="dossier-nav">
+        <button class="key key-small" type="button" id="d-prev" data-sound="none"></button>
+        <button class="key key-small" type="button" id="d-next" data-sound="none"></button>
+      </span>
+    </div>
+    <article class="dossier-body" id="d-body"></article>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
