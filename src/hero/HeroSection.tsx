@@ -9,6 +9,11 @@ const VIEW_TEXT: Record<HeroView, string> = {
   s: "Seen from above, it is the S on the floor.",
   x: "Seen along z, it reads X.",
 };
+// The loading gate: the poster's hand-over to the canvas, the same when the move is skipped, and what ends it.
+const GATE_FADE = 220;
+const GATE_SETTLE = 520;
+const GATE_LIMIT = 4500;
+const GATE_SKIP = ["pointerdown", "wheel", "touchmove", "keydown", "scroll"];
 // The drawing of the same geometry: the no-WebGL fallback (and what shows without JavaScript).
 const POSTER = { __html: posterSVG({ label: "A solid made of small cubes in the corner of a room. Its shadows on the two walls and the floor spell R, S and X." }) };
 
@@ -96,7 +101,69 @@ export function Hero() {
     const onTheme = (e: Event) => hero?.theme((e as CustomEvent<Theme>).detail);
     window.addEventListener("rsx-theme", onTheme);
 
+    const root = document.documentElement;
+    let gateRunning = false;
+    let gateSkipped = false;
+    let gateLimit = 0;
+    const reveal = () => {
+      hero?.canvas.classList.add("is-ready");
+      stage.classList.add("has-gl");
+    };
+    const leaveGate = () => {
+      clearTimeout(gateLimit);
+      for (const type of GATE_SKIP) removeEventListener(type, skipGate, true);
+      document.removeEventListener("visibilitychange", skipGate);
+      root.classList.remove("gate");
+      root.style.removeProperty("--gate-poster");
+    };
+    /** Any use of the page, or leaving it, ends the move in the hero's resting state. */
+    function skipGate() {
+      gateSkipped = true;
+      if (!gateRunning) return;
+      gateRunning = false;
+      hero?.gateFinish(() => {
+        reveal();
+        leaveGate();
+      });
+    }
+    if (root.classList.contains("gate")) {
+      for (const type of GATE_SKIP) addEventListener(type, skipGate, { capture: true, passive: true });
+      document.addEventListener("visibilitychange", skipGate);
+    }
+    /** Hands from the poster to the live scene, then moves it into the hero. */
+    const runGate = (h: HeroScene) => {
+      if (gateSkipped || scrollY || document.hidden) {
+        // Too late for the move: the scene fades in over the poster where the hero rests.
+        reveal();
+        setTimeout(leaveGate, GATE_SETTLE);
+        return;
+      }
+      gateRunning = true;
+      // A device too slow to finish the move in time goes straight to the hero.
+      gateLimit = window.setTimeout(skipGate, GATE_LIMIT);
+      h.gateOpen(parseFloat(getComputedStyle(stage).getPropertyValue("--gate-cx")))
+        .then(() => {
+          if (!gateRunning) return;
+          h.canvas.classList.add("is-ready");
+          if (window.__gateHold) return;
+          setTimeout(() => {
+            if (!gateRunning) return;
+            h.gatePlay(() => {
+              gateRunning = false;
+              reveal();
+              leaveGate();
+            });
+          }, GATE_FADE);
+        })
+        .catch((e) => {
+          console.warn("Loading gate unavailable:", e);
+          skipGate();
+        });
+    };
+
     const fallback = () => {
+      skipGate();
+      leaveGate();
       stage.classList.add("gl-off"); // the drawing is now the deliberate fallback
       views.hidden = true;
       if (hintRef.current) hintRef.current.textContent = "This is a drawing of the solid. Turning it needs WebGL.";
@@ -110,6 +177,7 @@ export function Hero() {
         onView: setView,
         onSettle: () => sound.play("settle"),
         onContextLost: () => {
+          skipGate();
           stage.classList.remove("has-gl");
           hero?.canvas.classList.remove("is-ready");
           fallback();
@@ -128,6 +196,7 @@ export function Hero() {
           hero = h;
           h.frame(frame());
           h.theme(document.documentElement.dataset.theme === "light" ? "light" : "dark");
+          if (root.classList.contains("gate")) return runGate(h);
           let played = false;
           try {
             played = sessionStorage.getItem("rsx-intro") === "1";
@@ -154,6 +223,8 @@ export function Hero() {
         });
 
     return () => {
+      gateRunning = false;
+      leaveGate();
       cancelled = true;
       removeEventListener("pagehide", onLeave);
       ro.disconnect();

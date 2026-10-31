@@ -41,6 +41,13 @@ const THEMES = {
   },
 };
 
+/**
+ * The loading gate opens from the room seen a little higher and further round.
+ * `poster` is the framing of public/gate/*.webp: its pixel size, and how many
+ * world units its height shows.
+ */
+export const GATE = { dir: [1.3, 1.12, 0.72], poster: { w: 2000, h: 1250, height: 34 }, ms: 1500 };
+
 const easeIO = (t) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
 const easeOut = (t) => 1 - (1 - t) ** 4;
 const clamp01 = (t) => Math.min(1, Math.max(0, t));
@@ -274,7 +281,7 @@ export async function createHero(host, { onView, onSettle, reduced, onContextLos
   };
 
   /* ---------------------------------------------------------------- animation */
-  const anim = { intro: null, camera: null };
+  const anim = { intro: null, camera: null, gate: null };
   let raf = 0;
   let offline = false; // context lost, or destroyed: nothing can be drawn
   const request = () => { if (!raf && !offline) raf = requestAnimationFrame(tick); };
@@ -331,13 +338,22 @@ export async function createHero(host, { onView, onSettle, reduced, onContextLos
   let lastT = 0;
   function tick(now) {
     raf = 0;
-    const dt = Math.min(0.05, lastT ? (now - lastT) / 1000 : 1 / 60);
+    const gap = lastT ? now - lastT : 1000 / 60;
+    const dt = Math.min(0.05, gap / 1000);
     lastT = now;
     let more = false;
 
     if (anim.intro) {
       if (introFrame(now - anim.intro.t0)) more = true;
       else anim.intro = null;
+    }
+
+    if (anim.gate) {
+      // Counted in capped steps: a slow device keeps its timing, a stalled page resumes where it was.
+      anim.gate.t += Math.min(100, gap);
+      const p = clamp01(anim.gate.t / GATE.ms);
+      gateFrame(easeIO(p));
+      if (p < 1) more = true;
     }
 
     if (anim.camera) {
@@ -371,8 +387,44 @@ export async function createHero(host, { onView, onSettle, reduced, onContextLos
     applySpin();
 
     renderer.render(scene, camera);
+    if (anim.gate && !more) return endGate();
     if (more) request();
     else lastT = 0;
+  }
+
+  /* ---------------------------------------------------------------- loading gate
+     One move of the camera, from the poster's framing to the hero's. The solid
+     stays aligned and nothing casting a shadow moves, so all three letters stay
+     exact on every frame and the shadow maps are drawn once and kept. */
+  let heroFrame = null; // the hero's own framing, kept current while the gate frames the stage
+  let gateFrom = null;
+  const heroDir = new T.Vector3(...VIEWS.axo.dir).normalize();
+  const gateDir = new T.Vector3(...GATE.dir).normalize();
+  function gateFrame(e) {
+    const to = heroFrame;
+    frame = {
+      cx: gateFrom.cx + (to.cx - gateFrom.cx) * e,
+      cy: gateFrom.cy + (to.cy - gateFrom.cy) * e,
+      height: Math.exp(Math.log(gateFrom.height) + (Math.log(to.height) - Math.log(gateFrom.height)) * e),
+    };
+    cam.dir.copy(gateDir).lerp(heroDir, e).normalize();
+    applyFrustum();
+    placeCamera();
+  }
+  function endGate() {
+    const done = anim.gate?.onDone;
+    anim.gate = null;
+    cancelAnimationFrame(raf);
+    raf = 0;
+    lastT = 0;
+    cam.dir.copy(heroDir);
+    frame = heroFrame;
+    heroFrame = null;
+    applyFrustum();
+    placeCamera();
+    renderer.shadowMap.autoUpdate = true;
+    if (!offline) renderer.render(scene, camera);
+    done?.();
   }
 
   /* ---------------------------------------------------------------- input */
@@ -458,7 +510,12 @@ export async function createHero(host, { onView, onSettle, reduced, onContextLos
   return {
     canvas,
     get view() { return view; },
-    frame(f) { frame = { ...frame, ...f }; applyFrustum(); request(); },
+    frame(f) {
+      if (heroFrame) { heroFrame = { ...heroFrame, ...f }; return; }
+      frame = { ...frame, ...f };
+      applyFrustum();
+      request();
+    },
     theme(name) { theme = name; applyTheme(); request(); },
     setView(name, { instant = false } = {}) {
       if (!VIEWS[name] || name === view) return;
@@ -478,6 +535,37 @@ export async function createHero(host, { onView, onSettle, reduced, onContextLos
       }
       onView?.(name);
       request();
+    },
+    /**
+     * Draws the gate's first frame, which matches the poster: its world scale
+     * comes from how the poster covers the stage, and its centre from cx.
+     * Resolves once that frame has reached the screen.
+     */
+    async gateOpen(cx) {
+      const p = GATE.poster;
+      const cover = Math.max(size.w / p.w, size.h / p.h);
+      heroFrame = frame;
+      gateFrom = { cx, cy: 0.5, height: size.h / ((cover * p.h) / p.height) };
+      frame = gateFrom;
+      cam.dir.copy(gateDir);
+      applyFrustum();
+      placeCamera();
+      renderer.shadowMap.autoUpdate = false;
+      renderer.shadowMap.needsUpdate = true;
+      // Compiles off the main thread where the GPU allows it; otherwise the first render does.
+      if (renderer.getContext().getExtension("KHR_parallel_shader_compile")) await renderer.compileAsync(scene, camera);
+      renderer.render(scene, camera);
+      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+    },
+    /** Runs the move to the hero's framing; onDone once the hero is in place. */
+    gatePlay(onDone) {
+      anim.gate = { t: 0, onDone };
+      request();
+    },
+    /** Ends the gate at once, in the hero's exact resting state. */
+    gateFinish(onDone) {
+      anim.gate = { onDone };
+      endGate();
     },
     /** The construction entrance. Never needed to read or use the page. */
     intro() {

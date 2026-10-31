@@ -69,6 +69,7 @@ test.describe("the accepted page @core", () => {
 test.describe("hero", () => {
   test("the entrance runs once per session, settles, and stays settled after reload", async ({ page }) => {
     await page.addInitScript(() => {
+      localStorage.setItem("rsx-gate", "1"); // a returning visitor: first-ever visits get the loading gate
       let frames = 0;
       const requestFrame = window.requestAnimationFrame.bind(window);
       window.requestAnimationFrame = (callback) => {

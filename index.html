@@ -12,6 +12,23 @@
         if ((m = /[?&]theme=(dark|light)/.exec(location.search))) t = m[1];
         d.dataset.theme = t;
         if (/[?&]motion=reduce/.test(location.search)) d.dataset.motion = "reduce";
+        // The loading gate: a visitor's first plain view of the home page. Reduced motion never gets
+        // it; those visitors see the hero's drawing at once. Later sessions keep the entrance.
+        if (matchMedia("(prefers-reduced-motion: reduce)").matches) return d.classList.add("poster-hold");
+        try {
+          var nav = performance.getEntriesByType("navigation")[0], net = navigator.connection;
+          if (location.pathname !== "/" || location.search || location.hash || scrollY || document.visibilityState !== "visible") return;
+          if ((nav && nav.type !== "navigate") || !("WebGL2RenderingContext" in window)) return;
+          if (localStorage.getItem("rsx-gate") || sessionStorage.getItem("rsx-intro")) return;
+          if (net && (net.saveData || /2g/.test(net.effectiveType))) return;
+          localStorage.setItem("rsx-gate", "1");
+          sessionStorage.setItem("rsx-intro", "1");
+        } catch (e) { return; }
+        var poster = "/gate/" + t + ".webp", l = document.createElement("link");
+        d.classList.add("gate");
+        d.style.setProperty("--gate-poster", 'url("' + poster + '")');
+        l.rel = "preload"; l.as = "image"; l.href = poster;
+        document.head.append(l);
       })();
     </script>
     <!--app-head-->

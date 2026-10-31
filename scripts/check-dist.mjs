@@ -5,6 +5,7 @@
 import { readFile, readdir, stat } from "node:fs/promises";
 import { join, relative, resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { sceneHash } from "./scene-hash.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const dist = join(root, "dist");
@@ -46,6 +47,22 @@ if (files.includes("og-image.png")) {
 if (files.some((f) => /btl-2025|ui-composite/i.test(f))) fail("obsolete 2025 Bhatkal Time Luxe composite in dist");
 if (files.some((f) => /(^|\/)lab(\.html|\/)/.test(f))) fail("a /lab page was emitted");
 if (files.some((f) => /prototypes|knowledge-base|Rifaque_Profile/i.test(f))) fail("prototype, knowledge-base or private file copied into dist");
+
+// ---- the loading gate's posters are present, the right size, and made from the current scene
+for (const theme of ["dark", "light"]) {
+  const f = `gate/${theme}.webp`;
+  if (!files.includes(f)) {
+    fail(`missing ${f}: run npm run posters`);
+    continue;
+  }
+  const webp = await readFile(join(dist, f));
+  // An extended WebP (it carries a colour profile): the canvas size is stored less one.
+  if (webp.toString("latin1", 0, 4) !== "RIFF" || webp.toString("latin1", 12, 16) !== "VP8X") fail(`${f} is not the expected WebP`);
+  else if (webp.readUIntLE(24, 3) + 1 !== 2000 || webp.readUIntLE(27, 3) + 1 !== 1250) fail(`${f} is not 2000x1250`);
+}
+if (files.some((f) => /^gate\/.*tall/.test(f))) fail("unused tall poster in dist");
+const manifest = JSON.parse(await readFile(join(root, "src", "hero", "gate-posters.json"), "utf8"));
+if (manifest.scene !== (await sceneHash())) fail("the gate posters are older than the hero scene: run npm run build, then npm run posters, then npm run build");
 
 // ---- forbidden content in every text file
 const forbidden = [

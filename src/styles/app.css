@@ -139,6 +139,15 @@ main > .hero:first-child { margin-top: calc(-1 * var(--nav-h)); padding-top: var
    (which the entrance would then take apart). The poster appears only as the
    deliberate fallback when WebGL is unavailable (.gl-off), or without JavaScript. */
 .js .hero-stage:not(.has-gl):not(.gl-off) .hero-poster { opacity: 0; transition: none; }
+/* Reduced motion, or a gate that left before the scene was ready: the drawing holds the room until then. */
+html.poster-hold[data-hydrated] .hero-stage:not(.has-gl):not(.gl-off) .hero-poster { opacity: 1; }
+/* The loading gate: the poster sits in the stage, behind the copy, until the live scene takes over from it.
+   It starts clear of the copy; --gate-cx is where the solid stands, which the first live frame reads. */
+.hero-stage { --gate-cx: 0.5; }
+@media (min-width: 901px) { .hero-stage { --gate-cx: 0.64; } }
+@media (min-width: 1000px) { .hero-stage { --gate-cx: 0.6; } }
+.gate .hero-stage::before { content: ""; position: absolute; inset: 0; background: var(--gate-poster) center / cover no-repeat; transform: translateX(calc((var(--gate-cx) - 0.5) * 100%)); }
+.gate .hero-canvas { transition-duration: 200ms; }
 .p-wall-l { fill: var(--poster-wall-l); }
 .p-wall-r { fill: var(--poster-wall-r); }
 .p-floor { fill: var(--poster-floor); }
