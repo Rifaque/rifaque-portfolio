@@ -21,7 +21,10 @@ export type DiagramId =
   | "reflux-playback"
   | "layers-pipeline"
   | "layers-scope"
-  | "btl-architecture";
+  | "btl-architecture"
+  | "hubzero"
+  | "hubzero-publish"
+  | "hubzero-signin";
 
 export const esc = (s: string) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
 
@@ -82,6 +85,21 @@ const sharedExtendspace = () => {
   s += t(300, 290, "Connect is disabled in both apps", "", "middle");
   return s;
 };
+
+const sharedHubzero = () => `
+    <rect class="box dash" x="16" y="28" width="378" height="150" rx="10"/>${t(30, 50, "One Next.js application", "")}
+    ${node(30, 66, 160, 92, "Website", "hubzero.in")}${node(220, 66, 160, 92, "Studio", "CMS", true)}
+    ${arrow(220, 112, 190, 112)}${t(205, 172, "publishes", "", "middle")}
+    ${node(420, 66, 164, 92, "Other HubZero", "products", false, true)}
+    ${t(502, 50, "designed for", "", "middle")}
+    <path class="ln-strong" d="M286 158 V252"/><path class="ln-strong" d="M279 244 L286 254 L293 244"/>
+    <path class="ln-strong" d="M314 252 V170"/><path class="ln-strong" d="M307 178 L314 168 L321 178"/>
+    ${t(276, 212, "sign-in", "t-em", "end")}${t(324, 212, "returns signed in", "t-em")}
+    <path class="ln dash" d="M502 158 V252"/>
+    <rect class="fill" x="16" y="254" width="568" height="112" rx="12"/>
+    ${t(300, 298, "HubZero Identity", "t-inv t-big", "middle")}
+    ${t(300, 320, "HubZero Account · auth.hubzero.in", "t-inv", "middle")}
+    ${t(300, 340, "OAuth 2.0 · OpenID Connect", "t-inv", "middle")}`;
 
 const D: Record<DiagramId, [number, string, () => string]> = {
   nexus: [400, "Illustration of the Nexus request path: the Command Fabric and the Cortex propose; only ToolRuntime, through its gate, policy and approval, can produce an effect.", sharedNexus],
@@ -181,6 +199,27 @@ const D: Record<DiagramId, [number, string, () => string]> = {
     ${arrow(495, 86, 495, 130)}${node(406, 130, 178, 56, "MongoDB", "catalogue data")}
     ${node(176, 150, 190, 56, "Cloudinary → imgix", "product images")}${arrow(271, 150, 271, 86)}
     ${t(300, 240, "Sitemap and structured data make the catalogue crawlable.", "", "middle")}`],
+
+  hubzero: [400, "Illustration of the HubZero platform: the website and Studio are one application, and Studio publishes to the website. HubZero Identity is a separate shared layer beneath them: Studio sends people to it to sign in and gets them back, and it is designed for other HubZero products too.", sharedHubzero],
+
+  "hubzero-publish": [210, "Illustration of Studio publishing: content moves through draft, review and publish in Studio and is written to MongoDB; public pages on the website consume only published content.", () => `
+    ${t(20, 26, "Studio", "t-strong")}
+    ${node(20, 40, 110, 56, "Draft")}${arrow(130, 68, 156, 68)}
+    ${node(156, 40, 110, 56, "Review")}${arrow(266, 68, 292, 68)}
+    ${node(292, 40, 110, 56, "Publish", "", true)}${arrow(402, 68, 454, 68)}
+    ${node(454, 40, 130, 56, "MongoDB", "content", true)}
+    ${arrow(519, 96, 519, 140)}${node(394, 140, 190, 56, "Public pages", "published content", true)}
+    ${t(20, 172, "hubzero.in reads what Studio has published.", "t-em")}`],
+
+  "hubzero-signin": [240, "Illustration of signing in to Studio: an unauthenticated user reaches Studio, Studio redirects them to HubZero Identity at auth.hubzero.in, Identity handles the sign-in, and the user returns to Studio authenticated.", () => `
+    ${node(16, 30, 150, 64, "Person", "not signed in")}${arrow(166, 62, 216, 62)}
+    ${node(216, 30, 150, 64, "Studio", "hubzero.in/studio", true)}
+    <path class="ln-strong" d="M366 52 H420"/><path class="ln-strong" d="M412 45 L422 52 L412 59"/>
+    ${t(395, 20, "redirect", "", "middle")}
+    ${node(424, 30, 160, 64, "HubZero Identity", "auth.hubzero.in", true)}
+    ${arrow(504, 94, 504, 138)}${node(424, 138, 160, 64, "Sign-in", "HubZero Account")}
+    <path class="ln-2" d="M424 170 H291 V94"/><path class="ln-2" d="M284 102 L291 92 L298 102"/>
+    ${t(358, 188, "returns signed in", "t-em", "middle")}`],
 };
 
 /** An illustration as SVG markup; `label` overrides its spoken description. */

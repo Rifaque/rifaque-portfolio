@@ -14,7 +14,7 @@ import wmLight2x from "../assets/brand/rsx-develops-wordmark-light-2x.png";
  * to, and an icon-only sound switch), the page, and a quiet footer.
  */
 export function Layout({ route, children }: { route: RouteMeta; children: ReactNode }) {
-  // Controls marked data-sound play that cue (only once the visitor has turned sound on).
+  // Controls marked data-sound play that cue (unless the visitor has turned sound off).
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
       const el = (e.target as Element | null)?.closest<HTMLElement>("[data-sound]");

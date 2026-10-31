@@ -15,11 +15,12 @@ export const bomProjects: { slug: string; short: string }[] = [
   { slug: "bluetap", short: "BlueTap" },
   { slug: "bhatkal-time-luxe", short: "BTL" },
   { slug: "querycraft", short: "QueryCraft" },
+  { slug: "hubzero", short: "HubZero" },
 ];
 
 export const materials: [family: string, rows: [tech: string, slugs: string[]][]][] = [
   ["Languages", [
-    ["TypeScript", ["atlas", "bhatkal-time-luxe"]],
+    ["TypeScript", ["atlas", "bhatkal-time-luxe", "hubzero"]],
     ["Rust", ["atlas"]],
     ["Python", ["nexus", "querycraft"]],
     ["Kotlin", ["reflux", "extendspace", "layers-by-rsx", "bluetap"]],
@@ -27,7 +28,7 @@ export const materials: [family: string, rows: [tech: string, slugs: string[]][]
   ]],
   ["Interfaces", [
     ["React", ["atlas"]],
-    ["Next.js", ["bhatkal-time-luxe", "querycraft"]],
+    ["Next.js", ["bhatkal-time-luxe", "querycraft", "hubzero"]],
     ["Tauri 2", ["atlas"]],
     ["Compose", ["reflux", "extendspace", "layers-by-rsx"]],
     ["Glance / RemoteViews", ["bluetap", "layers-by-rsx"]],
@@ -37,7 +38,8 @@ export const materials: [family: string, rows: [tech: string, slugs: string[]][]
     ["Node.js", ["bhatkal-time-luxe", "querycraft"]],
     ["FastAPI", ["nexus"]],
     ["PostgreSQL + pgvector", ["nexus"]],
-    ["MongoDB", ["bhatkal-time-luxe", "querycraft"]],
+    ["MongoDB", ["bhatkal-time-luxe", "querycraft", "hubzero"]],
+    ["OAuth 2.0, OpenID Connect", ["hubzero"]],
     ["LanceDB", ["atlas"]],
   ]],
   ["AI and retrieval", [

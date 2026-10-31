@@ -1,4 +1,4 @@
-/** Types for sound.js (the accepted design's synthesised UI cues; plain JS, unchanged). */
+/** Types for sound.js (the accepted design's synthesised UI cues; plain JS). */
 export declare const sound: {
   init(): void;
   /** Returns whether sound is now on (false if audio could not start). */

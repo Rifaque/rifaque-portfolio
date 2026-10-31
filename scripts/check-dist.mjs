@@ -29,7 +29,7 @@ const textFiles = files.filter((f) => /\.(html|js|css|xml|txt|json|svg|webmanife
 // ---- expected pages
 const expected = [
   "index.html", "about.html", "archive.html", "404.html",
-  ...["nexus", "atlas", "reflux", "extendspace", "layers-by-rsx", "bluetap", "querycraft", "bhatkal-time-luxe"].map((s) => `work/${s}.html`),
+  ...["nexus", "atlas", "reflux", "extendspace", "layers-by-rsx", "bluetap", "querycraft", "bhatkal-time-luxe", "hubzero"].map((s) => `work/${s}.html`),
 ];
 for (const f of expected) if (!files.includes(f)) fail(`missing page ${f}`);
 for (const f of ["sitemap.xml", "robots.txt", "resume/Rifaque_Resume.pdf", "favicon.ico", "favicon.svg", "favicon-96x96.png", "apple-touch-icon.png", "site.webmanifest", "og-image.png"]) if (!files.includes(f)) fail(`missing ${f}`);

@@ -204,17 +204,6 @@ export type ArchiveBuild = { id: string; name: string; meta: string; what: strin
 
 export const archiveBuilds: ArchiveBuild[] = [
   {
-    id: "hubzero-site",
-    name: "HubZero website",
-    meta: "Nov 2024 to now · Live · HubZero's site",
-    what: "HubZero's public site and Studio, the CMS that publishes it, as one application.",
-    tech: "Next.js 15 (App Router) and TypeScript with Tailwind CSS. Studio writes to MongoDB through a draft, review and publish workflow; public pages read only published content, through one visibility check; NextAuth guards Studio. I shipped the site, and GitHub records me as its only committer; the site and the work it presents belong to HubZero.",
-    links: [
-      { label: "hubzero.in", href: "https://hubzero.in/" },
-      { label: "Repository", href: "https://github.com/HubZeroHQ/hubzero" },
-    ],
-  },
-  {
     id: "zerolink",
     name: "ZeroLink",
     meta: "Jul 2025 · Experiment · not deployed",

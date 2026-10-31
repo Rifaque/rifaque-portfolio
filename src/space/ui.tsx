@@ -84,10 +84,11 @@ export function AsideStrip({ kind }: { kind: Aside }) {
         </span>
       </p>
     );
-  const which = kind === "text-nexus" ? "nexus" : "reflux";
+  const which = ({ "text-nexus": "nexus", "text-reflux": "reflux", "text-hubzero": "hubzero" } as const)[kind];
+  const name = { nexus: "Request path", reflux: "Media model", hubzero: "Platform and sign-in" }[which];
   return (
     <details className="ps-as-text">
-      <summary>{which === "nexus" ? "Request path" : "Media model"} as text</summary>
+      <summary>{name} as text</summary>
       <ol>
         {TEXT[which].map((t) => (
           <li key={t}>{t}</li>

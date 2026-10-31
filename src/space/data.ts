@@ -1,5 +1,5 @@
 /**
- * Project Space: the six featured projects as presented on the homepage and in
+ * Project Space: the seven featured projects as presented on the homepage and in
  * their case studies. Ported from the accepted Concept D prototype
  * (prototypes/projects-redesign/project-space/), which stays the reference.
  *
@@ -30,6 +30,10 @@ import btlArrivals from "../assets/space/btl-current-new-arrivals-desktop-inr.we
 import btlHomeMobile from "../assets/space/btl-current-home-mobile-inr.webp";
 import btlProductMobile from "../assets/space/btl-current-product-mobile-inr.webp";
 import btlProductKwd from "../assets/space/btl-current-product-desktop.webp";
+import hzHome from "../assets/space/hubzero-home-desktop.webp";
+import hzStudio from "../assets/space/hubzero-studio-sign-in-desktop.webp";
+import hzAccount from "../assets/space/hubzero-account-sign-in-desktop.webp";
+import hzAccountMobile from "../assets/space/hubzero-account-sign-in-mobile.webp";
 
 /* ---------------------------------------------------------------- evidence */
 export type Kind = "screenshot" | "capture" | "emulator" | "live" | "illustration" | "planned";
@@ -81,9 +85,14 @@ const btlLive: Shot[] = [
   { kind: "live", src: btlProductMobile, w: 390, h: 844, alt: "Bhatkal Time Luxe product page on a phone: watch photo, price in rupees, brand, colourway and reference.", caption: "Product page, mobile. Currency set to INR." },
   { kind: "live", src: btlProductKwd, w: 1440, h: 900, alt: "The same Bhatkal Time Luxe product page with prices shown in Kuwaiti dinar (KD), from the later demo work.", caption: "Product page with the currency set to KWD: later demo work, not the original seller's store." },
 ];
+const hubzeroHome: Shot = { kind: "live", src: hzHome, w: 1440, h: 900, alt: "The hubzero.in home page: the headline 'We build systems that hold up.', a short description of the studio and a panel of public-record details.", caption: "hubzero.in, the public website, 1 Nov 2026." };
+const hubzeroStudio: Shot = { kind: "live", src: hzStudio, w: 1440, h: 900, alt: "The HubZero Studio sign-in page: 'Sign in to Studio', a Continue with HubZero button, and a note that authentication is handled by HubZero Account.", caption: "Studio's public sign-in page, 1 Nov 2026. Its interior is private." };
+const hubzeroAccount: Shot = { kind: "live", src: hzAccount, w: 1440, h: 900, alt: "The HubZero Account sign-in page at auth.hubzero.in: 'One account. Your HubZero.' beside an empty form with email and password fields.", caption: "HubZero Account at auth.hubzero.in, 1 Nov 2026. The form is empty." };
+const hubzeroAccountPhone: Shot = { kind: "live", src: hzAccountMobile, w: 780, h: 1688, alt: "The HubZero Account sign-in page on a phone-sized screen.", caption: "HubZero Account, phone-sized view, 1 Nov 2026. The form is empty." };
 const draw = (id: DiagramId, alt: string, caption: string): Drawing => ({ kind: "illustration", id, alt, caption });
 const nexusDrawing = draw("nexus", "Illustration of the Nexus request path: the Command Fabric and the Cortex propose; only ToolRuntime, through its gate, policy and approval, can produce an effect.", "Nexus has no published interface.");
 const refluxDrawing = draw("reflux", "Illustration of the Reflux media model: three sources each provide a version of the same film, and identification resolves all three into one work.", "No interface capture is published.");
+const hubzeroDrawing = draw("hubzero", "Illustration of the HubZero platform: the website and Studio are one application, and Studio publishes to the website. HubZero Identity is a separate shared layer beneath them: Studio sends people to it to sign in and gets them back, and it is designed for other HubZero products too.", "Illustration of how the website, Studio and Identity connect.");
 const esDrawing = draw("extendspace", "Illustration of the ExtendSpace pipeline: capture and H.264 on Windows, USB link, decoder owner and surface on the tablet.", "Illustration of the pipeline, not a screenshot.");
 
 /* ---------------------------------------------------------------- scenes */
@@ -109,7 +118,7 @@ export type Device = {
   label?: string;
   bar?: string;
 };
-export type Aside = "road" | "studio" | "text-nexus" | "text-reflux";
+export type Aside = "road" | "studio" | "text-nexus" | "text-reflux" | "text-hubzero";
 export type Scene = { view: [number, number]; devices: Device[]; cable?: [string, string]; aside?: Aside; cap: [Kind | null, string][] };
 
 const shotOf = (m: Shot) => ({ ar: m.w / m.h, screen: { type: "shot" as const, media: m } });
@@ -142,6 +151,8 @@ export type CaseStudy = { kicker: string; summary: string; facts: [string, strin
 export type SpaceProject = {
   slug: string;
   project: Project;
+  /** The category line in the list and panel, where the default does not fit. */
+  line?: string;
   platforms: string[];
   blurb: string;
   part: string;
@@ -164,9 +175,10 @@ const P = (slug: string) => {
 };
 
 /** The drawings as text, beside the 3D view, for anyone who cannot use it. */
-export const TEXT: Record<"nexus" | "reflux", string[]> = {
+export const TEXT: Record<"nexus" | "reflux" | "hubzero", string[]> = {
   nexus: ["Request", "Command Fabric: recognise and route, never execute", "Deterministic reply, a typed intent, or the Cortex as fallback", "ToolRuntime: capability gate, then policy (deny wins), then hash-bound approval", "Effect, recorded in a hash-chained ledger"],
   reflux: ["Local folder, Jellyfin, network share", "Several file versions of the same film", "Identification", "One work: watch and resume state live here", "Best version: Media3 on Android, libmpv on desktop"],
+  hubzero: ["Website and Studio: one Next.js application", "Studio publishes content to the website", "HubZero Identity: a separate OpenID Connect service at auth.hubzero.in, shown to users as HubZero Account", "Studio sends unauthenticated users to Identity, which returns them signed in", "Identity is designed to be reused by other HubZero products"],
 };
 
 export const space: SpaceProject[] = [
@@ -416,6 +428,52 @@ export const space: SpaceProject[] = [
         { id: "phone", heading: "On a phone", flip: true, body: ["On a phone the storefront uses its own layout, as these captures of the live site show. Turn the phone to see it from any side."], visual: { type: "pair", items: [{ type: "stage", only: "phone", w: 40, pw: 56, ar: "1 / 1.25", kind: "live", label: "the product page on a phone", caption: "Product page, phone." }, { type: "media", media: btlLive[3] }] } },
         { id: "currency", heading: "A later demo, not the seller's store", body: ["In June–July 2026, GCC and Kuwait support and other features were added as a demo for a prospective client. The site can show prices in INR, KWD and other currencies from one selector.", "**This work was never part of the original seller's store**, and it is not evidence of a Kuwait or GCC market; the project's focus was India-wide."], visual: { type: "media", media: btlLive[5] } },
         { id: "status", heading: "Status and limits", status: true, list: ["The partnership ended in September 2025. The website remains live as a HubZero showcase, not an active storefront.", "Client work: the code is not presented as a personal open-source project."] },
+      ],
+    },
+  },
+
+  /* ------------------------------------------------------------ HUBZERO */
+  {
+    slug: "hubzero",
+    project: P("hubzero"),
+    line: "Engineering venture and platform",
+    platforms: ["Web"],
+    blurb: "A website and Studio CMS as one application, with HubZero Identity as a separate sign-in service that HubZero products can share.",
+    part: "Co-founder, leading engineering in a five-engineer team.",
+    purpose: "HubZero's engineering platform: the public website and Studio, the CMS that publishes it, as one application, and HubZero Identity, a separate OpenID Connect service that gives HubZero products one sign-in.",
+    contribution: "I co-founded HubZero and lead its engineering work. HubZero is a five-engineer team, and collaborative parts of the venture are team work.",
+    highlights: [
+      ["HubZero Identity", "A separate OpenID Connect service on OAuth 2.0, launched in September 2026 and branded to users as HubZero Account."],
+      ["Studio", "The CMS for the website: content reaches MongoDB through a draft, review and publish workflow."],
+      ["One shared sign-in", "Studio sends unauthenticated users to Identity and gets them back signed in. Identity is built to be reused by other HubZero products."],
+    ],
+    limits: "Studio's interior is private, so only its public sign-in page is shown. Identity supports email and password sign-in; password recovery is not available yet.",
+    missing: [],
+    evidence: [hubzeroDrawing, hubzeroHome, hubzeroStudio, hubzeroAccount],
+    liveNote: "Captured from the live sites on 1 Nov 2026. The sign-in pages are public and empty; no account is shown.",
+    scene: {
+      view: [-5, -10],
+      devices: [
+        { id: "website", kind: "monitor", at: [-25, -15, -20, 42], phone: null, bar: "hubzero.in", ...shotOf(hubzeroHome) },
+        { id: "studio", kind: "window", at: [24, -15, -14, 34], phone: null, bar: "hubzero.in/studio", ...shotOf(hubzeroStudio) },
+        { id: "identity", kind: "glass", at: [-7, 8, 12, 50], phone: [4, 13, 4, 80], ...drawingOf(hubzeroDrawing) },
+        { id: "account", kind: "phone", at: [36, 12, 10, 12], phone: [-31, -24, -4, 22], ...shotOf(hubzeroAccountPhone) },
+      ],
+      aside: "text-hubzero",
+      cap: [["live", "hubzero.in, Studio sign-in and HubZero Account, 1 Nov 2026"], ["illustration", "How they connect"]],
+    },
+    caseStudy: {
+      kicker: "Engineering venture and platform · case study",
+      summary: "HubZero's engineering platform: the public website and Studio, the CMS that publishes it, as one application, and HubZero Identity, a separate OpenID Connect service that gives HubZero products one sign-in.",
+      facts: [["Role", "Co-founder, leading engineering"], ["Team", "Five engineers"], ["Started", "Nov 2024; my public engineering role dates from Jan 2025"], ["Identity", "Launched Sep 2026"], ["Runs on", "Web"], ["Stack", "Next.js · TypeScript · Tailwind CSS · MongoDB · OAuth 2.0 · OpenID Connect"]],
+      openLabel: "the website on a monitor and Studio's sign-in window behind a glass panel showing how Identity connects them, with the HubZero Account sign-in on a phone",
+      sections: [
+        { id: "platform", heading: "One platform, three parts", body: ["HubZero started in November 2024. Today its engineering platform has three parts: **the public website**, **Studio**, the CMS behind it, and **HubZero Identity**, the sign-in service.", "The website and Studio are one Next.js application. Identity is deliberately not part of it."], visual: { type: "media", media: hubzeroHome } },
+        { id: "studio", heading: "Studio publishes the website", flip: true, body: ["Studio manages the website's content. Content is written to MongoDB through a **draft, review and publish** workflow, and public pages consume published content.", "Studio is protected by authentication. Its interior is private, so it is not shown here."], visual: { type: "diagram", id: "hubzero-publish", caption: "From a Studio draft to a public page." } },
+        { id: "identity", heading: "HubZero Identity", body: ["Launched in September 2026 at **auth.hubzero.in**, Identity provides unified authentication for HubZero products. It is built around **OAuth 2.0 and OpenID Connect**, and users know it as **HubZero Account**.", "It is separate from the website and Studio, and designed to be reused by other HubZero products, so that each does not need its own credentials."], visual: { type: "diagram", id: "hubzero", caption: "Website and Studio above; Identity as the shared sign-in layer." } },
+        { id: "sign-in", heading: "Signing in to Studio", flip: true, list: ["An unauthenticated user reaches Studio.", "Studio redirects them to **auth.hubzero.in**.", "Identity handles the sign-in.", "They return to Studio, authenticated."], after: ["Identity says who someone is. Each product decides what they may do."], visual: { type: "diagram", id: "hubzero-signin", caption: "Studio hands sign-in to Identity and gets the person back." } },
+        { id: "account", heading: "HubZero Account", body: ["This is the sign-in page users see at auth.hubzero.in. It is public, and no account is shown."], visual: { type: "media", media: hubzeroAccount } },
+        { id: "status", heading: "Status and limits", status: true, list: ["The website, Studio and Identity are live.", "HubZero is a five-engineer team; this page does not claim every part as my own work.", "Identity supports email and password sign-in. Password recovery is not available yet.", "Studio is the product shown using Identity here. Reuse by other products is its design, not a claim about them."] },
       ],
     },
   },

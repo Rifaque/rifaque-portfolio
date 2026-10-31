@@ -1,7 +1,8 @@
 import { expect, test } from "@playwright/test";
 import { detailClosed, detailOpen, hydrated, selected, watch } from "./helpers";
 
-const ORDER = ["Atlas", "Nexus", "ExtendSpace", "Reflux", "Layers by RSX", "Bhatkal Time Luxe"];
+const ORDER = ["Atlas", "Nexus", "ExtendSpace", "Reflux", "Layers by RSX", "Bhatkal Time Luxe", "HubZero"];
+const SLUGS = ["atlas", "nexus", "extendspace", "reflux", "layers-by-rsx", "bhatkal-time-luxe", "hubzero"];
 
 test.describe("project space @core", () => {
   test("the list selects projects, pushes ?project and never scrolls the page", async ({ page }) => {
@@ -25,10 +26,61 @@ test.describe("project space @core", () => {
     expect(problems).toEqual([]);
   });
 
-  test("the list holds the six featured projects in order", async ({ page }) => {
+  test("the list holds the seven featured projects in order", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("#work .ps-sd-name")).toHaveText(ORDER);
     await expect(page.locator("#work .ps-also").getByRole("link")).toHaveText(["QueryCraft", "BlueTap"]);
+  });
+
+  test("all seven projects select, each with its own scene and detail view", async ({ page }) => {
+    const problems = watch(page);
+    await page.goto("/");
+    await hydrated(page);
+    for (let i = 0; i < SLUGS.length; i++) {
+      const slug = SLUGS[i];
+      if (slug !== "atlas") await page.locator(`.ps-sd-btn[data-slug="${slug}"]`).click();
+      await expect(selected(page)).toHaveText(ORDER[i]);
+      await expect(page.locator("#work .ps-scene:not(.leaving)")).toHaveAttribute("data-scene", slug);
+      await expect(page.locator("#ps-info h3")).toHaveText(ORDER[i]);
+      await page.locator("#ps-explore").click();
+      await detailOpen(page, ORDER[i]);
+      await page.keyboard.press("Escape");
+      await detailClosed(page);
+    }
+    expect(problems).toEqual([]);
+  });
+
+  test("HubZero shows the website, Studio and Identity, with one group heading", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    const problems = watch(page);
+    await page.goto("/?project=hubzero");
+    await hydrated(page);
+    await expect(page.locator("#work .ps-sd-group")).toHaveCount(1);
+    await expect(page.locator("#ps-info .ps-in-line")).toHaveText("Engineering venture and platform");
+    const scene = page.locator('#work .ps-scene[data-scene="hubzero"]');
+    await expect(scene.locator(".ps-d3")).toHaveCount(4);
+    for (const dev of ["website", "studio", "identity", "account"]) await expect(scene.locator(`[data-dev="${dev}"]`)).toBeVisible();
+    await expect(scene.locator('[data-dev="identity"] svg')).toContainText("HubZero Identity");
+    await expect(scene.locator('[data-dev="identity"] svg')).toContainText("auth.hubzero.in");
+    const imgs = await scene.locator("img").evaluateAll((els) => els.map((e) => (e as HTMLImageElement).naturalWidth > 0));
+    expect(imgs).toEqual([true, true, true]);
+    // Identity sits in front of the website and Studio, near the centre.
+    const box = (await scene.locator('[data-dev="identity"]').boundingBox())!;
+    const stage = (await scene.boundingBox())!;
+    expect(box.width / stage.width).toBeGreaterThan(0.4);
+    expect(problems).toEqual([]);
+  });
+
+  test("on a phone HubZero keeps Identity and its sign-in in view", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/?project=hubzero");
+    await hydrated(page);
+    await expect(selected(page)).toHaveText("HubZero");
+    const scene = page.locator('#work .ps-scene[data-scene="hubzero"]');
+    await expect(scene.locator('[data-dev="identity"]')).toBeVisible();
+    await expect(scene.locator('[data-dev="account"]')).toBeVisible();
+    await expect(page.locator(".ps-as-text")).toContainText("Platform and sign-in as text");
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   });
 
   test("keyboard: arrows, Home and End move through the list and select", async ({ page }) => {
@@ -40,11 +92,11 @@ test.describe("project space @core", () => {
     await expect(selected(page)).toHaveText("Nexus");
     await expect(btns.nth(1)).toBeFocused();
     await page.keyboard.press("End");
-    await expect(selected(page)).toHaveText("Bhatkal Time Luxe");
+    await expect(selected(page)).toHaveText("HubZero");
     await page.keyboard.press("ArrowDown"); // wraps
     await expect(selected(page)).toHaveText("Atlas");
     await page.keyboard.press("ArrowUp");
-    await expect(selected(page)).toHaveText("Bhatkal Time Luxe");
+    await expect(selected(page)).toHaveText("HubZero");
     await page.keyboard.press("Home");
     await expect(selected(page)).toHaveText("Atlas");
     await expect(page.locator("#work p.sr-status")).toHaveText("Atlas selected.");
@@ -225,7 +277,7 @@ test.describe("without JavaScript", () => {
     await expect(page.locator("h1")).toBeVisible();
     await expect(page.locator("#work .ps-sd-name")).toHaveText(ORDER);
     const hrefs = await page.locator("#work .ps-sd-btn").evaluateAll((els) => els.map((e) => e.getAttribute("href")));
-    expect(hrefs).toEqual(["/work/atlas", "/work/nexus", "/work/extendspace", "/work/reflux", "/work/layers-by-rsx", "/work/bhatkal-time-luxe"]);
+    expect(hrefs).toEqual(SLUGS.map((s) => `/work/${s}`));
     await expect(page.locator("#work .ps-scene")).toBeVisible(); // the prerendered scene
     await page.locator('#work .ps-sd-btn[data-slug="nexus"]').click();
     await expect(page).toHaveURL(/\/work\/nexus$/);
@@ -280,7 +332,7 @@ test.describe("project space on a phone", () => {
 });
 
 test.describe("case studies @core", () => {
-  test("previous and next cycle through the six, and Projects returns to the selection", async ({ page }) => {
+  test("previous and next cycle through the seven, and Projects returns to the selection", async ({ page }) => {
     await page.goto("/work/atlas");
     const nav = page.getByRole("navigation", { name: "Other case studies" });
     await nav.getByRole("link", { name: /Next/ }).click();
@@ -288,10 +340,10 @@ test.describe("case studies @core", () => {
     await expect(page.locator("h1")).toHaveText("Nexus");
     await nav.getByRole("link", { name: /Previous/ }).click();
     await nav.getByRole("link", { name: /Previous/ }).click();
-    await expect(page).toHaveURL(/\/work\/bhatkal-time-luxe$/);
+    await expect(page).toHaveURL(/\/work\/hubzero$/);
     await nav.getByRole("link", { name: /Projects/ }).click();
-    await expect(page).toHaveURL(/\/\?project=bhatkal-time-luxe#work$/);
-    await expect(selected(page)).toHaveText("Bhatkal Time Luxe");
+    await expect(page).toHaveURL(/\/\?project=hubzero#work$/);
+    await expect(selected(page)).toHaveText("HubZero");
     await expect(page.locator("#work")).toBeInViewport();
   });
 });

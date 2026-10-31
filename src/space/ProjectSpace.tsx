@@ -11,7 +11,7 @@ import { AsideStrip } from "./ui";
 const DEFAULT = "atlas";
 
 /**
- * Project Space: the six featured projects. A persistent list (a chip row on
+ * Project Space: the seven featured projects. A persistent list (a chip row on
  * narrower screens), the project's 3D stage in the centre, and concise
  * information beside it with Explore project, which opens the detail view.
  *
@@ -108,8 +108,8 @@ export function ProjectSpace() {
       <div className="ps-grid">
         <nav className="ps-side" aria-label="Projects">
           <ol ref={row} onKeyDown={onKey} onScroll={fades}>
-            {space.map((s) => (
-              <SideItem key={s.slug} sp={s} current={s.slug === slug} live={mounted} onSelect={select} />
+            {space.map((s, i) => (
+              <SideItem key={s.slug} sp={s} group={s.project.ownership.kind === "hubzero" && space[i - 1]?.project.ownership.kind !== "hubzero"} current={s.slug === slug} live={mounted} onSelect={select} />
             ))}
           </ol>
         </nav>
@@ -125,7 +125,7 @@ export function ProjectSpace() {
 
         <div className="ps-info" id="ps-info" key={slug}>
           <div className="ps-in-a">
-            <p className="ps-in-line">{p.ownership.kind === "hubzero" ? "With HubZero · client work" : p.kicker}</p>
+            <p className="ps-in-line">{sp.line ?? (p.ownership.kind === "hubzero" ? "With HubZero · client work" : p.kicker)}</p>
             <h3 className="ps-in-title">{p.title}</h3>
             <Status stage={p.stage} text={p.status} />
             <p className="ps-in-blurb">{sp.blurb}</p>
@@ -166,7 +166,7 @@ export function ProjectSpace() {
         ))}
       </aside>
 
-      {/* Archive builds: earlier, smaller and team work, kept quiet beneath the six. */}
+      {/* Archive builds: earlier, smaller and team work, kept quiet beneath the seven. */}
       <section className="arc-wrap" id="archive" aria-labelledby="archive-title">
         <header className="arc-head">
           <h3 id="archive-title">Archive builds</h3>
@@ -204,21 +204,20 @@ export function ProjectSpace() {
   );
 }
 
-function SideItem({ sp, current, live, onSelect }: { sp: SpaceProject; current: boolean; live: boolean; onSelect: (slug: string) => void }) {
+function SideItem({ sp, group, current, live, onSelect }: { sp: SpaceProject; group: boolean; current: boolean; live: boolean; onSelect: (slug: string) => void }) {
   const p = sp.project;
-  const hub = p.ownership.kind === "hubzero";
   const body = (
     <>
       <span className="ps-sd-name">
         {p.title}
         <Glyph stage={p.stage} />
       </span>
-      <span className="ps-sd-line">{hub ? "Client project, HubZero" : p.kicker}</span>
+      <span className="ps-sd-line">{sp.line ?? (p.ownership.kind === "hubzero" ? "Client project, HubZero" : p.kicker)}</span>
     </>
   );
   return (
     <>
-      {hub && (
+      {group && (
         <li className="ps-sd-group" aria-hidden="true">
           With HubZero
         </li>

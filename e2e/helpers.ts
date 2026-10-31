@@ -15,6 +15,7 @@ export const routes = [
   "/work/bluetap",
   "/work/querycraft",
   "/work/bhatkal-time-luxe",
+  "/work/hubzero",
   "/about",
   "/archive",
 ];

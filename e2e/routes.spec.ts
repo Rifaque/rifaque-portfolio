@@ -103,7 +103,7 @@ test.describe("content in the prerendered HTML", () => {
     expect(await licence("extendspace")).toBe("MIT");
     expect(await licence("nexus")).toBe("Closed source");
     expect(await licence("reflux")).toBe("Proprietary");
-    for (const slug of ["layers-by-rsx", "querycraft", "bhatkal-time-luxe"]) expect(await licence(slug)).toBeNull();
+    for (const slug of ["layers-by-rsx", "querycraft", "bhatkal-time-luxe", "hubzero"]) expect(await licence(slug)).toBeNull();
     for (const slug of ["reflux", "nexus"]) {
       const html = await (await request.get(`/work/${slug}`)).text();
       const main = html.match(/<main[\s\S]*<\/main>/)![0]; // the footer's support line is site-wide

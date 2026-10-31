@@ -6,7 +6,7 @@ import { SpaceCaseStudy } from "../space/SpaceCaseStudy";
 import { StudyPage } from "./StudyPage";
 
 /**
- * /work/:slug. The six featured projects use the Project Space case-study
+ * /work/:slug. The seven featured projects use the Project Space case-study
  * layout; QueryCraft and BlueTap (Also built) use the study layout with their
  * 3D illustration.
  */

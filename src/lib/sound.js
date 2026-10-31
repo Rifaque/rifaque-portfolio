@@ -8,9 +8,10 @@
  * time: no audio files, nothing to license.
  *
  * Rules:
- *  - Off by default; never plays on load. Only the visible switch turns it on.
- *  - The AudioContext is created inside that click (autoplay policies). If a
- *    stored "on" preference exists, the context still waits for a gesture.
+ *  - On by default, but never plays on load: cues follow the visitor's actions.
+ *    A stored "off" always wins; only the visible switch stores a preference.
+ *  - The AudioContext waits for a gesture (autoplay policies): the switch's
+ *    click, or the first gesture that can start audio.
  *  - Per-cue cooldown plus a global voice cap: rapid input never stacks.
  *  - No cue carries information that is not also visible.
  *  - Off under automation unless ?sound=test.
@@ -43,7 +44,8 @@ let voices = 0;
 const last = new Map();
 const listeners = new Set();
 
-const read = () => { try { return localStorage.getItem(KEY) === "on"; } catch { return false; } };
+/** Anything but a stored "off" (nothing stored, an invalid value, no storage) means on. */
+const read = () => { try { return localStorage.getItem(KEY) !== "off"; } catch { return true; } };
 const write = (v) => { try { localStorage.setItem(KEY, v ? "on" : "off"); } catch { /* storage unavailable */ } };
 
 function ensureContext() {
@@ -70,6 +72,20 @@ function ensureContext() {
 }
 
 function emit() { for (const fn of listeners) fn(enabled); }
+
+/** Starts audio on the first gesture that browsers accept, and stops listening once it runs. */
+function armOnGesture() {
+  const types = ["pointerdown", "pointerup", "click", "keydown"];
+  const stop = () => { for (const t of types) window.removeEventListener(t, arm, true); };
+  const arm = (e) => {
+    // A touch's pointerdown cannot start audio; its pointerup can.
+    if (e.type === "pointerdown" && e.pointerType !== "mouse") return;
+    if (!enabled || !ensureContext()) return stop();
+    if (ctx.state === "running") return stop();
+    ctx.resume?.().then(() => { if (ctx.state === "running") stop(); }, () => {});
+  };
+  for (const t of types) window.addEventListener(t, arm, true);
+}
 
 function hit(t0, [freq, decay, gain, bright, offset = 0]) {
   const t = t0 + offset;
@@ -106,11 +122,9 @@ export const sound = {
   get available() { return !automated && !!(window.AudioContext || window.webkitAudioContext); },
   init() {
     if (automated) return emit();
-    if (read()) {
+    if (this.available && read()) {
       enabled = true;
-      const arm = () => { if (enabled && ensureContext()) ctx.resume?.(); };
-      window.addEventListener("pointerdown", arm, { once: true, capture: true });
-      window.addEventListener("keydown", arm, { once: true, capture: true });
+      armOnGesture();
     }
     emit();
   },

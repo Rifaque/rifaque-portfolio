@@ -26,6 +26,8 @@ import atlasAsk from "../assets/space/atlas-1.0-ask.webp";
 import atlasAskSmall from "../assets/space/atlas-1.0-ask-751.webp";
 import btlLiveHome from "../assets/space/btl-current-home-desktop-inr.webp";
 import btlLiveArrivals from "../assets/space/btl-current-new-arrivals-desktop-inr.webp";
+import hubzeroHome from "../assets/space/hubzero-home-desktop.webp";
+import hubzeroAccount from "../assets/space/hubzero-account-sign-in-desktop.webp";
 
 export const projects: Project[] = [
   // ------------------------------------------------------------------ NEXUS
@@ -757,6 +759,95 @@ export const projects: Project[] = [
         "Bhatkal Time Luxe: a watch-commerce storefront for a Bhatkal-based retailer and HubZero's first paid client project, redesigned and built end to end by Rifaque Akrami. Now a live showcase.",
     },
   },
+
+  // ---------------------------------------------------------------- HUBZERO
+  {
+    slug: "hubzero",
+    title: "HubZero",
+    kicker: "Engineering venture and platform",
+    status: "Live · website, Studio and Identity",
+    stage: "released",
+    period: "Nov 2024 – present",
+    ownership: {
+      kind: "hubzero",
+      label: "HubZero · five-engineer team",
+      credit: "HubZero is a five-engineer team. I co-founded it and lead its engineering work; collaborative parts of the venture are team work.",
+    },
+    role: "Co-founder, leading engineering in a five-engineer team",
+    summary:
+      "HubZero's engineering platform: the public website and Studio, the CMS that publishes it, as one application, and HubZero Identity, a separate OpenID Connect service that gives HubZero products one sign-in.",
+    problem: [
+      "HubZero started in November 2024. Its public website, the CMS behind it and the sign-in its products share have grown into a platform rather than a single site.",
+    ],
+    how: [
+      { title: "Website", body: "hubzero.in, built with Next.js and Tailwind CSS. Public pages consume published content." },
+      { title: "Studio", body: "The CMS inside the same application. Content is written to MongoDB through a draft, review and publish workflow." },
+      { title: "Identity", body: "A separate OpenID Connect service on OAuth 2.0 at auth.hubzero.in, branded to users as HubZero Account." },
+    ],
+    decisions: [
+      { title: "Sign-in as its own service", body: "Identity is separate from the website and Studio, so other HubZero products can reuse it instead of each keeping its own credentials." },
+      { title: "Sign-in is not permission", body: "Identity says who someone is; each product decides what they may do." },
+    ],
+    stack: [
+      { name: "Next.js · TypeScript · Tailwind CSS", why: "The website and Studio, as one application." },
+      { name: "MongoDB", why: "Studio's content, through draft, review and publish." },
+      { name: "OAuth 2.0 · OpenID Connect", why: "HubZero Identity's sign-in protocol." },
+    ],
+    limits: [
+      "Studio's interior is private, so only its public sign-in page is shown.",
+      "Identity supports email and password sign-in. Password recovery is not available yet.",
+      "Studio is the product shown using Identity here. Reuse by other products is its design, not a claim about them.",
+    ],
+    links: [
+      { label: "hubzero.in", href: "https://hubzero.in", kind: "live" },
+      { label: "HubZero Account", href: "https://auth.hubzero.in", kind: "live" },
+      { label: "Website repository", href: "https://github.com/HubZeroHQ/hubzero", kind: "source" },
+      { label: "Identity repository", href: "https://github.com/HubZeroHQ/hubzero-identity", kind: "source" },
+    ],
+    media: [
+      {
+        kind: "screenshot",
+        src: hubzeroHome,
+        width: 1440,
+        height: 900,
+        alt: "The hubzero.in home page: the headline 'We build systems that hold up.', a short description of the studio and a panel of public-record details.",
+        caption: "hubzero.in, the public website, captured on 1 Nov 2026.",
+      },
+      {
+        kind: "screenshot",
+        src: hubzeroAccount,
+        width: 1440,
+        height: 900,
+        alt: "The HubZero Account sign-in page at auth.hubzero.in: 'One account. Your HubZero.' beside an empty form with email and password fields.",
+        caption: "HubZero Account at auth.hubzero.in, captured on 1 Nov 2026. The form is empty.",
+      },
+    ],
+    caseStudy: [
+      {
+        heading: "One platform, three parts",
+        body: [
+          "HubZero's public website and Studio, the CMS behind it, are one Next.js application. HubZero Identity is a separate service.",
+        ],
+      },
+      {
+        heading: "Studio",
+        body: [
+          "Content is written to MongoDB through a draft, review and publish workflow, and public pages consume published content. Studio is protected by authentication.",
+        ],
+      },
+      {
+        heading: "HubZero Identity",
+        body: [
+          "Launched in September 2026 at auth.hubzero.in and branded to users as HubZero Account, it is built around OAuth 2.0 and OpenID Connect. Studio redirects unauthenticated users to it for sign-in, and they return authenticated.",
+        ],
+      },
+    ],
+    seo: {
+      title: "HubZero: engineering venture and platform",
+      description:
+        "HubZero's platform: a Next.js website and Studio CMS as one application, and HubZero Identity, a separate OpenID Connect service on OAuth 2.0 for unified sign-in. Co-founder and engineering lead: Rifaque Akrami.",
+    },
+  },
 ];
 
 export const projectBySlug = (slug: string) => projects.find((p) => p.slug === slug);
@@ -764,7 +855,7 @@ export const projectBySlug = (slug: string) => projects.find((p) => p.slug === s
 /** The homepage ribbon, in order. */
 export const featuredSlugs = ["nexus", "atlas", "reflux", "extendspace"] as const;
 /** HubZero work, shown with its attribution. */
-export const hubzeroSlugs = ["bhatkal-time-luxe", "querycraft"] as const;
+export const hubzeroSlugs = ["bhatkal-time-luxe", "querycraft", "hubzero"] as const;
 /** Smaller personal builds. */
 export const smallerSlugs = ["layers-by-rsx", "bluetap"] as const;
 

@@ -206,11 +206,11 @@ test.describe("also built and archive @core", () => {
     });
   }
 
-  test("archive builds: four entries, each with its repository", async ({ page }) => {
+  test("archive builds: three entries, each with its repository", async ({ page }) => {
     await home(page);
     const rows = page.locator("#archive .arc");
-    await expect(rows.locator("h4")).toHaveText(["HubZero website", "ZeroLink", "Blood Report Disease Diagnosis", "Hospital Management System"]);
-    for (let i = 0; i < 4; i++) await expect(rows.nth(i).locator('a[href^="https://github.com/"]')).toHaveCount(1);
+    await expect(rows.locator("h4")).toHaveText(["ZeroLink", "Blood Report Disease Diagnosis", "Hospital Management System"]);
+    for (let i = 0; i < 3; i++) await expect(rows.nth(i).locator('a[href^="https://github.com/"]')).toHaveCount(1);
     await expect(page.locator("#archive")).not.toContainText("DevPilot");
   });
 

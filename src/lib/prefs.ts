@@ -4,8 +4,8 @@ export { sound };
 /**
  * Theme and sound preferences, shared by the header and the hero. Ported from
  * the accepted design's shell: the theme is stored as `rsx-theme` and applied
- * before first paint by index.html; sound is off until the visitor turns it
- * on, and the audio context is only created inside that click.
+ * before first paint by index.html; sound is on unless the visitor has turned
+ * it off, and the audio context only starts from a gesture (lib/sound.js).
  */
 export type Theme = "dark" | "light";
 

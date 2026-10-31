@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { featuredSlugs, hubzeroSlugs, projects, smallerSlugs } from "./projects";
-import { archive, education, experience, stackSwitches } from "./profile";
+import { archive, archiveBuilds, education, experience, stackSwitches } from "./profile";
 import { routes } from "./routes";
 import { site } from "./site";
 
@@ -16,14 +16,18 @@ const verifiedLinks = new Set([
   "https://github.com/Rifaque/querycraft-backend",
   "https://github.com/Rifaque/querycraft-llm",
   "https://btl.hubzero.in",
+  "https://hubzero.in",
+  "https://auth.hubzero.in",
+  "https://github.com/HubZeroHQ/hubzero",
+  "https://github.com/HubZeroHQ/hubzero-identity",
 ]);
 
 const allText = (o: unknown): string => JSON.stringify(o);
 
 describe("projects", () => {
-  it("has the eight projects, each placed exactly once on the homepage", () => {
+  it("has the nine projects, each placed exactly once on the homepage", () => {
     expect(projects.map((p) => p.slug).sort()).toEqual(
-      ["atlas", "bhatkal-time-luxe", "bluetap", "extendspace", "layers-by-rsx", "nexus", "querycraft", "reflux"],
+      ["atlas", "bhatkal-time-luxe", "bluetap", "extendspace", "hubzero", "layers-by-rsx", "nexus", "querycraft", "reflux"],
     );
     expect([...featuredSlugs, ...hubzeroSlugs, ...smallerSlugs].sort()).toEqual(projects.map((p) => p.slug).sort());
   });
@@ -76,6 +80,7 @@ describe("projects", () => {
       bluetap: "MIT",
       querycraft: null,
       "bhatkal-time-luxe": null,
+      hubzero: null,
     });
   });
 
@@ -109,9 +114,20 @@ describe("projects", () => {
         if (m.kind === "screenshot") expect(m.alt.length, p.slug).toBeGreaterThan(20);
         else expect(m.label.length, p.slug).toBeGreaterThan(20);
       }
-    // Only Atlas and Bhatkal Time Luxe have real screenshots.
+    // Only Atlas, Bhatkal Time Luxe and HubZero have real screenshots here.
     const withShots = projects.filter((p) => p.media.some((m) => m.kind === "screenshot")).map((p) => p.slug);
-    expect(withShots.sort()).toEqual(["atlas", "bhatkal-time-luxe"]);
+    expect(withShots.sort()).toEqual(["atlas", "bhatkal-time-luxe", "hubzero"]);
+  });
+
+  it("keeps HubZero's dates apart and does not claim the team's work as solo", () => {
+    const hz = projects.find((x) => x.slug === "hubzero")!;
+    expect(hz.period).toBe("Nov 2024 – present");
+    expect(experience.find((e) => e.company === "HubZero")?.period).toBe("Jan 2025 – present");
+    expect(allText(hz)).toMatch(/five-engineer team/);
+    expect(allText(hz)).not.toMatch(/sole author|solo/i);
+    expect(allText(hz)).toMatch(/OpenID Connect/);
+    expect(hz.links.map((l) => l.href)).toContain("https://auth.hubzero.in");
+    expect(archiveBuilds.map((a) => a.name)).not.toContain("HubZero website");
   });
 
   it("links only to verified URLs", () => {
