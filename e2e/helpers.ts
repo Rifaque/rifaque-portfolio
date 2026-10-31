@@ -26,6 +26,8 @@ export function watch(page: Page) {
     // The hero's WebGL scene draws on the test machine's software renderer, whose driver notes
     // (performance hints, implementation-defined filtering) are not page errors.
     if (m.type() === "warning" && /GL Driver Message|WebGL warning: .*implementation-defined/.test(m.text())) return;
+    // Firefox reports the hero releasing its context on purpose when the home page is left.
+    if (m.type() === "warning" && /WebGL context was lost..*three.min-/.test(m.text())) return;
     if (m.type() === "error" || m.type() === "warning") problems.push(`console.${m.type()}: ${m.text()}`);
   });
   page.on("pageerror", (e) => problems.push(`pageerror: ${e.message}`));

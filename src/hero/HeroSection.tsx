@@ -88,7 +88,10 @@ export function Hero() {
       hero.setView(b.dataset.view as HeroView);
     };
     views.addEventListener("click", onViews);
-    if (hintRef.current) hintRef.current.textContent = fine.matches ? "Drag the solid to turn it. It settles back into place." : "Swipe sideways across the solid to turn it.";
+    const showHint = () => {
+      if (hintRef.current) hintRef.current.textContent = fine.matches ? "Drag the solid to turn it. It settles back into place." : "Swipe sideways across the solid to turn it.";
+    };
+    showHint();
 
     const onTheme = (e: Event) => hero?.theme((e as CustomEvent<Theme>).detail);
     window.addEventListener("rsx-theme", onTheme);
@@ -98,17 +101,27 @@ export function Hero() {
       views.hidden = true;
       if (hintRef.current) hintRef.current.textContent = "This is a drawing of the solid. Turning it needs WebGL.";
     };
-    const glOK = (() => {
-      if (params.get("webgl") === "off") return false;
-      try {
-        return !!document.createElement("canvas").getContext("webgl2");
-      } catch {
-        return false;
-      }
-    })();
+    // No trial context: browsers cap live ones, and createHero reports a renderer that cannot start.
+    const glOK = params.get("webgl") !== "off" && "WebGL2RenderingContext" in window;
     if (!glOK) fallback();
     else
-      createHero(stage, { reduced: reducedMotion, onView: setView, onSettle: () => sound.play("settle") })
+      createHero(stage, {
+        reduced: reducedMotion,
+        onView: setView,
+        onSettle: () => sound.play("settle"),
+        onContextLost: () => {
+          stage.classList.remove("has-gl");
+          hero?.canvas.classList.remove("is-ready");
+          fallback();
+        },
+        onContextRestored: () => {
+          stage.classList.remove("gl-off");
+          views.hidden = false;
+          showHint();
+          hero?.canvas.classList.add("is-ready");
+          stage.classList.add("has-gl");
+        },
+      })
         .then((h) => {
           if (cancelled) return h?.destroy();
           if (!h) return fallback();

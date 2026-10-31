@@ -88,7 +88,7 @@ export function posterSVG({ label }) {
 
 /* ------------------------------------------------------------------ WebGL */
 
-export async function createHero(host, { onView, onSettle, reduced } = {}) {
+export async function createHero(host, { onView, onSettle, reduced, onContextLost, onContextRestored } = {}) {
   const T = await import(/* @vite-ignore */ threeUrl);
   const canvas = document.createElement("canvas");
   canvas.className = "hero-canvas";
@@ -276,7 +276,8 @@ export async function createHero(host, { onView, onSettle, reduced } = {}) {
   /* ---------------------------------------------------------------- animation */
   const anim = { intro: null, camera: null };
   let raf = 0;
-  const request = () => { if (!raf) raf = requestAnimationFrame(tick); };
+  let offline = false; // context lost, or destroyed: nothing can be drawn
+  const request = () => { if (!raf && !offline) raf = requestAnimationFrame(tick); };
 
   const spin = { yaw: 0, pitch: 0, vy: 0, vp: 0, dragging: false };
   const qa = new T.Quaternion();
@@ -414,6 +415,30 @@ export async function createHero(host, { onView, onSettle, reduced } = {}) {
   canvas.addEventListener("pointerup", end);
   canvas.addEventListener("pointercancel", end);
 
+  /* ---------------------------------------------------------------- context loss
+     Three.js keeps the context restorable and rebuilds its GPU state; this
+     side stops drawing, finishes the entrance at once and reports the change. */
+  const contextLost = () => {
+    offline = true;
+    cancelAnimationFrame(raf);
+    raf = 0;
+    if (anim.intro) {
+      anim.intro = null;
+      for (const sw of sweeps) sw.mesh.visible = false;
+      lightLevel = 1;
+      applyLights();
+      placeCells(null);
+    }
+    onContextLost?.();
+  };
+  const contextRestored = () => {
+    offline = false;
+    request();
+    onContextRestored?.();
+  };
+  canvas.addEventListener("webglcontextlost", contextLost);
+  canvas.addEventListener("webglcontextrestored", contextRestored);
+
   /* ---------------------------------------------------------------- size */
   const resize = () => {
     const r = host.getBoundingClientRect();
@@ -479,6 +504,30 @@ export async function createHero(host, { onView, onSettle, reduced } = {}) {
       renderer.render(scene, camera);
     },
     debug: () => ({ intro: anim.intro, light: lightLevel, sweepVisible: sweeps.map((sw) => sw.mesh.visible), opacity: sweeps.map((sw) => sw.mat.opacity) }),
-    destroy() { ro.disconnect(); cancelAnimationFrame(raf); renderer.dispose(); canvas.remove(); },
+    destroy() {
+      offline = true;
+      canvas.removeEventListener("webglcontextlost", contextLost);
+      canvas.removeEventListener("webglcontextrestored", contextRestored);
+      ro.disconnect();
+      cancelAnimationFrame(raf);
+      for (const w of Object.values(walls)) {
+        w.material.map?.dispose();
+        w.material.dispose();
+        w.geometry.dispose();
+      }
+      for (const sw of sweeps) {
+        sw.mat.dispose();
+        sw.mesh.geometry.dispose();
+        sw.mesh.dispose();
+      }
+      solidMat.dispose();
+      geo.dispose();
+      solid.dispose();
+      for (const l of Object.values(lights)) l.dispose();
+      renderer.dispose();
+      // dispose() keeps the context; browsers cap live contexts, so release it.
+      renderer.forceContextLoss();
+      canvas.remove();
+    },
   };
 }

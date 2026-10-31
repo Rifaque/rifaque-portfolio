@@ -15,5 +15,5 @@ export type Hero = {
 export declare function posterSVG(opts: { label: string }): string;
 export declare function createHero(
   host: HTMLElement,
-  opts: { reduced: () => boolean; onView?: (v: HeroView) => void; onSettle?: () => void },
+  opts: { reduced: () => boolean; onView?: (v: HeroView) => void; onSettle?: () => void; onContextLost?: () => void; onContextRestored?: () => void },
 ): Promise<Hero | null>;
