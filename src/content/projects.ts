@@ -4,17 +4,18 @@
  * briefs (25 Oct 2026). Open questions are listed in
  * prototypes/rebuild-log/PROGRESS.md and resolved conservatively here:
  *
- *  - Nexus status is unresolved: "Private alpha · in development" (both parts
- *    are in the records), no "sole author" wording.
- *  - Bhatkal Time Luxe (owner's correction, 26 Oct 2026): a watch-commerce
- *    website concept for a Bhatkal-based retailer with an India-wide focus,
- *    built end to end by Rifaque through HubZero; current storefront iteration
- *    designed by him, original design by a HubZero co-founder; a later,
- *    independent currency experiment (KWD) that was not a client requirement;
- *    the site is now a live showcase, not an active storefront.
+ *  - Nexus: "Private alpha · in development"; sole author, confirmed by the
+ *    owner on 31 Oct 2026.
+ *  - Bhatkal Time Luxe (owner's correction, 31 Oct 2026): HubZero's first paid
+ *    client project for a Bhatkal-based retailer with an India-wide focus; a
+ *    co-founder established the initial UI/UX foundation, and Rifaque redesigned
+ *    the storefront and built it end to end on that foundation; GCC and Kuwait
+ *    support was a June–July 2026 demo for a prospective client; the site is
+ *    now a live showcase, not an active storefront.
  *  - Reflux: no repository link until the owner decides.
- *  - Licences: MIT for Atlas, BlueTap, ExtendSpace; Proprietary for Nexus and
- *    Reflux; nothing shown for the others.
+ *  - Licences: MIT for Atlas, BlueTap, ExtendSpace; Proprietary for Reflux;
+ *    closed source for Nexus, with future licensing undecided; nothing shown
+ *    for the others.
  *
  * Rules: no metric that was not measured, nothing planned presented as done,
  * team work attributed as such, every visual labelled Screenshot or
@@ -34,8 +35,8 @@ export const projects: Project[] = [
     kicker: "Personal AI operating layer",
     status: "Private alpha · in development",
     stage: "private-alpha",
-    licence: "Proprietary",
-    licenceNote: "Proprietary. The source is private; there is no public repository or demo.",
+    licence: "Closed source",
+    licenceNote: "Closed source. The source is private; there is no public repository or demo. Future licensing and distribution have not been decided.",
     period: "Jun 2026 – present",
     ownership: { kind: "personal", label: "Personal project · RSX Develops" },
     role: "Personal project",
@@ -233,8 +234,8 @@ export const projects: Project[] = [
     slug: "reflux",
     title: "Reflux",
     kicker: "Local-first media client",
-    status: "Pre-release · source-available, not open source",
-    stage: "pre-release",
+    status: "In development · source-available, not open source",
+    stage: "in-development",
     licence: "Proprietary",
     licenceNote:
       "Proprietary, all rights reserved. The source is publicly visible so the work can be seen, but that grants no permission to redistribute, modify or reuse it. Third-party components keep their own licences.",
@@ -267,7 +268,7 @@ export const projects: Project[] = [
     ],
     limits: [
       "Pre-release; nothing has been published.",
-      "At the latest recorded checkpoint, builds were checked on Windows and Linux desktops, a Google TV emulator, and one physical phone and one physical tablet. That is not broad device compatibility.",
+      "At the latest recorded checkpoint, builds were checked on Windows and Linux desktops, a Google TV emulator, and a Xiaomi Pad 7 tablet. Physical phone testing has not been completed. That is not broad device compatibility.",
       "Accessibility is partial: contrast and system text size are tested, while screen-reader labels on every control, focus order, reduced motion and a TalkBack / Narrator pass are not done yet.",
       "Source-specific library browsing and an adaptive navigation layout are planned, not built.",
     ],
@@ -315,7 +316,7 @@ export const projects: Project[] = [
     seo: {
       title: "Reflux: local-first media client",
       description:
-        "Reflux is a pre-release, proprietary Kotlin Multiplatform media client that treats a film or show as one work across many files and sources, with watch state that follows the work.",
+        "Reflux is an in-development, proprietary Kotlin Multiplatform media client that treats a film or show as one work across many files and sources, with watch state that follows the work.",
     },
   },
 
@@ -416,13 +417,13 @@ export const projects: Project[] = [
     slug: "layers-by-rsx",
     title: "Layers by RSX",
     kicker: "Android widget platform",
-    status: "In development · V1 not yet released",
+    status: "In development · paused",
     stage: "in-development",
     period: "Oct 2026 – present",
     ownership: { kind: "personal", label: "Personal project · RSX Develops" },
     role: "Personal project",
     summary:
-      "A customisable Android widget platform built around a portable widget definition: one shared runtime renders every widget, with a generic editor, a theme system and curated presets. Ten basic widget types are planned for V1; not all of them are built yet.",
+      "A customisable Android widget platform built around a portable widget definition: one shared runtime renders every widget, with a generic editor, a theme system and curated presets. Ten first-party widget families are implemented. Development is paused and nothing has been released.",
     problem: [
       "Layers separates what a widget is from how it is drawn. A widget is a portable definition; one runtime renders every widget at its real size, with per-instance customisation and themes.",
       "The same runtime handles first-party widgets and imported ones, so an imported widget gets the same validation, sizing and theming as a built-in one.",
@@ -444,10 +445,11 @@ export const projects: Project[] = [
       { name: "RemoteViews", why: "The rendering target for home-screen widgets." },
     ],
     limits: [
-      "No public release. V1 is in development.",
-      "Ten basic widget types are planned for V1; not all are implemented yet.",
+      "No public release. V1 is in development, and work is currently paused.",
+      "Ten first-party widget families are implemented: Clock, Battery, Music, Calendar, Countdown, Shortcuts, Device, Notes, Photos and Weather.",
+      "Weather's data provider is licensed for non-commercial use only, which remains a release condition.",
       "The .layers package format is internal and provisional.",
-      "Physical tablets, other launchers and spoken TalkBack have not been verified.",
+      "Automated testing has run on the Android emulator. Physical devices, other launchers and OEMs, and spoken TalkBack have not been verified.",
     ],
     links: [],
     linksNote: "No public release yet. The repository is private.",
@@ -492,7 +494,7 @@ export const projects: Project[] = [
     seo: {
       title: "Layers by RSX: Android widget platform",
       description:
-        "Layers by RSX is an in-development Android widget platform: portable widget definitions rendered by one shared runtime, with an editor, themes and presets. V1 is not yet released.",
+        "Layers by RSX is an in-development Android widget platform, currently paused: portable widget definitions rendered by one shared runtime, with an editor, themes and presets. V1 is not yet released.",
     },
   },
 
@@ -501,14 +503,14 @@ export const projects: Project[] = [
     slug: "bluetap",
     title: "BlueTap",
     kicker: "Android Bluetooth widgets",
-    status: "Pre-release · foundation complete",
-    stage: "pre-release",
+    status: "In development · paused",
+    stage: "in-development",
     licence: "MIT",
     period: "Sep 2026 – present",
     ownership: { kind: "personal", label: "Personal project · RSX Develops" },
     role: "Personal project",
     summary:
-      "Home-screen widgets for already-paired Bluetooth devices. Device assignment, per-widget appearance and responsive widget layouts work. Tapping a widget to connect or disconnect is the goal, and it is not implemented yet.",
+      "Home-screen widgets for already-paired Bluetooth devices. Device assignment, per-widget appearance and responsive widget layouts work. Development is paused with the pre-Android-17 foundation complete. Tapping a widget to connect or disconnect is the goal, and it is not implemented yet.",
     problem: [
       "The longer-term aim is one-tap Bluetooth control from the home screen: a widget per paired device. The foundation for that, which covers devices, widgets, appearance and persistence, is built. The connection itself is not.",
     ],
@@ -529,7 +531,7 @@ export const projects: Project[] = [
       { name: "Android", why: "Bonded-device access through the public Bluetooth APIs." },
     ],
     limits: [
-      "Connect and disconnect, live connection state and battery reporting are not implemented; they wait on Android 17's public APIs, to be verified on a real device first.",
+      "Connect and disconnect, live connection state and generic battery reporting are not implemented; they wait on Android 17's public APIs, to be verified on a real device first.",
       "Tapping a widget currently opens its editor.",
       "Pre-release: there is no published build.",
     ],
@@ -556,6 +558,7 @@ export const projects: Project[] = [
         heading: "Why it stops where it does",
         body: [
           "Connecting and disconnecting a device from a widget needs APIs that the public Android SDK does not offer before Android 17. BlueTap waits for them rather than reaching for hidden APIs, reflection, root or accessibility services, and the work will be verified on a real device before it ships.",
+          "The app currently targets API 36. Validating Android 17's public Bluetooth APIs on a real device is the next development phase.",
         ],
       },
       {
@@ -568,7 +571,7 @@ export const projects: Project[] = [
     seo: {
       title: "BlueTap: Android Bluetooth widgets",
       description:
-        "BlueTap is a pre-release, MIT-licensed set of Android home-screen widgets for paired Bluetooth devices. The foundation is complete; tap-to-connect is not implemented yet.",
+        "BlueTap is an MIT-licensed set of Android home-screen widgets for paired Bluetooth devices, in development and currently paused. The pre-Android-17 foundation is complete; tap-to-connect is not implemented yet.",
     },
   },
 
@@ -583,9 +586,9 @@ export const projects: Project[] = [
     ownership: {
       kind: "hubzero",
       label: "Three-person final-year project · HubZero Build",
-      credit: "Built by a team of three for our final-year engineering project, and later kept as a HubZero Build. I was the primary technical contributor.",
+      credit: "Built by a team of three for our final-year engineering project, and later kept as a HubZero Build. I was the primary technical contributor, and I was responsible for the later HubZero version, a separate codebase.",
     },
-    role: "Primary technical contributor, three-person team",
+    role: "Primary technical contributor, three-person team; responsible for the later HubZero version",
     summary:
       "A natural-language database querying app: plain English in, SQL or NoSQL queries out, generated by locally hosted Qwen and Mistral models through Ollama.",
     problem: [
@@ -611,9 +614,15 @@ export const projects: Project[] = [
     limits: [
       "The safeguards were prototype-grade: pattern-based checks in the client, not parsing, and connections were not read-only.",
       "Retired. There is no live deployment.",
-      "HubZero later rebuilt QueryCraft as a separate production codebase. That rebuild is not the final-year project and is not described here as my work.",
+      "This page describes the original project, which began in August 2025. The later HubZero version is a separate codebase: I revisited the idea with an updated UI and was responsible for its development and reworking. It is also retired.",
     ],
-    links: [{ label: "Repository (HubZero)", href: "https://github.com/HubZeroHQ/querycraft", kind: "source" }],
+    links: [
+      { label: "Original repository", href: "https://github.com/Rifaque/querycraft", kind: "source" },
+      { label: "Original frontend", href: "https://github.com/Rifaque/querycraft-frontend", kind: "source" },
+      { label: "Original backend", href: "https://github.com/Rifaque/querycraft-backend", kind: "source" },
+      { label: "Original LLM setup", href: "https://github.com/Rifaque/querycraft-llm", kind: "source" },
+      { label: "Later HubZero version", href: "https://github.com/HubZeroHQ/querycraft", kind: "source" },
+    ],
     media: [
       {
         kind: "illustration",
@@ -668,13 +677,13 @@ export const projects: Project[] = [
     ownership: {
       kind: "hubzero",
       label: "HubZero client project",
-      credit: "A HubZero client project. I built it end to end through HubZero and designed the current storefront iteration; the original design was created by a HubZero co-founder. It is not an RSX Develops product.",
+      credit: "A HubZero client project. I designed and developed the redesigned Bhatkal Time Luxe storefront end to end, building upon the initial UI/UX foundation established by the co-founder. It is not an RSX Develops product.",
     },
-    role: "Architecture, frontend and full-stack implementation, database and infrastructure, end to end through HubZero",
+    role: "Storefront redesign, architecture, frontend and full-stack implementation, database and infrastructure, end to end through HubZero",
     summary:
-      "A watch-commerce website concept for a Bhatkal-based retailer, with an India-wide market focus, and HubZero's first paid client project. I built it end to end and designed its current storefront; it remains live as a showcase, not an active storefront.",
+      "A watch-commerce storefront for a Bhatkal-based retailer, with an India-wide market focus, and HubZero's first paid client project. I redesigned it and built the redesigned storefront end to end on a co-founder's initial UI/UX foundation; it remains live as a showcase, not an active storefront.",
     problem: [
-      "The retailer sold through conversation on WhatsApp. The storefront handles discovery, presentation and building a cart, then hands the order to WhatsApp, where the business already knew how to sell, rather than replacing that with a payment gateway.",
+      "The retailer sold online only, showing stock on Instagram and handling orders over WhatsApp. The storefront handles discovery, presentation and building a cart, then hands the order to WhatsApp, where the business already knew how to sell, rather than replacing that with a payment gateway.",
     ],
     how: [
       { title: "Storefront", body: "A Next.js App Router storefront deployed on Vercel, with brand and collection browsing and filtering." },
@@ -683,7 +692,7 @@ export const projects: Project[] = [
       { title: "Search engines", body: "Server-rendered pages with JSON-LD and a sitemap, so the catalogue is crawlable." },
     ],
     decisions: [
-      { title: "Concierge checkout", body: "Checkout hands a structured cart to WhatsApp, matching how the business already sold." },
+      { title: "WhatsApp order checkout", body: "Checkout opens WhatsApp with a generated order message for the customer to send, matching how the business already sold." },
       { title: "Server-rendered catalogue", body: "Pages are rendered on the server with structured data, so the catalogue can be indexed." },
       { title: "Clear ownership", body: "This is client work delivered by HubZero; the code belongs to the client project and is not presented as a personal open-source project." },
     ],
@@ -694,9 +703,9 @@ export const projects: Project[] = [
       { name: "Vercel", why: "Hosting for the storefront." },
     ],
     limits: [
-      "The client did not continue the partnership. The website remains live as a showcase of my work, not an active storefront.",
+      "The first website was built in April 2025, the redesigned storefront was delivered in August 2025, and the partnership ended in September 2025. The website remains live as a HubZero showcase, not an active storefront.",
       "Client work: the code belongs to the client project and is not presented here as a personal open-source project.",
-      "Configurable currency presentation was a later, independent experiment of mine; KWD was used in it. It was not a client requirement or evidence of a Kuwait or GCC market.",
+      "GCC and Kuwait support, shown here through KWD, came in June–July 2026 as a demo for a prospective client, not a feature delivered to the original seller.",
       "No traffic, sales or performance figures are published here.",
     ],
     links: [{ label: "Live site", href: "https://btl.hubzero.in", kind: "live" }],
@@ -722,7 +731,7 @@ export const projects: Project[] = [
       {
         heading: "Who did what",
         body: [
-          "This was a HubZero engagement. I built it end to end: the architecture, the frontend and full-stack implementation, the database and the infrastructure. I designed the current storefront iteration; the original design was created by one of my HubZero co-founders.",
+          "This was a HubZero engagement. A co-founder, a UI/UX designer, established the initial mobile-only UI foundation. I substantially redesigned the interface, including the desktop experience, and built the redesigned storefront end to end on that foundation: the architecture, the frontend and full-stack implementation, the database and the infrastructure.",
         ],
       },
       {
@@ -732,7 +741,7 @@ export const projects: Project[] = [
           "A separate Node.js API backed by MongoDB.",
           "An image pipeline through Cloudinary with imgix in front for delivery.",
           "Server-rendered pages with JSON-LD and a sitemap, so the catalogue is crawlable.",
-          "A WhatsApp-based concierge checkout.",
+          "A WhatsApp-based order checkout with a generated, prefilled order message.",
         ],
       },
       {
@@ -745,7 +754,7 @@ export const projects: Project[] = [
     seo: {
       title: "Bhatkal Time Luxe: client project, HubZero",
       description:
-        "Bhatkal Time Luxe: a watch-commerce website concept for a Bhatkal-based retailer and HubZero's first paid client project, built end to end by Rifaque Akrami. Now a live showcase.",
+        "Bhatkal Time Luxe: a watch-commerce storefront for a Bhatkal-based retailer and HubZero's first paid client project, redesigned and built end to end by Rifaque Akrami. Now a live showcase.",
     },
   },
 ];

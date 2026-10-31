@@ -4,13 +4,17 @@ import { archive, education, experience, stackSwitches } from "./profile";
 import { routes } from "./routes";
 import { site } from "./site";
 
-/** Every outbound link, as recorded in knowledge-base/links-and-contact.md. */
+/** Every outbound link, as recorded in knowledge-base/portfolio.md. */
 const verifiedLinks = new Set([
   "https://github.com/Rifaque/atlas",
   "https://github.com/Rifaque/atlas/releases/tag/v1.0.3",
   "https://atlas.rsxdevelops.dev",
   "https://github.com/Rifaque/blue-tap",
   "https://github.com/HubZeroHQ/querycraft",
+  "https://github.com/Rifaque/querycraft",
+  "https://github.com/Rifaque/querycraft-frontend",
+  "https://github.com/Rifaque/querycraft-backend",
+  "https://github.com/Rifaque/querycraft-llm",
   "https://btl.hubzero.in",
 ]);
 
@@ -46,14 +50,16 @@ describe("projects", () => {
       expect(p.ownership.label).not.toMatch(/RSX Develops/);
     }
     const btl = projects.find((x) => x.slug === "bhatkal-time-luxe")!;
-    // Owner's correction (26 Oct 2026): built end to end through HubZero; a Bhatkal-based,
-    // India-wide concept; Kuwait or the GCC only ever named to say they were not the market.
+    // Owner's correction (31 Oct 2026): a genuine paid client project, redesigned on a
+    // co-founder's foundation; Kuwait or the GCC named only as later prospective-client demo work.
     expect(btl.role).toMatch(/end to end through HubZero/);
     expect(allText(btl)).not.toMatch(/60\s?%|I built the frontend|not necessarily my implementation/);
     expect(btl.summary).toMatch(/Bhatkal-based/);
     expect(btl.summary).toMatch(/India-wide/);
+    expect(allText(btl)).not.toMatch(/\bconcept\b/i);
+    expect(allText(btl.ownership)).toMatch(/foundation established by the co-founder/);
     const gulf = allText(btl).match(/[^."]*(Kuwait|GCC)[^."]*/g) ?? [];
-    for (const sentence of gulf) expect(sentence).toMatch(/not a client requirement|not evidence|or evidence of/);
+    for (const sentence of gulf) expect(sentence).toMatch(/prospective client/);
     const qc = projects.find((x) => x.slug === "querycraft")!;
     expect(qc.period).toBe("Aug 2025 – Jan 2026");
     expect(allText(qc)).toMatch(/three/);
@@ -62,7 +68,7 @@ describe("projects", () => {
   it("shows only verified licences", () => {
     const lic = Object.fromEntries(projects.map((p) => [p.slug, p.licence ?? null]));
     expect(lic).toEqual({
-      nexus: "Proprietary",
+      nexus: "Closed source",
       atlas: "MIT",
       reflux: "Proprietary",
       extendspace: "MIT",
@@ -74,19 +80,22 @@ describe("projects", () => {
   });
 
   it("never calls a proprietary project open source", () => {
-    for (const p of projects.filter((x) => x.licence === "Proprietary")) {
+    for (const p of projects.filter((x) => x.licence === "Proprietary" || x.licence === "Closed source")) {
       expect(allText(p).replace(/not open source/g, ""), p.slug).not.toMatch(/open[- ]source/i);
     }
   });
 
   it("keeps the conservative wording for unresolved questions", () => {
     const nexus = projects.find((x) => x.slug === "nexus")!;
-    expect(allText(nexus)).not.toMatch(/sole author/i);
     expect(nexus.links).toEqual([]);
     const reflux = projects.find((x) => x.slug === "reflux")!;
     expect(reflux.links).toEqual([]);
+    expect(allText(reflux)).toMatch(/Physical phone testing has not been completed/);
+    expect(allText(reflux)).not.toMatch(/physical phone and/i);
     const layers = projects.find((x) => x.slug === "layers-by-rsx")!;
-    expect(allText(layers)).toMatch(/Ten basic widget types are planned for V1; not all/);
+    expect(allText(layers)).toMatch(/Ten first-party widget families are implemented/);
+    for (const family of ["Clock", "Battery", "Music", "Calendar", "Countdown", "Shortcuts", "Device", "Notes", "Photos", "Weather"]) expect(allText(layers)).toContain(family);
+    expect(allText(layers)).toMatch(/non-commercial use only/);
     const bluetap = projects.find((x) => x.slug === "bluetap")!;
     expect(allText(bluetap)).toMatch(/not implemented/);
     const es = projects.find((x) => x.slug === "extendspace")!;

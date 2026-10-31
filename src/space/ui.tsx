@@ -63,7 +63,7 @@ export function AsideStrip({ kind }: { kind: Aside }) {
             <b>Now:</b> USB, wired, the current focus
           </span>
           <span className="ps-road-next">
-            <b>Next:</b> Wi-Fi, wireless. Planned after the wired milestone, when development resumes.
+            <b>Next:</b> Wi-Fi, wireless. Planned after the wired milestone.
           </span>
         </p>
         <p className="ps-pipe" aria-label="Pipeline: capture, H.264 encode, USB, decode, surface">

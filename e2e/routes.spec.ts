@@ -89,7 +89,7 @@ test.describe("content in the prerendered HTML", () => {
     expect(await (await request.get("/work/querycraft")).text()).toMatch(/class="ro-credit"/);
     const btl = await (await request.get("/work/bhatkal-time-luxe")).text();
     expect(btl).toContain("Ownership</dt><dd>HubZero client project</dd>");
-    expect(btl).toContain("original design by a HubZero co-founder");
+    expect(btl).toContain("Initial mobile-only UI/UX foundation by a co-founder");
     expect(btl).not.toMatch(/Kuwait and the wider GCC|serving Kuwait/);
   });
 
@@ -101,7 +101,7 @@ test.describe("content in the prerendered HTML", () => {
     expect(await licence("atlas")).toBe("MIT");
     expect(await licence("bluetap")).toBe("MIT");
     expect(await licence("extendspace")).toBe("MIT");
-    expect(await licence("nexus")).toBe("Proprietary");
+    expect(await licence("nexus")).toBe("Closed source");
     expect(await licence("reflux")).toBe("Proprietary");
     for (const slug of ["layers-by-rsx", "querycraft", "bhatkal-time-luxe"]) expect(await licence(slug)).toBeNull();
     for (const slug of ["reflux", "nexus"]) {

@@ -1,6 +1,6 @@
 /**
- * Identity, contact and links. Source: knowledge-base/brand-and-identity.md and
- * links-and-contact.md (published, public). Display name and full name follow
+ * Identity, contact and links. Source: knowledge-base/portfolio.md
+ * (published, public). Display name and full name follow
  * the owner's Milestone 0 decision: "Rifaque Akrami" displayed, "Rifaque Ahmed
  * Akrami" as the full name.
  */

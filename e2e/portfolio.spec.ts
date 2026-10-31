@@ -214,13 +214,13 @@ test.describe("also built and archive @core", () => {
     await expect(page.locator("#archive")).not.toContainText("DevPilot");
   });
 
-  test("Bhatkal Time Luxe keeps its India-wide framing and the currency experiment", async ({ page }) => {
+  test("Bhatkal Time Luxe keeps its India-wide framing and the later demo", async ({ page }) => {
     await page.goto("/work/bhatkal-time-luxe");
     const main = page.locator("main");
     await expect(main).toContainText("Bhatkal-based retailer");
     await expect(main).toContainText("India-wide");
-    await expect(main).toContainText("original design by a HubZero co-founder");
-    await expect(main).toContainText("not a client requirement");
+    await expect(main).toContainText("Initial mobile-only UI/UX foundation by a co-founder");
+    await expect(main).toContainText("a demo for a prospective client");
     await expect(main).toContainText("not an active storefront");
   });
 });

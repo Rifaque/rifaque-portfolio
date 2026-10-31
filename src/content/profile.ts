@@ -1,7 +1,7 @@
 /**
  * About-page material: experience, education, principles, evidence-linked
- * skills and the archive. Source: knowledge-base/experience-and-education.md,
- * about-and-profile.md, brand-and-identity.md and projects/other-projects.md
+ * skills and the archive. Source: knowledge-base/profile.md, portfolio.md
+ * and projects/other-projects.md
  * (published, public-safe). The Bhatkal Time Luxe line follows the owner's
  * correction of 26 Oct 2026: built end to end through HubZero.
  */
@@ -47,7 +47,7 @@ export const experience: Role[] = [
     location: "Bhatkal, India",
     summary: "An engineering studio I co-founded. I work across its architecture, full-stack implementation and delivery infrastructure.",
     highlights: [
-      "Built HubZero's first paid client project, Bhatkal Time Luxe, end to end: architecture, full-stack implementation, database and infrastructure.",
+      "Redesigned and built the Bhatkal Time Luxe storefront, HubZero's first paid client project, end to end on a co-founder's initial UI/UX foundation: architecture, full-stack implementation, database and infrastructure.",
       "Built reusable Blueprint foundations that client work starts from, and manage delivery infrastructure across Cloudflare, Vercel, DNS and Linux.",
       "Shipped the studio's site, hubzero.in.",
     ],
@@ -79,7 +79,7 @@ export const education = {
 /** Each skill points at work where it was used; no skill wall. */
 export const skills: { area: string; items: string; evidence: string }[] = [
   { area: "Web and full-stack", items: "TypeScript, React, Next.js, Node.js, Express, REST and GraphQL APIs", evidence: "RG SmartDiscovery, HubZero, Bhatkal Time Luxe, QueryCraft" },
-  { area: "Retrieval and local AI", items: "RAG, BM25, embeddings, reciprocal-rank fusion, Ollama", evidence: "Atlas, Nexus, QueryCraft" },
+  { area: "Retrieval and local AI", items: "RAG, BM25, embeddings, reciprocal-rank fusion, Ollama", evidence: "Atlas, Nexus" },
   { area: "Desktop and systems", items: "Rust and Tauri 2; Python and FastAPI; C# / .NET and WinUI 3", evidence: "Atlas, Nexus, ExtendSpace" },
   { area: "Android", items: "Kotlin, Kotlin Multiplatform, Jetpack Compose, Glance, Media3", evidence: "Reflux, Layers by RSX, BlueTap, ExtendSpace" },
   { area: "Data", items: "PostgreSQL with pgvector, MongoDB", evidence: "Nexus, QueryCraft, Bhatkal Time Luxe" },
@@ -186,7 +186,7 @@ export type ChronEntry = {
 
 export const chronicle: ChronEntry[] = [
   { kind: "Personal projects", title: "Reflux, ExtendSpace, Layers by RSX", org: "RSX Develops", from: [2026, 10], to: null, note: "All three started at the beginning of October 2026." },
-  { kind: "Personal project", title: "BlueTap", org: "RSX Develops", from: [2026, 9], to: null, note: "Started at the end of September 2026.", slug: "bluetap" },
+  { kind: "Personal project", title: "BlueTap", org: "RSX Develops", from: [2026, 9], to: null, note: "Started at the end of September 2026. Paused at the pre-Android-17 foundation.", slug: "bluetap" },
   { kind: "Personal project", title: "Nexus", org: "RSX Develops", from: [2026, 6], to: null, note: "Private alpha, actively developing.", slug: "nexus" },
   { kind: "Personal project", title: "Atlas", org: "RSX Develops", from: [2026, 2], to: [2026, 9], note: "v1.0.3 released in September 2026.", slug: "atlas" },
   { kind: "Employment", title: "Software Engineer Intern", org: "RG SmartDiscovery LLP", from: [2025, 8], to: [2026, 5], note: "Frontend development and API integration for nxNearby's job portal and AI-assisted course and quiz workflows." },
@@ -206,7 +206,7 @@ export const archiveBuilds: ArchiveBuild[] = [
   {
     id: "hubzero-site",
     name: "HubZero website",
-    meta: "2025 to now · Live · HubZero's site",
+    meta: "Nov 2024 to now · Live · HubZero's site",
     what: "HubZero's public site and Studio, the CMS that publishes it, as one application.",
     tech: "Next.js 15 (App Router) and TypeScript with Tailwind CSS. Studio writes to MongoDB through a draft, review and publish workflow; public pages read only published content, through one visibility check; NextAuth guards Studio. I shipped the site, and GitHub records me as its only committer; the site and the work it presents belong to HubZero.",
     links: [

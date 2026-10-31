@@ -129,10 +129,10 @@ const D: Record<DiagramId, [number, string, () => string]> = {
     ${t(437, 220, "ToolRuntime: the only place an effect can happen", "t-em", "middle")}
     ${t(104, 220, "can recommend, never act", "", "middle")}`],
 
-  "extendspace-roadmap": [210, "Illustration of the ExtendSpace order of work: the USB, wired path is the first milestone and the current focus; Wi-Fi, wireless extension is planned after it, when development resumes. Connect stays disabled until then.", () => `
+  "extendspace-roadmap": [210, "Illustration of the ExtendSpace order of work: the USB, wired path is the first milestone and the current focus; Wi-Fi, wireless extension is planned after it. Connect stays disabled until then.", () => `
     ${node(20, 30, 230, 70, "1 · USB, wired", "current focus: finishing it", true)}
     ${arrow(250, 65, 340, 65)}${t(295, 54, "then", "", "middle")}
-    ${node(340, 30, 240, 70, "2 · Wi-Fi, wireless", "planned, when development resumes", false, true)}
+    ${node(340, 30, 240, 70, "2 · Wi-Fi, wireless", "planned after the wired milestone", false, true)}
     ${t(20, 140, "Not implemented yet:", "t-strong")}
     ${t(20, 162, "pairing · input forwarding · the virtual display that true extension needs")}
     ${t(20, 188, "Connect is disabled in both apps.", "t-em")}`],

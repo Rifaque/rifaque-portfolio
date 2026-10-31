@@ -12,7 +12,7 @@
  * emulator capture an emulator capture, an illustration an illustration.
  * Bhatkal Time Luxe uses current-site captures (26 Oct 2026) with the site's own
  * currency selector set to INR; one KWD capture is kept, labelled as the later
- * currency experiment. The 2025 composite is not used.
+ * later demo. The 2025 composite is not used.
  */
 import { projectBySlug } from "../content/projects";
 import type { Project } from "../content/types";
@@ -79,7 +79,7 @@ const btlLive: Shot[] = [
   { kind: "live", src: btlArrivals, w: 1440, h: 900, alt: "Bhatkal Time Luxe New Arrivals catalogue on desktop: a grid of watch cards with discount badges, prices in rupees and Add buttons.", caption: "New Arrivals catalogue, desktop. Currency set to INR." },
   { kind: "live", src: btlHomeMobile, w: 390, h: 680, alt: "Bhatkal Time Luxe home page on a phone: headline, Shop Collection button, three service badges and a row of brand logos.", caption: "Home, mobile (cropped above the floating contact button)." },
   { kind: "live", src: btlProductMobile, w: 390, h: 844, alt: "Bhatkal Time Luxe product page on a phone: watch photo, price in rupees, brand, colourway and reference.", caption: "Product page, mobile. Currency set to INR." },
-  { kind: "live", src: btlProductKwd, w: 1440, h: 900, alt: "The same Bhatkal Time Luxe product page with prices shown in Kuwaiti dinar (KD), from the later currency-presentation experiment.", caption: "Product page with the currency set to KWD: my later currency experiment, not a client requirement." },
+  { kind: "live", src: btlProductKwd, w: 1440, h: 900, alt: "The same Bhatkal Time Luxe product page with prices shown in Kuwaiti dinar (KD), from the later demo work.", caption: "Product page with the currency set to KWD: later demo work, not the original seller's store." },
 ];
 const draw = (id: DiagramId, alt: string, caption: string): Drawing => ({ kind: "illustration", id, alt, caption });
 const nexusDrawing = draw("nexus", "Illustration of the Nexus request path: the Command Fabric and the Cortex propose; only ToolRuntime, through its gate, policy and approval, can produce an effect.", "Nexus has no published interface.");
@@ -217,7 +217,7 @@ export const space: SpaceProject[] = [
     project: P("nexus"),
     platforms: ["Windows"],
     blurb: "A local, voice-first assistant layer for one Windows machine, built so a model can propose but only a governed runtime can act.",
-    part: "Personal project: architecture, governance model, runtime.",
+    part: "Sole author: architecture, governance model, runtime.",
     purpose: "A local-first, voice-first layer for one owner on one Windows machine, built so that what a model may suggest stays separate from what is allowed to happen.",
     contribution: "Architecture, governance model, runtime, voice and Surface work.",
     highlights: [
@@ -240,14 +240,14 @@ export const space: SpaceProject[] = [
     caseStudy: {
       kicker: "Personal AI operating layer · case study",
       summary: "A local-first, voice-first layer for one owner on one Windows machine. Deterministic recognition handles what it can without a model, a reasoning step is reached only when it declines, and every effect passes through one governed tool runtime.",
-      facts: [["Period", "Jun 2026 to now"], ["Runs on", "Windows, one owner, one machine"], ["Source", "Private; no public demo"], ["Stack", "Python 3.13 · FastAPI · PostgreSQL + pgvector · pywebview / WebView2 · faster-whisper · Anthropic Claude · Ollama"]],
+      facts: [["Role", "Personal project, sole author"], ["Period", "Jun 2026 to now"], ["Runs on", "Windows, one owner, one machine"], ["Source", "Private; no public demo"], ["Stack", "Python 3.13 · FastAPI · PostgreSQL + pgvector · pywebview / WebView2 · faster-whisper · Anthropic Claude · Ollama"]],
       openLabel: "the governed request path on a glass panel, in front of a monitor that carries only a label",
       sections: [
         { id: "question", heading: "The question", quote: "How can a personal AI stay useful without capability quietly becoming authority?", body: ["Most assistants become more useful by being allowed to do more. Nexus keeps those apart: it can hold a great deal of context about its owner and their work, while what it may actually change on the machine stays **narrow, explicit and auditable**.", "There is no published interface. The drawing above is an illustration, and the monitor behind it carries only a label."], visual: { type: "diagram", id: "nexus-layers", caption: "Recognise and decide in front; act only inside ToolRuntime." } },
         { id: "words", heading: "From words to effects", flip: true, body: ["A request passes through layers that each decide one thing. Only the last one can change anything."], list: ["**Command Fabric:** deterministic, model-less recognition. \"Set a timer for ten minutes\" becomes a typed intent with typed slots, or is marked ambiguous, unsupported or a matter for the assistant. It cannot execute anything.", "**Response engine:** deterministic wording for structured outcomes, with no model call.", "**Cortex:** reached only when the deterministic layers decline. One bounded decision: answer, pick one governed capability from a closed set, ask, or delegate.", "**ToolRuntime:** the only place an effect happens, behind a capability gate and a policy in which one deny beats any number of allows."], visual: { type: "diagram", id: "nexus", caption: "The governed request path." } },
         { id: "approval", heading: "Approval that cannot drift", body: ["A consequential call needs explicit owner confirmation, and that approval is **bound to a hash of the computed effect**. The executor computes the effect itself; the model's description of it is never trusted. If the effect changes after approval, the approval is void.", "Mutations are checkpointed in a shadow Git repository, and every call is recorded in an append-only, hash-chained ledger, denials and failures included."], visual: { type: "diagram", id: "nexus-approval", caption: "The owner approves an effect, not a description of one." } },
         { id: "decisions", heading: "Decisions and trade-offs", list: ["**The defaults refuse.** The standard policy stack is read-only, so every call at or above \"mutate\" is denied before confirmation is reached; mutating stacks are explicit opt-in configurations.", "**Dangerous capabilities stay absent.** Host control registers no tool at all unless configured, and there is no shell, PowerShell or run-command tool.", "**Deterministic first.** A model is used only where the deterministic layers cannot answer, which keeps common requests fast and predictable.", "**Voice without listening.** Push-to-talk with no wake word and no background listening; speech-to-text runs locally on faster-whisper."] },
-        { id: "status", heading: "Status and limits", status: true, linksNote: "No public source or demo.", list: ["Private alpha: Windows only, single owner, unreleased, with no public demo or source.", "The newest tag predates the desktop shell and voice. Those exist on working branches and have not been tagged or released.", "Spoken acceptance of the voice endpoint on the owner's machine is paused.", "No screenshot is shown: existing Surface captures contain personal content."] },
+        { id: "status", heading: "Status and limits", status: true, linksNote: "No public source or demo.", list: ["Private alpha: Windows only, single owner, unreleased, with no public demo or source.", "Closed source. Future licensing and distribution have not been decided.", "The newest tag predates the desktop shell and voice. Those exist on working branches and have not been tagged or released.", "Spoken acceptance of the voice endpoint on the owner's machine is paused.", "No screenshot is shown: existing Surface captures contain personal content."] },
       ],
     },
   },
@@ -264,7 +264,7 @@ export const space: SpaceProject[] = [
     highlights: [
       ["A pipeline with owners", "Capture and hardware H.264 on Windows, decoding on Android, each behind an explicit session owner."],
       ["Tested, narrowly", "A 1080p60 test pattern streamed for ten minutes on one PC and one tablet; the USB link recovers from a pulled cable."],
-      ["Wired first", "USB is the first milestone and the current focus. Wi-Fi is planned after it, when development resumes."],
+      ["Wired first", "USB is the first milestone and the current focus. Wi-Fi is planned after it."],
     ],
     limits: "Connect is disabled in both apps. Tested on one PC and one tablet. Wi-Fi is planned after the wired milestone; pairing, input forwarding and the virtual display are not implemented.",
     missing: ["No public link: the public repository's last push predates this work."],
@@ -285,7 +285,7 @@ export const space: SpaceProject[] = [
       facts: [["Period", "Oct 2026 to now"], ["Runs on", "Windows host, Android tablet"], ["Stack", "C# / .NET 10 · WinUI 3 · Kotlin · Jetpack Compose · H.264 (Media Foundation, MediaCodec) · USB transport"]],
       openLabel: "a Windows host monitor and an Android tablet joined by a USB cable",
       sections: [
-        { id: "aim", heading: "The aim, and the order of work", quote: "Can a tablet on a USB cable become a dependable second screen for Windows?", body: ["Mirroring first, true extension later; extension needs a virtual display driver on Windows. The work so far is the streaming pipeline and the session machinery around it."], list: ["**First: USB, wired.** The current focus is finishing this path.", "**Then: Wi-Fi, wireless.** Planned after the wired milestone, when development resumes. It is not implemented."], visual: { type: "diagram", id: "extendspace-roadmap", caption: "Wired first; wireless only after the wired milestone." } },
+        { id: "aim", heading: "The aim, and the order of work", quote: "Can a tablet on a USB cable become a dependable second screen for Windows?", body: ["Mirroring first, true extension later; extension needs a virtual display driver on Windows. The work so far is the streaming pipeline and the session machinery around it."], list: ["**First: USB, wired.** The current focus is finishing this path.", "**Then: Wi-Fi, wireless.** Planned after the wired milestone. It is not implemented."], visual: { type: "diagram", id: "extendspace-roadmap", caption: "Wired first; wireless only after the wired milestone." } },
         { id: "built", heading: "How it is put together", flip: true, list: ["**Windows host** in C# and WinUI 3: display capture and hardware H.264 encoding behind a production session owner.", "**Android companion** in Kotlin and Jetpack Compose: link, decoder ownership and surface handling, with a session state model covered by unit tests.", "**A draft wire protocol**, implemented on both sides, over a USB transport with reconnection."], after: ["The host screen in the 3D view is an illustration: no capture of the host interface is published."], visual: { type: "diagram", id: "extendspace", caption: "Capture and encode on Windows, USB, decode and draw on the tablet." } },
         { id: "tested", heading: "What has been tested", body: ["On one PC and one tablet over USB, the production session path streamed a **1080p60 test pattern for ten minutes: 36,081 frames** sent, all decoded and released to the tablet's surface.", "These runs were driven by gated acceptance tests on the PC and a debug-only screen on the tablet. They show the pipeline working on one setup; they are not broad device validation."], visual: { type: "media", media: esShot } },
         { id: "recover", heading: "Recovering, not restarting", flip: true, body: ["The USB link recovers from a pulled cable with video still flowing afterwards.", "Decoders are created on a dedicated owner thread, never on the reader thread, and a creation is used only if it still matches the stream that is wanted. Frames that arrive meanwhile wait in order, within limits; beyond that, the stream skips to the next keyframe."], visual: { type: "diagram", id: "extendspace-recovery", caption: "A pulled cable costs a keyframe, not the session." } },
@@ -308,7 +308,7 @@ export const space: SpaceProject[] = [
       ["Careful identification", "Embedded IDs and edition tags are honoured; weak matches go to an Identify flow instead of being guessed."],
       ["Your folders stay yours", "Organisation is virtual: Reflux never renames, moves or modifies files."],
     ],
-    limits: "Pre-release; nothing published. Android and TV builds verified mainly on emulators; accessibility is partial.",
+    limits: "Pre-release; nothing published. Tablet validation passed on a Xiaomi Pad 7; physical phone testing is not complete. Accessibility is partial.",
     missing: ["No interface capture yet; any capture must avoid copyrighted artwork."],
     evidence: [refluxDrawing],
     scene: {
@@ -320,7 +320,7 @@ export const space: SpaceProject[] = [
         { id: "phone", kind: "phone", at: [37, 12, 8, 9], phone: [-30, -23, -4, 21], ...none("Android", 9 / 19.5) },
       ],
       aside: "text-reflux",
-      cap: [["illustration", "Media model · no captures published · Android builds verified mainly on emulators"]],
+      cap: [["illustration", "Media model · no captures published · physical phone testing not complete"]],
     },
     caseStudy: {
       kicker: "Local-first media client · case study",
@@ -331,7 +331,7 @@ export const space: SpaceProject[] = [
         { id: "model", heading: "Works, versions and sources", quote: "What if a film were one thing, no matter how many files it lives in?", body: ["Most players treat a file as the thing you watch. Reflux treats the film or show as the thing, and files as versions of it that sources happen to provide. A 1080p copy on a laptop, a 4K copy on a Jellyfin server and an extended edition on a network share are **three versions of one work**.", "Library state lives in the platform's data directory and never in your media folders; nothing is renamed or moved."], visual: { type: "stage", only: "model", w: 62, pw: 88, ar: "16 / 11", kind: "illustration", label: "the media model alone on a glass panel; turn it to see the drawing through the glass", caption: "The same drawing, turnable: from behind it shows through the glass, reversed." } },
         { id: "identify", heading: "Identification", flip: true, list: ["Titles are read from ordinary filenames: a title ends at the first unambiguous release token, and ambiguous words are only hints.", "Embedded IDs such as **{tmdb-123}** and IMDb IDs, and Plex **{edition-…}** tags, are honoured.", "A file without a year joins its title's only known year; with several, it stays separate rather than being guessed into the wrong work.", "A metadata match is accepted only when it is strong and clearly ahead of the runner-up. Anything else goes to an Identify flow."], visual: { type: "diagram", id: "reflux-identify", caption: "From filename to one work, or to a person's decision." } },
         { id: "play", heading: "Playback", body: ["One engine drives every form factor: **Media3 on Android and libmpv on desktop**. Reflux picks the best available version for the device, and input adapts to touch, mouse and keyboard, game controllers and TV remotes.", "The platform outlines in the 3D view are labelled \"No capture published\": no interface capture is shown, and none would use copyrighted artwork."], visual: { type: "diagram", id: "reflux-playback", caption: "One shared engine, two playback back ends." } },
-        { id: "status", heading: "Status and limits", status: true, linksNote: "No release or demo yet.", list: ["Pre-release; nothing has been published.", "Android and television builds have been verified mainly on emulators.", "Accessibility is partial: contrast and system text size are tested; screen-reader labels on every control, focus order, reduced motion and a TalkBack or Narrator pass are not done yet.", "Reflux is proprietary. Source visibility grants no permission to redistribute, modify or reuse it."] },
+        { id: "status", heading: "Status and limits", status: true, linksNote: "No release or demo yet.", list: ["Pre-release; nothing has been published.", "Tablet validation passed on a Xiaomi Pad 7. Physical phone testing has not been completed.", "Accessibility is partial: contrast and system text size are tested; screen-reader labels on every control, focus order, reduced motion and a TalkBack or Narrator pass are not done yet.", "Reflux is proprietary. Source visibility grants no permission to redistribute, modify or reuse it."] },
       ],
     },
   },
@@ -350,7 +350,7 @@ export const space: SpaceProject[] = [
       ["Real sizes", "Widgets size from their real dimensions, with per-instance overrides and a multi-size preview workspace."],
       ["Studio, later", "Layers Studio is specified as a browser editor that opens the same .layers packages; no Studio source exists yet."],
     ],
-    limits: "Ten basic widget types planned for V1; not all implemented. Notes and Photos exist on a branch only. Physical tablets, other launchers and TalkBack not verified.",
+    limits: "Paused; no public release. Ten first-party widget families are implemented, tested on the Android emulator. Physical devices, other launchers and OEMs, and TalkBack are not verified. Weather's non-commercial data licence remains a release condition.",
     missing: ["Captures are from the emulator; physical devices not shown.", "No public release or repository."],
     evidence: [layersTablet, ...layersLaunchers],
     studio: ["Opens the same .layers packages", "Visual editing with live previews at several sizes", "Local use, no account or backend"],
@@ -369,11 +369,11 @@ export const space: SpaceProject[] = [
       facts: [["Period", "Oct 2026 to now"], ["Runs on", "Android"], ["Source", "Private repository"], ["Stack", "Kotlin · Jetpack Compose · RemoteViews"]],
       openLabel: "the large-window editor on a tablet and home-screen widgets on a phone, both emulator captures",
       sections: [
-        { id: "runtime", heading: "One definition, one runtime", body: ["Every widget, first-party or imported, is a portable definition that goes through the same steps: a bounded parse, schema checks, resolution against theme, defaults and per-instance overrides, sizing from the widget's real dimensions, and rendering with **RemoteViews**.", "Seven widget families are merged: Clock, Battery, Music, Calendar/Date, Countdown, Shortcuts and Device/System. Others exist on branches only."], visual: { type: "diagram", id: "layers-pipeline", caption: "From a .layers definition to a widget on the home screen." } },
+        { id: "runtime", heading: "One definition, one runtime", body: ["Every widget, first-party or imported, is a portable definition that goes through the same steps: a bounded parse, schema checks, resolution against theme, defaults and per-instance overrides, sizing from the widget's real dimensions, and rendering with **RemoteViews**.", "Ten first-party widget families are implemented: Clock, Battery, Music, Calendar, Countdown, Shortcuts, Device, Notes, Photos and Weather."], visual: { type: "diagram", id: "layers-pipeline", caption: "From a .layers definition to a widget on the home screen." } },
         { id: "sizes", heading: "Real sizes, previewed", flip: true, body: ["Widgets size from their actual dimensions, with global and per-instance overrides in an explicit order. The editor previews compact, wide and large sizes side by side and adapts to large windows.", "This capture is from an Android emulator with a large-window display override. It is **not a physical tablet**; physical tablets have not been verified."], visual: { type: "media", media: layersTablet } },
         { id: "home", heading: "On the home screen", body: ["The same runtime draws the widgets on the launcher. Imported packages use a bounded, validated **.layers** format; it is internal and provisional, not a public standard.", "Widgets never run arbitrary code or intents: Shortcuts and Device/System use allowlisted host actions and typed capabilities."], visual: { type: "pair", items: [{ type: "media", media: layersLaunchers[1] }, { type: "media", media: layersLaunchers[2] }] } },
         { id: "studio", heading: "What exists, and what is planned", flip: true, body: ["The Android runtime, editor, themes and .layers import and export are implemented. **Layers Studio** is specified as a browser editor that opens the same .layers packages, with visual editing, live previews at several sizes and local use without an account.", "No Studio source exists yet, so it has no screen to show anywhere on this page."], visual: { type: "diagram", id: "layers-scope", caption: "Implemented on Android; Studio planned, not built." } },
-        { id: "status", heading: "Status and limits", status: true, linksNote: "No public release or repository.", list: ["No public release; V1 is not released.", "The .layers package format is internal and provisional.", "Physical tablets, other launchers and spoken TalkBack have not been verified. Captures are from the emulator."] },
+        { id: "status", heading: "Status and limits", status: true, linksNote: "No public release or repository.", list: ["Development is currently paused. No public release; V1 is not released.", "The .layers package format is internal and provisional.", "Automated testing has run on the Android emulator. Physical devices, other launchers and OEMs, and spoken TalkBack have not been verified. Captures are from the emulator.", "Weather's data provider is licensed for non-commercial use only, which remains a release condition."] },
       ],
     },
   },
@@ -383,16 +383,16 @@ export const space: SpaceProject[] = [
     slug: "bhatkal-time-luxe",
     project: P("bhatkal-time-luxe"),
     platforms: ["Web"],
-    blurb: "A watch-commerce website concept for a Bhatkal-based retailer, with an India-wide market focus. Originally a HubZero client project; now a live showcase.",
-    part: "Built end to end through HubZero: architecture, frontend and full-stack implementation, database and infrastructure. I designed the current storefront; the original design was by a HubZero co-founder.",
-    purpose: "A watch-commerce website concept for a Bhatkal-based retailer, with an India-wide market focus. It began as a HubZero client project and now remains live as a showcase of my work, not an active storefront.",
-    contribution: "I built the project end to end through HubZero, covering architecture, frontend and full-stack implementation, database, and infrastructure. I designed the current storefront iteration; the original design was created by a HubZero co-founder.",
+    blurb: "A watch-commerce storefront for a Bhatkal-based retailer, with an India-wide market focus. Originally a HubZero client project; now a live showcase.",
+    part: "Designed and developed the redesigned storefront end to end, building upon the initial UI/UX foundation established by the co-founder.",
+    purpose: "A watch-commerce storefront for a Bhatkal-based retailer, with an India-wide market focus. It began as HubZero's first paid client project and now remains live as a HubZero showcase, not an active storefront.",
+    contribution: "A co-founder established the initial mobile-only UI/UX foundation. I substantially redesigned the interface, including the desktop experience, and built the redesigned storefront end to end: architecture, frontend and full-stack implementation, database and infrastructure.",
     highlights: [
       ["Two deployments", "A Next.js storefront on Vercel against a separate Node.js API on a self-hosted Ubuntu server."],
       ["Catalogue", "A MongoDB data model, with images delivered through Cloudinary and imgix."],
-      ["Currency, as an experiment", "After the partnership began I independently tried configurable currency presentation (KWD among others). It was not a client requirement or a sign of a Kuwait/GCC market."],
+      ["A later demo", "GCC and Kuwait support came in June–July 2026 as a demo for a prospective client. It was not delivered to the original seller."],
     ],
-    limits: "The website remains live as a showcase of my work, not an active storefront; the client did not continue the partnership. Client work: the code is not presented as a personal open-source project.",
+    limits: "The website remains live as a HubZero showcase, not an active storefront; the partnership ended in September 2025. Client work: the code is not presented as a personal open-source project.",
     missing: [],
     evidence: btlLive,
     liveNote: "Current live site, captured 26 Oct 2026 from btl.hubzero.in using the site's own currency selector. Originally HubZero client work; now a showcase, not an active storefront.",
@@ -406,16 +406,16 @@ export const space: SpaceProject[] = [
     },
     caseStudy: {
       kicker: "Originally a HubZero client project · case study",
-      summary: "A watch-commerce website concept for a Bhatkal-based retailer, with an India-wide market focus. I built it end to end through HubZero, from the architecture to the servers it runs on, and designed its current storefront. It remains live as a showcase of my work, not an active storefront.",
-      facts: [["Client", "HubZero client work"], ["Period", "Apr to Sep 2025"], ["My part", "Architecture, frontend and full-stack implementation, database, infrastructure"], ["Design", "Current storefront iteration by me; original design by a HubZero co-founder"], ["Now", "Live showcase, not an active storefront"], ["Stack", "Next.js · TypeScript · Node.js · MongoDB · Tailwind CSS · Cloudinary · imgix · Vercel · Ubuntu"]],
+      summary: "A watch-commerce storefront for a Bhatkal-based retailer, with an India-wide market focus, and HubZero's first paid client project. I redesigned it and built the redesigned storefront end to end on a co-founder's initial UI/UX foundation, from the architecture to the servers it runs on. It remains live as a HubZero showcase, not an active storefront.",
+      facts: [["Client", "HubZero client work"], ["Period", "Apr to Sep 2025"], ["My part", "Architecture, frontend and full-stack implementation, database, infrastructure"], ["Design", "Initial mobile-only UI/UX foundation by a co-founder; redesign, including desktop, by me"], ["Now", "Live showcase, not an active storefront"], ["Stack", "Next.js · TypeScript · Node.js · MongoDB · Tailwind CSS · Cloudinary · imgix · Vercel · Ubuntu"]],
       openLabel: "the current storefront on a desktop monitor and a product page on a phone",
       sections: [
-        { id: "who", heading: "Who did what", body: ["Bhatkal Time Luxe began as a HubZero client project: a watch-commerce website for a Bhatkal-based retailer, aimed at customers across India. **I built it end to end through HubZero: the architecture, the frontend and full-stack implementation, the database and the infrastructure.**", "I designed the current storefront iteration, which is what the captures here show. The original design was created by one of my HubZero co-founders.", "It was HubZero's first paid client project, and the first time I carried paid software from architecture through to production infrastructure for another business."], visual: { type: "diagram", id: "btl-architecture", caption: "Two deployments: the storefront on Vercel, the API on a self-hosted server." } },
+        { id: "who", heading: "Who did what", body: ["Bhatkal Time Luxe began as a HubZero client project: a watch-commerce website for a Bhatkal-based retailer, aimed at customers across India. The first website was built in April 2025, the redesigned storefront was delivered in August 2025, and the partnership ended in September 2025.", "One of my HubZero co-founders, a UI/UX designer, established the initial mobile-only UI foundation. **I substantially redesigned the interface, including the desktop experience, and built the redesigned storefront end to end on that foundation: the architecture, the frontend and full-stack implementation, the database and the infrastructure.**", "It was HubZero's first paid client project, and the first time I carried paid software from architecture through to production infrastructure for another business."], visual: { type: "diagram", id: "btl-architecture", caption: "Two deployments: the storefront on Vercel, the API on a self-hosted server." } },
         { id: "built", heading: "What was built", flip: true, list: ["A **Next.js App Router storefront**, deployed on Vercel.", "A separate **Node.js API** on a self-hosted Ubuntu server, backed by MongoDB.", "An image pipeline through **Cloudinary**, with **imgix** in front for delivery.", "Server-rendered pages with JSON-LD and a sitemap, so the catalogue is crawlable."], visual: { type: "media", media: btlLive[2] } },
         { id: "product", heading: "Product pages", body: ["Each watch has its own server-rendered page with photography, price, specifications and a path to purchase. The captures here are of the current live site, taken on 26 October 2026 and cropped to the viewport, with the site's currency selector set to INR."], visual: { type: "media", media: btlLive[1] } },
         { id: "phone", heading: "On a phone", flip: true, body: ["On a phone the storefront uses its own layout, as these captures of the live site show. Turn the phone to see it from any side."], visual: { type: "pair", items: [{ type: "stage", only: "phone", w: 40, pw: 56, ar: "1 / 1.25", kind: "live", label: "the product page on a phone", caption: "Product page, phone." }, { type: "media", media: btlLive[3] }] } },
-        { id: "currency", heading: "A currency experiment, after the fact", body: ["After the partnership began, I independently experimented with configurable currency presentation: the site can show prices in INR, KWD and other currencies from one selector.", "**KWD was used in that experiment.** It was not a client requirement, and it is not evidence of a Kuwait or GCC market; the project's focus was India-wide."], visual: { type: "media", media: btlLive[5] } },
-        { id: "status", heading: "Status and limits", status: true, list: ["The client did not continue the partnership. The website remains live as a showcase of my work, not an active storefront.", "Client work: the code is not presented as a personal open-source project."] },
+        { id: "currency", heading: "A later demo, not the seller's store", body: ["In June–July 2026, GCC and Kuwait support and other features were added as a demo for a prospective client. The site can show prices in INR, KWD and other currencies from one selector.", "**This work was never part of the original seller's store**, and it is not evidence of a Kuwait or GCC market; the project's focus was India-wide."], visual: { type: "media", media: btlLive[5] } },
+        { id: "status", heading: "Status and limits", status: true, list: ["The partnership ended in September 2025. The website remains live as a HubZero showcase, not an active storefront.", "Client work: the code is not presented as a personal open-source project."] },
       ],
     },
   },
@@ -427,5 +427,5 @@ export const spaceSlugs = space.map((s) => s.slug);
 /** Also built: the two smaller projects, with their own existing pages. */
 export const alsoBuilt = [
   { slug: "querycraft", title: "QueryCraft", note: "Final-year project with two HubZero teammates; I was the primary technical contributor. Natural language to proposed, validated queries on local models. Retired." },
-  { slug: "bluetap", title: "BlueTap", note: "Android widgets for paired Bluetooth devices. Pre-release; tap-to-connect is not implemented." },
+  { slug: "bluetap", title: "BlueTap", note: "Android widgets for paired Bluetooth devices. In development, paused; tap-to-connect is not implemented." },
 ];

@@ -41,7 +41,7 @@ export type Project = {
   status: string;
   stage: Stage;
   /** Only verified licences. Omitted when not verified. */
-  licence?: "MIT" | "Proprietary";
+  licence?: "MIT" | "Proprietary" | "Closed source";
   licenceNote?: string;
   period?: string;
   ownership: Ownership;
