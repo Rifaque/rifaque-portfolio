@@ -277,14 +277,25 @@ test.describe("loading gate @core", () => {
 
   test("the handover moves no layout", async ({ page }) => {
     await page.addInitScript(() => {
-      (window as Window & { __cls?: number }).__cls = 0;
+      const w = window as Window & { __cls?: number; __shifts?: string[] };
+      w.__cls = 0;
+      w.__shifts = [];
       new PerformanceObserver((l) => {
-        for (const e of l.getEntries() as (PerformanceEntry & { value: number; hadRecentInput: boolean })[]) if (!e.hadRecentInput) (window as Window & { __cls?: number }).__cls! += e.value;
+        for (const e of l.getEntries() as (PerformanceEntry & { value: number; hadRecentInput: boolean; sources?: { node?: Node | null; previousRect: DOMRectReadOnly; currentRect: DOMRectReadOnly }[] })[]) {
+          if (e.hadRecentInput) continue;
+          w.__cls! += e.value;
+          // Named in the failure, so a shift can be traced to what moved.
+          w.__shifts!.push(`${Math.round(e.startTime)}ms ${e.value.toFixed(4)}: ${(e.sources ?? []).map((s) => `${s.node?.nodeName}.${(s.node as Element | null)?.className} y${Math.round(s.previousRect.y)}>${Math.round(s.currentRect.y)}`).join(", ")}`);
+        }
       }).observe({ type: "layout-shift", buffered: true });
     });
     await page.goto("/");
     await settled(page);
-    expect(await page.evaluate(() => (window as Window & { __cls?: number }).__cls)).toBeLessThan(0.01);
+    const { cls, shifts } = await page.evaluate(() => {
+      const w = window as Window & { __cls?: number; __shifts?: string[] };
+      return { cls: w.__cls!, shifts: w.__shifts! };
+    });
+    expect(cls, shifts.join("\n")).toBeLessThan(0.01);
   });
 
   test("nothing keeps running afterwards", async ({ page }) => {

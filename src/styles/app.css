@@ -120,6 +120,8 @@ i.mark[data-state="planned"], [data-state="planned"] i.mark { border-style: dash
 :root[data-theme="dark"] .i-moon { opacity: 0; transform: rotate(40deg) scale(0.6); }
 .i-wave, .i-mute { transition: opacity var(--t-ui) ease; }
 .pref-square { width: 36px; padding: 0; justify-content: center; }
+.menu-switch, .site-menu { display: none; }
+.i-menu { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }
 #sound-switch[data-on="false"] .i-wave { opacity: 0; }
 #sound-switch[data-on="true"] .i-mute { opacity: 0; }
 #sound-switch[data-on="true"] { color: var(--fg); border-color: var(--line-3); }
@@ -142,11 +144,11 @@ main > .hero:first-child { margin-top: calc(-1 * var(--nav-h)); padding-top: var
 /* Reduced motion, or a gate that left before the scene was ready: the drawing holds the room until then. */
 html.poster-hold[data-hydrated] .hero-stage:not(.has-gl):not(.gl-off) .hero-poster { opacity: 1; }
 /* The loading gate: the poster sits in the stage, behind the copy, until the live scene takes over from it.
-   It starts clear of the copy; --gate-cx is where the solid stands, which the first live frame reads. */
-.hero-stage { --gate-cx: 0.5; }
+   It starts clear of the copy; --gate-cx and --gate-cy are where the solid stands, which the first live frame reads. */
+.hero-stage { --gate-cx: 0.5; --gate-cy: 0.5; }
 @media (min-width: 901px) { .hero-stage { --gate-cx: 0.64; } }
 @media (min-width: 1000px) { .hero-stage { --gate-cx: 0.6; } }
-.gate .hero-stage::before { content: ""; position: absolute; inset: 0; background: var(--gate-poster) center / cover no-repeat; transform: translateX(calc((var(--gate-cx) - 0.5) * 100%)); }
+.gate .hero-stage::before { content: ""; position: absolute; inset: 0; background: var(--gate-poster) center / cover no-repeat; transform: translate(calc((var(--gate-cx) - 0.5) * 100%), calc((var(--gate-cy) - 0.5) * 100%)); }
 .gate .hero-canvas { transition-duration: 200ms; }
 .p-wall-l { fill: var(--poster-wall-l); }
 .p-wall-r { fill: var(--poster-wall-r); }
@@ -511,6 +513,98 @@ html.poster-hold[data-hydrated] .hero-stage:not(.has-gl):not(.gl-off) .hero-post
   .st-layers li { grid-template-columns: 26px minmax(0, 1fr); }
   .st-layers .st-state { grid-column: 2; }
   .st-next a { font-size: 1.05rem; }
+}
+
+/* ------------------------------------------------------------ mobile hero
+   Everything here sits behind a mobile query; desktop never reads it.
+   room:  portrait, tall enough. The room fills the first screen; the name is on the
+          dark upper wall, the introduction and actions on the dark floor.
+   short: portrait with little height. Name and actions first, then a full stage;
+          the introduction follows it, below the fold if it must.
+   two:   landscape phones. Text and room share the height, side by side.
+   --hero-layout tells the hero how to frame the room. The view controls sit in a
+   strip just below the first screen. svh keeps the stage still as browser bars move. */
+@media (max-width: 900px), (orientation: landscape) and (max-height: 520px) and (max-width: 1000px) {
+  :root { --nav-h: calc(76px + env(safe-area-inset-top, 0px)); --gutter: max(clamp(16px, 4vw, 48px), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px)); }
+  /* The bar is solid enough to read over any content, and nothing shows above it. */
+  .top { padding-top: max(12px, env(safe-area-inset-top, 0px)); background: linear-gradient(to bottom, var(--bg) 62%, transparent); }
+  .top .top-row { background: color-mix(in srgb, var(--bg) 92%, transparent); padding-right: 4px; }
+  .pref { height: 44px; }
+  .pref-square { width: 44px; }
+  .foot { padding-bottom: env(safe-area-inset-bottom, 0px); }
+}
+@media (max-width: 640px) {
+  .menu-switch { display: inline-flex; }
+  .prefs { gap: 2px; }
+  .site-menu:not([hidden]) {
+    display: grid; position: absolute; z-index: 1; pointer-events: auto;
+    top: calc(var(--nav-h) + 2px); left: max(8px, calc(var(--gutter) - 16px)); right: max(8px, calc(var(--gutter) - 16px));
+    padding: 8px; border-radius: 20px; border: 1px solid var(--line-3); background: var(--bg-2); box-shadow: 0 18px 40px -18px var(--shade);
+  }
+  .site-menu a { display: flex; align-items: center; min-height: 48px; padding: 0 14px; border-radius: 12px; font-size: 1.1rem; font-weight: 500; color: var(--fg); text-decoration: none; }
+}
+@media (orientation: portrait) and (max-width: 900px) and (min-height: 661px), (orientation: portrait) and (max-width: 900px) and (max-height: 660px), (orientation: landscape) and (max-width: 559px), (orientation: landscape) and (min-width: 560px) and (max-width: 900px), (orientation: landscape) and (min-width: 560px) and (max-height: 520px) and (max-width: 1000px) {
+  .hero { display: flex; flex-direction: column; --strip: 112px; min-height: calc(100svh + var(--strip)); }
+  .hero-grid { display: contents; }
+  .hero-stage { position: absolute; inset: 0 0 var(--strip) 0; height: auto; margin: 0; z-index: -1; }
+  .hero-object { order: 9; flex: none; min-height: var(--strip); padding: 12px var(--gutter) 0; }
+  .hero-instrument { position: static; grid-template-columns: minmax(0, 1fr); justify-items: start; text-align: left; gap: 8px; }
+  .solid-caption { font-size: 0.84rem; max-width: none; }
+  .views { flex-wrap: wrap; max-width: 100%; }
+  .solid-hint { display: none; }
+  .view-key { min-width: 44px; min-height: 44px; }
+  .hero-actions { flex-wrap: nowrap; gap: 8px 12px; }
+  .hero-actions .btn { min-height: 48px; }
+  .hero-actions .link { white-space: nowrap; }
+  .hero-meta { color: var(--fg-2); }
+}
+@media (orientation: portrait) and (max-width: 900px) and (min-height: 661px), (orientation: portrait) and (max-width: 900px) and (max-height: 660px), (orientation: landscape) and (max-width: 559px) {
+  .hero-copy { display: contents; }
+  .hero-name { order: 1; padding: 8px var(--gutter) 0; }
+  .hero-role { order: 2; padding: 0 var(--gutter); margin-top: 10px; font-size: 1rem; }
+  .hero-lede { order: 4; padding: 0 var(--gutter); margin: 0; font-size: 1rem; max-width: calc(38ch + 2 * var(--gutter)); }
+  .hero-actions { order: 5; padding: 0 var(--gutter); margin-top: 14px; }
+  .hero-meta { order: 6; padding: 0 var(--gutter); margin: 12px 0 max(16px, env(safe-area-inset-bottom, 0px)); font-size: 0.88rem; }
+}
+@media (orientation: portrait) and (max-width: 900px) and (min-height: 661px) {
+  .hero-stage { --hero-layout: room; }
+  .hero-name { font-size: clamp(2.6rem, 14.4vw, 4.6rem); }
+  .hero-role { margin-bottom: 200px; }
+  .hero-lede { margin-top: auto; }
+}
+@media (orientation: portrait) and (max-width: 900px) and (max-height: 660px), (orientation: landscape) and (max-width: 559px) {
+  .hero-stage { --hero-layout: short; }
+  .hero-name { font-size: clamp(2.3rem, 12.4vw, 3rem); }
+  .hero-name span { display: inline; }
+  .hero-role { margin-top: 6px; font-size: 0.92rem; }
+  .hero-actions { order: 3; margin-top: 12px; }
+  .hero-lede { margin-top: 272px; }
+}
+/* The tall stage runs past the first screen here, so the opening frame stands lower, between the actions and the introduction. */
+@media (orientation: portrait) and (max-width: 900px) and (max-height: 660px) {
+  .hero-stage { --gate-cy: 0.55; }
+}
+/* 200% zoom on a phone: the actions wrap, and the wordmark gives way to the controls. */
+@media (max-width: 300px) {
+  .hero-actions { flex-wrap: wrap; }
+  .top .top-row { gap: 4px; padding-left: 10px; }
+  .mark { flex: 0 1 auto; min-width: 0; overflow: hidden; }
+  .prefs { flex: none; }
+}
+@media (max-width: 389px) {
+  .hero-actions .btn { padding-inline: 12px; font-size: 0.92rem; }
+  .hero-actions { gap: 8px; }
+  .hero-actions .link { font-size: 0.82rem; }
+}
+@media (orientation: landscape) and (min-width: 560px) and (max-width: 900px), (orientation: landscape) and (min-width: 560px) and (max-height: 520px) and (max-width: 1000px) {
+  .hero-stage { --hero-layout: two; --gate-cx: 0.72; }
+  .hero-copy { order: 1; flex: 1 1 auto; align-self: flex-start; display: flex; flex-direction: column; justify-content: center; max-width: calc(25rem + var(--gutter)); padding: 8px 0 12px var(--gutter); }
+  .hero-name { font-size: clamp(2.3rem, 11svh, 3.2rem); }
+  .hero-name span { display: inline; }
+  .hero-role { margin-top: 6px; font-size: 0.92rem; }
+  .hero-lede { margin-top: 4px; font-size: 0.92rem; line-height: 1.32; max-width: 40ch; }
+  .hero-actions { margin-top: 10px; }
+  .hero-meta { margin-top: 8px; font-size: 0.84rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,5 +1,5 @@
-import { useEffect, useState, type ReactNode } from "react";
-import { Link } from "react-router";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { Link, useLocation } from "react-router";
 import { footerNav, nav, site, support } from "../content/site";
 import type { RouteMeta } from "../content/routes";
 import { currentTheme, setTheme, sound, toast, type Theme } from "../lib/prefs";
@@ -73,6 +73,36 @@ function Header({ home }: { home: boolean }) {
     return sound.subscribe(setSoundOn);
   }, []);
 
+  // The small-screen menu: a disclosure of the same links the header shows on wider screens.
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
+  const menu = useRef<HTMLElement>(null);
+  const { pathname, hash } = useLocation();
+  useEffect(() => setMenuOpen(false), [pathname, hash]);
+  useEffect(() => {
+    if (!menuOpen) return;
+    menu.current?.querySelector("a")?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setMenuOpen(false);
+      menuButton.current?.focus();
+    };
+    const onPointer = (e: PointerEvent) => {
+      if (!(e.target as Element).closest("header.top")) setMenuOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("pointerdown", onPointer);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("pointerdown", onPointer);
+    };
+  }, [menuOpen]);
+  /** The current hash changes nothing in the router, so a repeat choice scrolls here. */
+  const menuChoice = (to: string) => {
+    setMenuOpen(false);
+    if (pathname === "/" && to === `/${hash}`) document.getElementById(hash.slice(1))?.scrollIntoView();
+  };
+
   const next: Theme = theme === "light" ? "dark" : "light";
   const soundLabel = soundOn ? "Mute sound" : "Enable sound";
 
@@ -105,6 +135,19 @@ function Header({ home }: { home: boolean }) {
           ))}
         </nav>
         <div className="prefs">
+          <button
+            ref={menuButton}
+            className="pref pref-square menu-switch"
+            type="button"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            aria-controls="site-menu"
+            onClick={() => setMenuOpen((o) => !o)}
+          >
+            <svg className="pref-icon" viewBox="0 0 20 20" aria-hidden="true">
+              <path className="i-menu" d={menuOpen ? "M5 5l10 10M15 5L5 15" : "M3.5 6h13M3.5 10h13M3.5 14h13"} />
+            </svg>
+          </button>
           <button className="pref" id="theme-switch" type="button" aria-label={`Switch to ${next} theme`} title={`Switch to ${next} theme`} onClick={toggleTheme}>
             <svg className="pref-icon" viewBox="0 0 20 20" aria-hidden="true">
               <circle className="i-sun" cx="10" cy="10" r="3.6" />
@@ -122,6 +165,22 @@ function Header({ home }: { home: boolean }) {
           </button>
         </div>
       </div>
+      <nav
+        ref={menu}
+        className="site-menu"
+        id="site-menu"
+        aria-label="Primary"
+        hidden={!menuOpen}
+        onBlur={(e) => {
+          if (e.relatedTarget && !(e.relatedTarget as Element).closest("header.top")) setMenuOpen(false);
+        }}
+      >
+        {nav.map((n) => (
+          <Link key={n.to} to={n.to} data-sound="press" onClick={() => menuChoice(n.to)}>
+            {n.label}
+          </Link>
+        ))}
+      </nav>
     </header>
   );
 }

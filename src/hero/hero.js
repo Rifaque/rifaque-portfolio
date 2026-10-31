@@ -43,10 +43,11 @@ const THEMES = {
 
 /**
  * The loading gate opens from the room seen a little higher and further round.
- * `poster` is the framing of public/gate/*.webp: its pixel size, and how many
- * world units its height shows.
+ * `posters` are the framings of public/gate/*.webp: pixel size, and how many
+ * world units the height shows. The tall one shows more of the room, so the
+ * letters stay between the copy at any portrait shape.
  */
-export const GATE = { dir: [1.3, 1.12, 0.72], poster: { w: 2000, h: 1250, height: 34 }, ms: 1500 };
+export const GATE = { dir: [1.3, 1.12, 0.72], posters: { wide: { w: 2000, h: 1250, height: 34 }, tall: { w: 1200, h: 2000, height: 64 } }, ms: 1500 };
 
 const easeIO = (t) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
 const easeOut = (t) => 1 - (1 - t) ** 4;
@@ -442,6 +443,11 @@ export async function createHero(host, { onView, onSettle, reduced, onContextLos
     const now = performance.now();
     const dx = e.clientX - drag.x;
     const dy = e.clientY - drag.y;
+    // A vertical touch is a page scroll, which the browser is about to take over: it must not wake the scene.
+    if (e.pointerType === "touch" && !drag.turning) {
+      if (Math.abs(dy) >= Math.abs(dx)) return;
+      drag.turning = true;
+    }
     const dts = Math.max(0.008, (now - drag.t) / 1000);
     // A drag across the stage's short side is about half a turn.
     const k = Math.PI / Math.max(320, Math.min(size.w, size.h));
@@ -538,14 +544,14 @@ export async function createHero(host, { onView, onSettle, reduced, onContextLos
     },
     /**
      * Draws the gate's first frame, which matches the poster: its world scale
-     * comes from how the poster covers the stage, and its centre from cx.
+     * comes from how the poster of that shape covers the stage, and its centre from cx and cy.
      * Resolves once that frame has reached the screen.
      */
-    async gateOpen(cx) {
-      const p = GATE.poster;
+    async gateOpen(cx, shape = "wide", cy = 0.5) {
+      const p = GATE.posters[shape];
       const cover = Math.max(size.w / p.w, size.h / p.h);
       heroFrame = frame;
-      gateFrom = { cx, cy: 0.5, height: size.h / ((cover * p.h) / p.height) };
+      gateFrom = { cx, cy, height: size.h / ((cover * p.h) / p.height) };
       frame = gateFrom;
       cam.dir.copy(gateDir);
       applyFrustum();

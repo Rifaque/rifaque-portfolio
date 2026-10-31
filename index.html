@@ -24,8 +24,11 @@
           localStorage.setItem("rsx-gate", "1");
           sessionStorage.setItem("rsx-intro", "1");
         } catch (e) { return; }
-        var poster = "/gate/" + t + ".webp", l = document.createElement("link");
+        // Portrait stages take the tall poster (window.__gateShape: poster capture only).
+        var shape = window.__gateShape || (innerWidth <= 900 && innerHeight > innerWidth ? "tall" : "wide");
+        var poster = "/gate/" + t + (shape === "tall" ? "-tall" : "") + ".webp", l = document.createElement("link");
         d.classList.add("gate");
+        d.dataset.gateShape = shape;
         d.style.setProperty("--gate-poster", 'url("' + poster + '")');
         l.rel = "preload"; l.as = "image"; l.href = poster;
         document.head.append(l);

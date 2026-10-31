@@ -13,6 +13,10 @@ const VIEW_TEXT: Record<HeroView, string> = {
 const GATE_FADE = 220;
 const GATE_SETTLE = 520;
 const GATE_LIMIT = 4500;
+// The room's composition (R, X and S) in world units, and the gap kept from the copy in pixels.
+const ROOM_W = 25.5;
+const ROOM_H = 22.5;
+const ROOM_INSET = 4;
 const GATE_SKIP = ["pointerdown", "wheel", "touchmove", "keydown", "scroll"];
 // The drawing of the same geometry: the no-WebGL fallback (and what shows without JavaScript).
 const POSTER = { __html: posterSVG({ label: "A solid made of small cubes in the corner of a room. Its shadows on the two walls and the floor spell R, S and X." }) };
@@ -33,6 +37,7 @@ export function Hero() {
   const hintRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
+    const root = document.documentElement;
     const stage = stageRef.current!;
     const object = objectRef.current!;
     const views = viewsRef.current!;
@@ -46,9 +51,28 @@ export function Hero() {
     const onLeave = () => (leaving = true);
     addEventListener("pagehide", onLeave);
 
+    /**
+     * Mobile layouts: the room is framed to the space the copy leaves free, so
+     * all three shadows fit between the text. The active layout comes from the
+     * stylesheet (--hero-layout), which owns the breakpoints.
+     */
+    const roomFrame = (layout: string, s: DOMRect) => {
+      const box = (sel: string) => root.querySelector(sel)!.getBoundingClientRect();
+      if (layout === "two") {
+        const left = box(".hero-copy").right, top = box(".top-row").bottom;
+        const px = Math.min((s.right - left) / ROOM_W, (s.bottom - top) / ROOM_H);
+        return { cx: ((left + s.right) / 2 - s.left) / s.width, cy: ((top + s.bottom) / 2 - s.top) / s.height, height: s.height / px };
+      }
+      const top = box(layout === "short" ? ".hero-actions" : ".hero-role").bottom + ROOM_INSET;
+      const bottom = box(".hero-lede").top - ROOM_INSET;
+      const px = Math.min(s.width / ROOM_W, (bottom - top) / ROOM_H);
+      return { cx: 0.5, cy: (top + (bottom - top) * 0.46 - s.top) / s.height, height: s.height / px };
+    };
     /** The solid sits at the centre of the grid's object column, so text and object stay together. */
     const frame = () => {
       const s = stage.getBoundingClientRect();
+      const layout = getComputedStyle(stage).getPropertyValue("--hero-layout").trim();
+      if (layout) return roomFrame(layout, s);
       const o = object.getBoundingClientRect();
       const stacked = innerWidth <= 900;
       const cx = (o.left + o.width / 2 - s.left) / s.width;
@@ -74,6 +98,9 @@ export function Hero() {
     };
     const ro = new ResizeObserver(reframe);
     ro.observe(stage);
+    // The copy decides the free space on mobile, and it moves when the web fonts arrive.
+    ro.observe(stage.parentElement!.querySelector(".hero-lede")!);
+    document.fonts?.ready.then(() => !cancelled && reframe());
     reframe();
 
     const setView = (name: HeroView) => {
@@ -101,7 +128,6 @@ export function Hero() {
     const onTheme = (e: Event) => hero?.theme((e as CustomEvent<Theme>).detail);
     window.addEventListener("rsx-theme", onTheme);
 
-    const root = document.documentElement;
     let gateRunning = false;
     let gateSkipped = false;
     let gateLimit = 0;
@@ -115,6 +141,7 @@ export function Hero() {
       document.removeEventListener("visibilitychange", skipGate);
       root.classList.remove("gate");
       root.style.removeProperty("--gate-poster");
+      delete root.dataset.gateShape;
     };
     /** Any use of the page, or leaving it, ends the move in the hero's resting state. */
     function skipGate() {
@@ -141,7 +168,8 @@ export function Hero() {
       gateRunning = true;
       // A device too slow to finish the move in time goes straight to the hero.
       gateLimit = window.setTimeout(skipGate, GATE_LIMIT);
-      h.gateOpen(parseFloat(getComputedStyle(stage).getPropertyValue("--gate-cx")))
+      const place = getComputedStyle(stage);
+      h.gateOpen(parseFloat(place.getPropertyValue("--gate-cx")), root.dataset.gateShape, parseFloat(place.getPropertyValue("--gate-cy")))
         .then(() => {
           if (!gateRunning) return;
           h.canvas.classList.add("is-ready");
